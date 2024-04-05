@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "12729428612",
+    "project_id": "genchat-40209",
+    "storage_bucket": "genchat-40209.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:12729428612:android:661087d780e127ef9a70d1",
+        "android_client_info": {
+          "package_name": "com.leetrongjnghiax.GenChat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "12729428612-2sfmfel39gor7sg0og796gi31u44931h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.leetrongjnghiax.GenChat",
+            "certificate_hash": "a221ab97ae635f8da179c5ed55bea5f4f0dbd441"
+          }
+        },
+        {
+          "client_id": "12729428612-f56qko1123f255n58h69osa2bvrlemp9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.leetrongjnghiax.GenChat",
+            "certificate_hash": "abf399f76510e00c3aa628af5be3fbf904b6ff31"
+          }
+        },
+        {
+          "client_id": "12729428612-3334fgcm3kls6p0pttp4km0dqvcbsnq4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGkq8gCgHLc7_fFkK-Tl51c3ec4HxH7PI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "12729428612-3334fgcm3kls6p0pttp4km0dqvcbsnq4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
