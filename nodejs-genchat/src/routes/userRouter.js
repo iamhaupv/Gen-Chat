@@ -17,5 +17,10 @@ router.get("/getInfor", userController.getInfor);
 router.patch("/update", userController.updateUserInfo);
 // uploadImage
 router.post("/uploadAvatar", upload.single("image"), userController.uploadAvatar);
+// delete
 router.delete("/deleteUser", userController.deleteUser);
+// findUserByPhoneNumber
+router.post("/findUserByPhoneNumber", userController.findUserByPhoneNumber);
+// addFriend
+router.post("/addFriend", userController.addFriend);
 module.exports = router;

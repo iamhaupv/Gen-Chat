@@ -4,7 +4,6 @@ const { validationResult } = require("express-validator");
 const { User } = require("../models/index");
 const bcrypt = require("bcrypt");
 const mailer = require("../utils/mailer");
-const Mess = require("../models/Message");
 const { upload, s3, bucketName } = require("../config/aws.config");
 //
 const myEvent = new EventEmitter();
@@ -74,9 +73,13 @@ const verify = (req, res) => {
     if (result == true) {
       User.verify(req.query.email, (err, result) => {
         if (!err) {
-          res.redirect("/login");
+          res.status(200).json({
+            message: "Successfully!",
+          });
         } else {
-          res.redirect("/500");
+          res.status(500).json({
+            message: "Cannot verify!",
+          });
         }
       });
     } else {
@@ -87,13 +90,17 @@ const verify = (req, res) => {
 const sendResetLinkEmail = async (req, res) => {
   const { email } = req.body;
   if (!email) {
-    return res.redirect("/password/reset");
+    return res.status(500).json({
+      message: "Cannot found email!",
+    });
   }
 
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      return res.redirect("/password/reset");
+      return res.status(500).json({
+        message: "Cannot found user!",
+      });
     }
 
     const hashedEmail = await bcrypt.hash(
@@ -103,13 +110,17 @@ const sendResetLinkEmail = async (req, res) => {
     await mailer.sendMail(
       user.email,
       "Reset password",
-      `<a href="${process.env.APP_URL}?token=${hashedEmail}"> Reset Password </a>`
+      `<a href="${process.env.APP_URL}/users/reset/?token=${hashedEmail}"> Reset Password </a>`
     );
     // console.log(`${process.env.APP_URL}/users/reset/?token=${hashedEmail}`);
-    return res.send("Send Email Successfully!");
+    return res.status(200).json({
+      message: "Send Email Successfully!",
+    });
   } catch (error) {
     console.error("Error sending reset link email:", error);
-    return res.redirect("Error!");
+    return res.status(500).json({
+      message: "Error",
+    });
   }
 };
 const reset = async (req, res) => {
@@ -132,10 +143,14 @@ const reset = async (req, res) => {
     );
     // Cập nhật mật khẩu mới vào cơ sở dữ liệu
     await User.updateOne({ email }, { password: hashedPassword });
-    return res.send("Succesfully");
+    return res.status(200).json({
+      message: "Successfully!",
+    });
   } catch (error) {
     console.error("Error resetting password:", error);
-    return res.send("Error!");
+    return res.status(500).json({
+      message: "Error!",
+    });
   }
 };
 const getInfor = async (req, res) => {
@@ -244,21 +259,52 @@ const uploadAvatar = async (req, res) => {
     });
   }
 };
-const deleteUser = async(req, res) =>{
+const deleteUser = async (req, res) => {
   try {
-    const {phoneNumber} = req.body
-    await userRepository.deleteUser(phoneNumber)
+    const { phoneNumber } = req.body;
+    await userRepository.deleteUser(phoneNumber);
     res.status(200).json({
-      message: "Successfully!"
+      message: "Successfully!",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Cannot find phoneNumber",
+    });
+  }
+};
+const findUserByPhoneNumber = async (req, res) => {
+  try {
+    const { phoneNumber } = req.body;
+    const user = await userRepository.findUserByPhoneNumber(phoneNumber);
+    res.status(200).json({
+      message: "Successfully!",
+      data: user,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "User not exist!",
+    });
+  }
+};
+const addFriend = async (req, res) => {
+  try {
+    const { phoneNumberUserSend, phoneNumberUserGet } = req.body;
+    await userRepository.addFriend(phoneNumberUserSend, phoneNumberUserGet);
+    res.status(200).json({
+      message: "Add Friend Successfully!"
     })
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({
-      message: "Cannot find phoneNumber"
-    })
+      message: "Error",
+    });
   }
-}
+};
 module.exports = {
+  addFriend,
+  findUserByPhoneNumber,
   deleteUser,
   uploadAvatar,
   updateUserInfo,

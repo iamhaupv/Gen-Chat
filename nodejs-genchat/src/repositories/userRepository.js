@@ -57,13 +57,14 @@ const register = async ({
     bcrypt
       .hash(newUser.email, parseInt(process.env.SALT_ROUNDS))
       .then((hashedEmail) => {
-        console.log(
-          `${process.env.APP_URL}/verify?email=${newUser.email}&token=${hashedEmail}`
-        );
+        // console.log(
+        //   `${process.env.APP_URL}/verify?email=${newUser.email}&token=${hashedEmail}`
+        // );
         mailer.sendMail(
           newUser.email,
           "Verify Email",
-          `<a href="${process.env.APP_URL}/verify?email=${newUser.email}&token=${hashedEmail}"> Verify </a>`
+          // `<a href="${process.env.APP_URL}/verify?email=${newUser.email}&token=${hashedEmail}"> Verify </a>`
+          `<h1>Register Successfully!</h1>`
         );
       });
     return newUser;
@@ -77,6 +78,24 @@ const getInfor = async (phoneNumber) => {
   try {
     // Tìm người dùng dựa trên số điện thoại
     const existUser = await User.findOne({ phoneNumber }).exec();
+    // Nếu người dùng không tồn tại, ném ra một lỗi
+    if (!existUser) {
+      throw new Error("User is not exist!");
+    }
+    // Trả về thông tin của người dùng
+    return existUser;
+  } catch (error) {
+    // Bắt và xử lý lỗi
+    console.error(error);
+    throw error; // Chuyển tiếp lỗi để nơi gọi hàm có thể xử lý
+  }
+};
+// findUserByPhoneNumber
+const findUserByPhoneNumber = async (phoneNumber) => {
+  try {
+    // Tìm người dùng dựa trên số điện thoại
+    const existUser = await User.findOne({ phoneNumber }).exec();
+    console.log(phoneNumber);
     // Nếu người dùng không tồn tại, ném ra một lỗi
     if (!existUser) {
       throw new Error("User is not exist!");
@@ -132,7 +151,22 @@ const deleteUser = async (phoneNumber) => {
     throw new Error(error);
   }
 };
+// add friend
+const addFriend = async (phoneNumberUserSend, phoneNumberUserGet) => {
+  try {
+    await User.findOneAndUpdate(
+      { phoneNumberUserSend }, // Tìm kiếm dựa trên số điện thoại
+      { listFriend: [phoneNumberUserGet] }, // Dữ liệu cần cập nhật
+      { new: true } // Tùy chọn để trả về bản ghi được cập nhật
+    );
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
 module.exports = {
+  addFriend,
+  findUserByPhoneNumber,
   deleteUser,
   update,
   login,

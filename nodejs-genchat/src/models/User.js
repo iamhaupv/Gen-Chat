@@ -40,6 +40,10 @@ const User = mongoose.model(
       type: String,
       required: false,
     },
+    listFriend: {
+      type: [String],
+      required: false
+    }
   })
 );
 User.methods = {

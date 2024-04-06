@@ -4,6 +4,7 @@ import { useWindowDimensions } from 'react-native';
 import * as React from 'react';
 
 import Profile from '../../Components/Profile';
+import ChatContainer from '../../Components/ChatContainer';
 
 export default function Main({ navigation }, props) {
   const route = useRoute();
@@ -12,7 +13,8 @@ export default function Main({ navigation }, props) {
   const renderScene = ({ route }) => {
     switch (route.key) {
       case 'tab_1': return <Profile user={user} navigation={{navigation}} />;
-      case 'tab_2': return <Profile user={user} navigation={navigation} />;
+      case 'tab_2': return <ChatContainer navigation={{navigation}} />;
+      case 'tab_3': return <Profile user={user} navigation={navigation} />;
       default: return null;
     }
   };
