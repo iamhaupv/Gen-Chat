@@ -26,7 +26,7 @@ export default function OTP({ navigation }) {
   const handleSignUp = async () => {
     try {
       // Gọi API đăng ký
-      await registerUser(user.name, user.phoneNumber, user.email, user.password);
+      await registerUser(user.name, user.phoneNumber, user.password, user.email);
       // Đăng ký thành công, chuyển hướng đến màn hình đăng nhập
     } catch (error) {
       console.error("Registration error:", error);

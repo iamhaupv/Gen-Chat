@@ -3,6 +3,7 @@ import { collection, getDocs, doc } from "firebase/firestore";
 import config from "../firebase/config.js";
 import ChatUser from "./ChatUser";
 import React, { useState } from "react";
+import { useRoute } from "@react-navigation/native";
 import findUserByPhoneNumber from "../services/findUserByPhoneNumber.js";
 
 import GlobalStyle from "../GlobalStyle.js";
@@ -13,20 +14,22 @@ export default function ChatHistory({ navigation }) {
 
   const styles = GlobalStyle();
 
+  const route = useRoute();
+  const userSend = route.params?.user;
+  console.log("User send");
+  console.log(userSend);
+
   const findUser = async () => {
-    let user;
+    let userGet;
 
     try {
-      user = await findUserByPhoneNumber(phoneNumber);
-      
-      console.log(user.data);
+      userGet = await findUserByPhoneNumber(phoneNumber);      
     } catch (error) {
-      user = null;
-
+      userGet = null;
       console.error("Error error:", error);
     }
 
-    navigation.navigate("FindingUser", {user})
+    navigation.navigate("FindingUser", {userSend: userSend, userGet: userGet})
   };
 
   return (
@@ -47,8 +50,20 @@ export default function ChatHistory({ navigation }) {
           >
 
           </TextInput>
-          <Pressable onPress={findUser}>
+          <Pressable onPress={findUser} style={{
+            flex: 1, 
+            alignItems: 'center', 
+            justifyContent: 'center'
+          }}>
             <Text>Find</Text>
+          </Pressable>
+
+          <Pressable onPress={() => navigation.navigate("ListRequest")} style={{
+            flex: 1, 
+            alignItems: 'center', 
+            justifyContent: 'center'
+          }}>
+            <Text>List Request</Text>
           </Pressable>
         </View>
 

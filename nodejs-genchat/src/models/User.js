@@ -43,6 +43,14 @@ const User = mongoose.model(
     listFriend: {
       type: [String],
       required: false
+    },
+    listRequestSend: {
+      type: [String],
+      required: false
+    },
+    listRequestGet: {
+      type: [String],
+      required: false
     }
   })
 );

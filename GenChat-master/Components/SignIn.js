@@ -28,13 +28,13 @@ export default function SignIn({ navigation }) {
 
   const provider = new GoogleAuthProvider();
   // Ham nay chay lien tuc de kiem tra xem nguoi dung co dang nhap ko
-  auth.onAuthStateChanged((user) => {
-    // Neu nguoi dung da dang nhap thi chuyen huong sang trang khac
-    console.log(user);
-    if (user) {
-      navigation.navigate("Main", { user: user });
-    }
-  });
+  // auth.onAuthStateChanged((user) => {
+  //   // Neu nguoi dung da dang nhap thi chuyen huong sang trang khac
+  //   console.log(user);
+  //   if (user) {
+  //     navigation.navigate("Main", { user: user });
+  //   }
+  // });
   const signInWithGoogle = async () => {
     console.log("Pressed Sign in");
     const userCred = await signInWithPopup(auth, provider);
@@ -68,7 +68,7 @@ export default function SignIn({ navigation }) {
             style={[styles.input, styles.fontColor]}
             placeholder="Phone number"
             inputMode="tel"
-            maxLength={10}
+            maxLength={11}
             onChangeText={onChangePhoneNumber}
             value={phoneNumber}
           />

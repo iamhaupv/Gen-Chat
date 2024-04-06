@@ -34,9 +34,16 @@ const register = async ({
   email,
   password,
   phoneNumber,
-  address,
   photoURL,
+  address,
+  listFriend,
+  listRequestSend,
+  listRequestGet
 }) => {
+  // console.log("------------------------------");
+  // console.log(email);
+  // console.log(password);
+  // console.log("------------------------------");
   try {
     const existUser = await User.findOne({ phoneNumber }).exec(); // tìm kiếm dựa trên số diện thoại hoặc email
     if (!!existUser) {
@@ -51,8 +58,11 @@ const register = async ({
       email,
       password: hashPassword,
       phoneNumber,
-      address,
       photoURL,
+      address,
+      listFriend: [],
+      listRequestSend: [],
+      listRequestGet: [] 
     });
     bcrypt
       .hash(newUser.email, parseInt(process.env.SALT_ROUNDS))
@@ -112,9 +122,9 @@ const findUserByPhoneNumber = async (phoneNumber) => {
 const update = async (userData) => {
   try {
     // Lấy thông tin người dùng dựa trên _id hoặc bất kỳ trường thông tin nào khác
-    const { phoneNumber, email, name, address } = userData;
+    const { phoneNumber, email, name, address, listFriend, listRequestSend, listRequestGet } = userData;
     // Kiểm tra xem có trường thông tin nào được cung cấp không
-    if (!phoneNumber && !email && !name && !address) {
+    if (!phoneNumber && !email && !name && !address && !listFriend && !listRequestSend && !listRequestGet) {
       throw new Error("Missing user identification information!");
     }
     // Tìm và cập nhật thông tin người dùng
@@ -152,19 +162,170 @@ const deleteUser = async (phoneNumber) => {
   }
 };
 // add friend
-const addFriend = async (phoneNumberUserSend, phoneNumberUserGet) => {
+const addFriend = async (phoneNumber, phoneNumberUserGet) => {
   try {
-    await User.findOneAndUpdate(
-      { phoneNumberUserSend }, // Tìm kiếm dựa trên số điện thoại
-      { listFriend: [phoneNumberUserGet] }, // Dữ liệu cần cập nhật
-      { new: true } // Tùy chọn để trả về bản ghi được cập nhật
+    // Tìm kiếm người dùng
+
+    const user = await User.findOne({ phoneNumber });
+    console.log(user);
+
+    if (!user) {
+      throw new Error("Người dùng không tồn tại");
+    }
+
+    // Kiểm tra xem số điện thoại mới có tồn tại trong danh sách bạn bè không
+    if (user.listFriend.includes(phoneNumberUserGet)) {
+      console.log("Số điện thoại đã tồn tại trong danh sách bạn bè.");
+      return; // Không thêm số điện thoại đã tồn tại
+    }
+
+    // Thêm số điện thoại mới vào danh sách bạn bè
+    user.listFriend.push(phoneNumberUserGet);
+
+    // Cập nhật bản ghi người dùng với danh sách bạn bè mới
+    const updatedUser = await User.findOneAndUpdate(
+      { phoneNumber },
+      { listFriend: user.listFriend },
+      { new: true }
     );
+
+    return updatedUser;
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
+const addRequestSend = async (phoneNumber, phoneNumberUserGet) => {
+  try {
+    // Tìm kiếm người dùng
+
+    const user = await User.findOne({ phoneNumber });
+    console.log(user);
+
+    if (!user) {
+      throw new Error("Người dùng không tồn tại");
+    }
+
+    // Kiểm tra xem số điện thoại mới có tồn tại trong danh sách bạn bè không
+    if (user.listRequestSend.includes(phoneNumberUserGet)) {
+      console.log("Số điện thoại đã tồn tại trong danh sách bạn bè.");
+      return; // Không thêm số điện thoại đã tồn tại
+    }
+
+    // Thêm số điện thoại mới vào danh sách bạn bè
+    user.listRequestSend.push(phoneNumberUserGet);
+
+    // Cập nhật bản ghi người dùng với danh sách bạn bè mới
+    const updatedUser = await User.findOneAndUpdate(
+      { phoneNumber },
+      { listRequestSend: user.listRequestSend },
+      { new: true }
+    );
+
+    return updatedUser;
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
+const addRequestGet = async (phoneNumber, phoneNumberUserGet) => {
+  try {
+    // Tìm kiếm người dùng
+
+    const user = await User.findOne({ phoneNumber });
+    console.log(user);
+
+    if (!user) {
+      throw new Error("Người dùng không tồn tại");
+    }
+
+    // Kiểm tra xem số điện thoại mới có tồn tại trong danh sách bạn bè không
+    if (user.listRequestGet.includes(phoneNumberUserGet)) {
+      console.log("Số điện thoại đã tồn tại trong danh sách bạn bè.");
+      return; // Không thêm số điện thoại đã tồn tại
+    }
+
+    // Thêm số điện thoại mới vào danh sách bạn bè
+    user.listRequestGet.push(phoneNumberUserGet);
+
+    // Cập nhật bản ghi người dùng với danh sách bạn bè mới
+    const updatedUser = await User.findOneAndUpdate(
+      { phoneNumber },
+      { listRequestGet: user.listRequestGet },
+      { new: true }
+    );
+
+    return updatedUser;
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
+const getRequestSend = async (phoneNumber, phoneNumberUserGet) => {
+  try {
+    // Tìm kiếm người dùng
+
+    const user = await User.findOne({ phoneNumber });
+    console.log(user);
+
+    if (!user) {
+      throw new Error("Người dùng không tồn tại");
+    }
+
+    // Kiểm tra xem số điện thoại mới có tồn tại trong danh sách bạn bè không
+    if (user.listRequestSend.includes(phoneNumberUserGet)) {
+      console.log("Số điện thoại đã tồn tại trong danh sách bạn bè.");
+      return; // Không thêm số điện thoại đã tồn tại
+    }
+
+    // Thêm số điện thoại mới vào danh sách bạn bè
+    user.listRequestSend.push(phoneNumberUserGet);
+
+    // Cập nhật bản ghi người dùng với danh sách bạn bè mới
+    const updatedUser = await User.findOneAndUpdate(
+      { phoneNumber },
+      { listRequestSend: user.listRequestSend },
+      { new: true }
+    );
+
+    return updatedUser;
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
+const getRequestGet = async (phoneNumber) => {
+  try {
+    // Tìm kiếm người dùng
+
+    const user = await User.findOne({ phoneNumber });
+    console.log(user);
+
+    if (!user) {
+      throw new Error("Người dùng không tồn tại");
+    }
+
+    // Thêm số điện thoại mới vào danh sách bạn bè
+    user.listRequestGet.push(phoneNumberUserGet);
+
+    // Cập nhật bản ghi người dùng với danh sách bạn bè mới
+    const updatedUser = await User.findOneAndUpdate(
+      { phoneNumber },
+      { listRequestGet: user.listRequestGet },
+      { new: true }
+    );
+
+    return updatedUser;
   } catch (error) {
     console.log(error);
     throw new Error(error);
   }
 };
 module.exports = {
+  addRequestGet,
+  addRequestSend,
+  getRequestGet, 
+  getRequestSend, 
   addFriend,
   findUserByPhoneNumber,
   deleteUser,

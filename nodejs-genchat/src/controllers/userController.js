@@ -38,14 +38,16 @@ const login = async (req, res) => {
 
 //
 const register = async (req, res) => {
-  const { name, email, password, phoneNumber, address, photoURL } = req.body;
+  const { name, email, password, phoneNumber, photoURL, address, listFriend, listRequestSend, listRequestGet } = req.body;
   myEvent.emit("event.register.user", {
     name,
     email,
     password,
     phoneNumber,
-    address,
     photoURL,
+    address,
+    listFriend,
+    listRequestSend, listRequestGet
   });
   try {
     const user = await userRepository.register({
@@ -53,8 +55,10 @@ const register = async (req, res) => {
       email,
       password,
       phoneNumber,
-      address,
       photoURL,
+      address,
+      listFriend,
+      listRequestSend, listRequestGet
     });
     res.status(200).json({
       message: "Register Successfully!",
@@ -170,13 +174,16 @@ const getInfor = async (req, res) => {
 };
 const updateUserInfo = async (req, res) => {
   try {
-    const { phoneNumber, email, name, address } = req.body;
+    const { phoneNumber, email, name, address, listFriend, listRequestSend, listRequestGet } = req.body;
     // Gọi hàm update để cập nhật thông tin người dùng
     const updatedUser = await userRepository.update({
       phoneNumber,
       email,
       name,
       address,
+      listFriend,
+      listRequestSend, 
+      listRequestGet
     });
     // Trả về phản hồi thành công
     res.status(200).json({
@@ -291,10 +298,41 @@ const findUserByPhoneNumber = async (req, res) => {
 const addFriend = async (req, res) => {
   try {
     const { phoneNumberUserSend, phoneNumberUserGet } = req.body;
+    console.log("2", phoneNumberUserSend)
     await userRepository.addFriend(phoneNumberUserSend, phoneNumberUserGet);
     res.status(200).json({
-      message: "Add Friend Successfully!"
-    })
+      message: "Add Friend Successfully!",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error",
+    });
+  }
+};
+const addRequestSend = async (req, res) => {
+  try {
+    const { phoneNumberUserSend, phoneNumberUserGet } = req.body;
+    console.log("2", phoneNumberUserSend)
+    await userRepository.addRequestSend(phoneNumberUserSend, phoneNumberUserGet);
+    res.status(200).json({
+      message: "Add Friend Successfully!",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error",
+    });
+  }
+};
+const addRequestGet = async (req, res) => {
+  try {
+    const { phoneNumberUserSend, phoneNumberUserGet } = req.body;
+    console.log("2", phoneNumberUserSend)
+    await userRepository.addRequestGet(phoneNumberUserSend, phoneNumberUserGet);
+    res.status(200).json({
+      message: "Add Friend Successfully!",
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -303,6 +341,8 @@ const addFriend = async (req, res) => {
   }
 };
 module.exports = {
+  addRequestGet,
+  addRequestSend,
   addFriend,
   findUserByPhoneNumber,
   deleteUser,

@@ -23,4 +23,8 @@ router.delete("/deleteUser", userController.deleteUser);
 router.post("/findUserByPhoneNumber", userController.findUserByPhoneNumber);
 // addFriend
 router.post("/addFriend", userController.addFriend);
+// addRequestSend
+router.post("/addRequestSend", userController.addRequestSend);
+// addRequestGet
+router.post("/addRequestGet", userController.addRequestGet);
 module.exports = router;

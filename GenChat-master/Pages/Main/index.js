@@ -13,7 +13,7 @@ export default function Main({ navigation }, props) {
   const renderScene = ({ route }) => {
     switch (route.key) {
       case 'tab_1': return <Profile user={user} navigation={{navigation}} />;
-      case 'tab_2': return <ChatContainer navigation={{navigation}} />;
+      case 'tab_2': return <ChatContainer user={user} navigation={{navigation}} />;
       case 'tab_3': return <Profile user={user} navigation={navigation} />;
       default: return null;
     }

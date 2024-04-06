@@ -52,7 +52,7 @@ export default function Profile({ navigation }) {
           flexDirection: 'row', 
         }}>
           <Text style={[styles.flex1, styles.fontColor]}>Phone Number</Text>
-          <Text style={[styles.flex1, styles.bolder, styles.fontColor]}>0938225745</Text>
+          <Text style={[styles.flex1, styles.bolder, styles.fontColor]}>{user.phoneNumber}</Text>
         </View>
 
         <Pressable style={[styles.btnSubmitWrapper, styles.marginSide]} onPress={appSignOut}>
