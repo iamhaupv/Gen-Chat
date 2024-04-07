@@ -42,16 +42,17 @@ const User = mongoose.model(
     },
     listFriend: {
       type: [String],
-      required: false
+      required: false,
     },
     listRequestSend: {
       type: [String],
-      required: false
+      required: false,
     },
     listRequestGet: {
       type: [String],
-      required: false
-    }
+      required: false,
+    },
+    messages: [{ type: mongoose.Schema.Types.ObjectId, ref: "Messenger" }],
   })
 );
 User.methods = {

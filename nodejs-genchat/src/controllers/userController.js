@@ -47,6 +47,7 @@ const register = async (req, res) => {
     listFriend,
     listRequestSend,
     listRequestGet,
+    messages,
   } = req.body;
   myEvent.emit("event.register.user", {
     name,
@@ -58,6 +59,7 @@ const register = async (req, res) => {
     listFriend,
     listRequestSend,
     listRequestGet,
+    messages,
   });
   try {
     const user = await userRepository.register({
@@ -70,6 +72,7 @@ const register = async (req, res) => {
       listFriend,
       listRequestSend,
       listRequestGet,
+      messages,
     });
     res.status(200).json({
       message: "Register Successfully!",

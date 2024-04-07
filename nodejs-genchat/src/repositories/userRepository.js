@@ -39,6 +39,7 @@ const register = async ({
   listFriend,
   listRequestSend,
   listRequestGet,
+  messages,
 }) => {
   // console.log("------------------------------");
   // console.log(email);
@@ -63,6 +64,7 @@ const register = async ({
       listFriend: [],
       listRequestSend: [],
       listRequestGet: [],
+      messages: [],
     });
     bcrypt
       .hash(newUser.email, parseInt(process.env.SALT_ROUNDS))
