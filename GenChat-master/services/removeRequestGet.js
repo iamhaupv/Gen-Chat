@@ -1,12 +1,12 @@
 import axios from "axios";
-const addFriend = async (phoneNumberUserSend, phoneNumberUserGet) => {
+const addRequestGet = async (phoneNumberUserSend, phoneNumberUserGet) => {
   try {
     const userData = {
       phoneNumberUserSend: phoneNumberUserSend,
       phoneNumberUserGet: phoneNumberUserGet,
     };
     const response = await axios.post(
-      "http://localhost:6969/users/addFriend",
+      "http://localhost:6969/users/removeRequestGet",
       userData
     );
     if (response.status === 200) {
@@ -22,4 +22,4 @@ const addFriend = async (phoneNumberUserSend, phoneNumberUserGet) => {
     throw new Error(error);
   }
 };
-export default addFriend;
+export default addRequestGet;

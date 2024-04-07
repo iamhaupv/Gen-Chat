@@ -1,6 +1,7 @@
 import React from 'react'
 import { TextInput, ScrollView, View, Image, Text, Pressable } from 'react-native'
 import Chat from './Chat'
+import GlobalAsset from '../GlobalAsset'
 
 export default function ChatUserDetail({ navigation }) {
   return (

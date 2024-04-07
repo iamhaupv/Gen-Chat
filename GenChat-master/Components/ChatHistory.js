@@ -1,4 +1,4 @@
-import { TextInput, ScrollView, View, Pressable, Text, Modal } from "react-native";
+import { TextInput, ScrollView, View, Pressable, Text, Modal, Image } from "react-native";
 import { collection, getDocs, doc } from "firebase/firestore";
 import config from "../firebase/config.js";
 import ChatUser from "./ChatUser";
@@ -7,7 +7,7 @@ import { useRoute } from "@react-navigation/native";
 import findUserByPhoneNumber from "../services/findUserByPhoneNumber.js";
 
 import GlobalStyle from "../GlobalStyle.js";
-
+import GlobalAsset from '../GlobalAsset';
 
 export default function ChatHistory({ navigation }) {
   const [phoneNumber, onChangePhoneNumber] = useState("");
@@ -34,36 +34,69 @@ export default function ChatHistory({ navigation }) {
 
   return (
     <ScrollView>
-      <View>
-        <View style={{flex: 1, flexDirection: 'row'}}>
+      <View style={{
+        gap: 10
+      }}>
+        <View style={{
+          flex: 1,
+          flexDirection: 'row',
+          gap: 10
+        }}>
           <TextInput
             style={{
               backgroundColor: "#eeeeee",
-              padding: 10,
-              flex: 4, 
+              padding: 16, 
+              flex: 5
+            }}
+            placeholder='Find new friend here' 
+            onChangeText={onChangePhoneNumber}
+          >
+          </TextInput>
+
+          <Pressable
+            style={{
+              flex: 1, 
               alignItems: 'center', 
               justifyContent: 'center'
             }}
-            value={phoneNumber}
-            placeholder="Find new friend here"
-            onChangeText={onChangePhoneNumber}
+            onPress={findUser}
           >
+            <Image
+              source={GlobalAsset.searchIcon}
+              style={{
+                width: 30, 
+                height: 30
+              }}
+            >
 
-          </TextInput>
-          <Pressable onPress={findUser} style={{
-            flex: 1, 
-            alignItems: 'center', 
-            justifyContent: 'center'
-          }}>
-            <Text>Find</Text>
+            </Image>
           </Pressable>
+        </View>
 
-          <Pressable onPress={() => navigation.navigate("ListRequest")} style={{
+        <View style={[
+          {
             flex: 1, 
-            alignItems: 'center', 
-            justifyContent: 'center'
-          }}>
-            <Text>List Request</Text>
+            flexDirection: 'row', 
+            justifyContent: 'space-around', 
+            gap: 10, 
+            margin: 10
+          }
+        ]}>
+          <Pressable
+            style={[styles.btnSubmitWrapper, {flex: 1, justifyContent: 'center'}]}
+            onPress={() => navigation.navigate("SentFriendRequest")}
+          >
+            <Text style={[styles.btnSubmit, {fontSize: 16}]}>
+              List of sent friend requests
+            </Text>
+          </Pressable>
+          <Pressable
+            style={[styles.btnSubmitWrapper, {flex: 1, justifyContent: 'center'}]}
+            onPress={() => navigation.navigate("ReceivedFriendRequest")}
+          >
+            <Text style={[styles.btnSubmit, {fontSize: 16}]}>
+              List of received friend requests
+            </Text>
           </Pressable>
         </View>
 

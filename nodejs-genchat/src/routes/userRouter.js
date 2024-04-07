@@ -29,6 +29,8 @@ router.post("/addRequestSend", userController.addRequestSend);
 router.post("/addRequestGet", userController.addRequestGet);
 // getRequestGet
 router.post("/getRequestGet", userController.getRequestGet);
+// getRequestSend
+router.post("/getRequestSend", userController.getRequestSend);
 // acceptRequestGet
 router.post("/acceptRequestGet", userController.acceptRequestGet);
 // acceptRequestSend

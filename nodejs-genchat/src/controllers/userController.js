@@ -19,6 +19,10 @@ const login = async (req, res) => {
     });
   }
   const { phoneNumber, password } = req.body;
+  console.log("---------------------------");
+  console.log(phoneNumber);
+  console.log(password);
+  console.log("---------------------------");
   try {
     let existUser = await userRepository.login({
       phoneNumber,
@@ -433,6 +437,22 @@ const getRequestGet = async (req, res) => {
   }
 };
 //
+const getRequestSend = async (req, res) => {
+  try {
+    const { phoneNumber } = req.body;
+    const user = await userRepository.getRequestSend(phoneNumber);
+    res.status(200).json({
+      message: "Successfully!",
+      data: user,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error!",
+    });
+  }
+};
+//
 const removeRequestSend = async (req, res) => {
   try {
     const { phoneNumber, phoneRemove } = req.body;
@@ -479,6 +499,7 @@ const removeFriend = async (req, res) => {
 };
 //
 module.exports = {
+  getRequestSend,
   removeFriend,
   removeRequestGet,
   removeRequestSend,

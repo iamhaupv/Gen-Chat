@@ -4,7 +4,11 @@ const jwt = require("jsonwebtoken");
 const mailer = require("../utils/mailer");
 // login (đăng nhập)
 const login = async ({ phoneNumber, password }) => {
+  console.log(phoneNumber);
+  console.log(password);
   let existUser = await User.findOne({ phoneNumber }).exec();
+  console.log("Exist User");
+  console.log(existUser);
   if (existUser) {
     let isMatch = await bcrypt.compare(password, existUser.password);
     if (!!isMatch) {
@@ -321,6 +325,15 @@ const getRequestGet = async (phoneNumber) => {
     return user.listRequestGet;
   }
 };
+// lấy toàn bộ phone trong getRequestSend (danh sách lời mời kết bạn) để render gồm 2 option accept, delete
+const getRequestSend = async (phoneNumber) => {
+  const user = await User.findOne({ phoneNumber });
+  if (!user) {
+    throw new Error();
+  } else {
+    return user.listRequestSend;
+  }
+};
 // delete request send xóa phone trong listRequestSend
 const removeRequestSend = async (phoneNumber, phoneNumberRemove) => {
   try {
@@ -382,6 +395,7 @@ const removeFriend = async (phoneNumber, phoneRemove) => {
   }
 };
 module.exports = {
+  getRequestSend,
   removeFriend,
   removeRequestGet,
   removeRequestSend,

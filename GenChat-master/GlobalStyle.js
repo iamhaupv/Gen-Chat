@@ -90,6 +90,10 @@ export default function GlobalStyle() {
             fontWeight: 'bold',
             padding: 10,
         },
+        paddingSide: {
+            paddingLeft: margin,
+            paddingRight: margin,
+        }, 
 
         // SignIn
         hyperlinkComponent: {
