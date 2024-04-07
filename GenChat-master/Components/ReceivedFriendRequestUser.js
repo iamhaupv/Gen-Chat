@@ -1,11 +1,10 @@
 import React from 'react'
+import { useRoute } from "@react-navigation/native";
 import { TextInput, ScrollView, Text, View, Image, Pressable } from 'react-native'
 import GlobalAsset from "../GlobalAsset.js";
 import GlobalStyle from '../GlobalStyle.js';
 
-export default function SentFriendRequestUser({ navigation }) {
-  const styles = GlobalStyle();
-
+export default function ReceivedFriendRequestUser({ navigation, user }) {
   return (
     <View
       style={{
@@ -47,8 +46,8 @@ export default function SentFriendRequestUser({ navigation }) {
             gap: 10
           }}
         >
-          <Text style={{fontWeight: 'bold'}}>Nguyen Thanh Khoa</Text>
-          <Text>0374858237</Text>
+          <Text style={{fontWeight: 'bold'}}>{user.name}</Text>
+          <Text>{user.phoneNumber}</Text>
         </View>
 
       </View>

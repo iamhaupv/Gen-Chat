@@ -4,6 +4,9 @@ import config from "../firebase/config.js";
 import ChatUser from "./ChatUser";
 import React, { useState } from "react";
 import { useRoute } from "@react-navigation/native";
+import getRequestSend from '../services/getRequestSend'
+import getRequestGet from '../services/getRequestGet'
+import getInfor from "../services/getInfor.js";
 import findUserByPhoneNumber from "../services/findUserByPhoneNumber.js";
 
 import GlobalStyle from "../GlobalStyle.js";
@@ -16,8 +19,6 @@ export default function ChatHistory({ navigation }) {
 
   const route = useRoute();
   const userSend = route.params?.user;
-  console.log("User send");
-  console.log(userSend);
 
   const findUser = async () => {
     let userGet;
@@ -31,6 +32,30 @@ export default function ChatHistory({ navigation }) {
 
     navigation.navigate("FindingUser", {userSend: userSend, userGet: userGet})
   };
+
+  const goToSentFriendRequestPage = async () => {
+    const users = [];
+    const userGets = await getRequestGet(userSend.phoneNumber);
+
+    for (let i = 0; i < userGets.data.length; i++) {
+      const user = await getInfor(userGets.data[i]);
+      users.push(user.data);
+    }
+
+    navigation.navigate("SentFriendRequest", {user: userSend, userGets: users})
+  }
+
+  const goToReceivedFriendRequestPage = async () => {
+    const users = [];
+    const userSends = await getRequestSend(userSend.phoneNumber);
+
+    for (let i = 0; i < userSends.data.length; i++) {
+      const user = await getInfor(userSends.data[i]);
+      users.push(user.data);
+    }
+
+    navigation.navigate("ReceivedFriendRequest", {user: userSend, userSends: users})
+  }
 
   return (
     <ScrollView>
@@ -84,7 +109,7 @@ export default function ChatHistory({ navigation }) {
         ]}>
           <Pressable
             style={[styles.btnSubmitWrapper, {flex: 1, justifyContent: 'center'}]}
-            onPress={() => navigation.navigate("SentFriendRequest")}
+            onPress={goToSentFriendRequestPage}
           >
             <Text style={[styles.btnSubmit, {fontSize: 16}]}>
               List of sent friend requests
@@ -92,7 +117,7 @@ export default function ChatHistory({ navigation }) {
           </Pressable>
           <Pressable
             style={[styles.btnSubmitWrapper, {flex: 1, justifyContent: 'center'}]}
-            onPress={() => navigation.navigate("ReceivedFriendRequest")}
+            onPress={goToReceivedFriendRequestPage}
           >
             <Text style={[styles.btnSubmit, {fontSize: 16}]}>
               List of received friend requests

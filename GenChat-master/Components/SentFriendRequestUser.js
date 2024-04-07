@@ -3,7 +3,7 @@ import { TextInput, ScrollView, Text, View, Image, Pressable } from 'react-nativ
 import GlobalAsset from "../GlobalAsset.js";
 import GlobalStyle from '../GlobalStyle.js';
 
-export default function SentFriendRequestUser({ navigation }) {
+export default function SentFriendRequestUser({ navigation, user }) {
   const styles = GlobalStyle();
 
   return (
@@ -47,8 +47,8 @@ export default function SentFriendRequestUser({ navigation }) {
             gap: 10
           }}
         >
-          <Text style={{fontWeight: 'bold'}}>Nguyen Thanh Khoa</Text>
-          <Text>0374858237</Text>
+          <Text style={{fontWeight: 'bold'}}>{user.name}</Text>
+          <Text>{user.phoneNumber}</Text>
         </View>
 
       </View>

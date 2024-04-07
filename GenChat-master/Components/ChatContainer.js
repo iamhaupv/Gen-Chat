@@ -9,8 +9,6 @@ import ReceivedFriendRequest from './ReceivedFriendRequest';
 export default function ChatContainer() {
   const route = useRoute();
   const user = route.params?.user;
-  console.log("User send 1");
-  console.log(user);
 
   const Stack = createNativeStackNavigator();
 

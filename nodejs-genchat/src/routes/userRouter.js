@@ -12,7 +12,7 @@ router.post("/sendResetLinkEmail", userController.sendResetLinkEmail);
 // url reset
 router.post("/reset", userController.reset);
 // getInfor
-router.get("/getInfor", userController.getInfor);
+router.post("/getInfor", userController.getInfor);
 // update userInfor
 router.patch("/update", userController.updateUserInfo);
 // uploadImage
