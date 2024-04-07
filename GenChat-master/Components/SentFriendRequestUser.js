@@ -3,7 +3,8 @@ import { TextInput, ScrollView, Text, View, Image, Pressable } from 'react-nativ
 import GlobalAsset from "../GlobalAsset.js";
 import GlobalStyle from '../GlobalStyle.js';
 
-export default function SentFriendRequestUser({ navigation, user }) {
+export default function SentFriendRequestUser({ navigation, user, userRoot }) {
+  console.log(userRoot);
   const styles = GlobalStyle();
 
   return (

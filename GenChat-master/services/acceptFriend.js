@@ -1,5 +1,5 @@
 import axios from "axios";
-const addFriend = async (phoneNumberUserSend, phoneNumberUserGet) => {
+const acceptFriend = async (phoneNumberUserSend, phoneNumberUserGet) => {
   try {
     const userData = {
       phoneNumberUserSend: phoneNumberUserSend,
@@ -22,4 +22,4 @@ const addFriend = async (phoneNumberUserSend, phoneNumberUserGet) => {
     throw new Error(error);
   }
 };
-export default addFriend;
+export default acceptFriend;

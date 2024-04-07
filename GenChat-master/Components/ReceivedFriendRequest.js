@@ -10,7 +10,7 @@ export default function ReceivedFriendRequest({navigation}) {
   
   return (
     <ScrollView>
-      {userSends.map((elem, i) => <ReceivedFriendRequestUser navigation={navigation} key={i} user={elem}/>)}
+      {userSends.map((elem, i) => <ReceivedFriendRequestUser navigation={navigation} key={i} user={elem} userRoot={user}/>)}
     </ScrollView>
   )
 }

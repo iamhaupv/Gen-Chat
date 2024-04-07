@@ -10,7 +10,7 @@ export default function SentFriendRequest() {
 
   return (
     <ScrollView>
-    {userGets.map((elem, i) => <SentFriendRequestUser navigation={navigation} key={i} user={elem}/>)}
+    {userGets.map((elem, i) => <SentFriendRequestUser navigation={navigation} key={i} user={elem} userRoot={user}/>)}
   </ScrollView>
   )
 }

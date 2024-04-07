@@ -3,8 +3,16 @@ import { useRoute } from "@react-navigation/native";
 import { TextInput, ScrollView, Text, View, Image, Pressable } from 'react-native'
 import GlobalAsset from "../GlobalAsset.js";
 import GlobalStyle from '../GlobalStyle.js';
+import acceptFriend from '../services/acceptFriend.js';
 
-export default function ReceivedFriendRequestUser({ navigation, user }) {
+export default function ReceivedFriendRequestUser({ navigation, user, userRoot }) {
+  const acceptFriendRequest = async () => {
+    await acceptFriend(userRoot.phoneNumber, user.phoneNumber);
+    await acceptFriend(user.phoneNumber, userRoot.phoneNumber);
+    alert("Added friend Successfully!");
+    navigation.navigate("ChatHistory");
+  }
+
   return (
     <View
       style={{
@@ -61,7 +69,9 @@ export default function ReceivedFriendRequestUser({ navigation, user }) {
       }}>
         {/* <Text style={{}}>Accept Friend?</Text> */}
         
-        <Pressable>
+        <Pressable
+          onPress={acceptFriendRequest}
+        >
           <Image
             source={GlobalAsset.acceptIcon}
             style={{
