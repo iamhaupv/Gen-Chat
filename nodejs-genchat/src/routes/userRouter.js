@@ -21,10 +21,17 @@ router.post("/uploadAvatar", upload.single("image"), userController.uploadAvatar
 router.delete("/deleteUser", userController.deleteUser);
 // findUserByPhoneNumber
 router.post("/findUserByPhoneNumber", userController.findUserByPhoneNumber);
-// addFriend
-router.post("/addFriend", userController.addFriend);
+// aceptFriend
+router.post("/acceptFriend", userController.acceptFriend);
 // addRequestSend
 router.post("/addRequestSend", userController.addRequestSend);
 // addRequestGet
 router.post("/addRequestGet", userController.addRequestGet);
+// getRequestGet
+router.post("/getRequestGet", userController.getRequestGet);
+// acceptRequestGet
+router.post("/acceptRequestGet", userController.acceptRequestGet);
+// acceptRequestSend
+router.post("/acceptRequestSend", userController.acceptRequestSend);
+//
 module.exports = router;

@@ -10,7 +10,7 @@ const myEvent = new EventEmitter();
 myEvent.on("event.register.user", (params) => {
   console.log(`${JSON.stringify(params)}`);
 });
-//
+// login (đăng nhập)
 const login = async (req, res) => {
   const error = validationResult(req);
   if (!error.isEmpty()) {
@@ -35,10 +35,19 @@ const login = async (req, res) => {
     });
   }
 };
-
-//
+// register (đang ký)
 const register = async (req, res) => {
-  const { name, email, password, phoneNumber, photoURL, address, listFriend, listRequestSend, listRequestGet } = req.body;
+  const {
+    name,
+    email,
+    password,
+    phoneNumber,
+    photoURL,
+    address,
+    listFriend,
+    listRequestSend,
+    listRequestGet,
+  } = req.body;
   myEvent.emit("event.register.user", {
     name,
     email,
@@ -47,7 +56,8 @@ const register = async (req, res) => {
     photoURL,
     address,
     listFriend,
-    listRequestSend, listRequestGet
+    listRequestSend,
+    listRequestGet,
   });
   try {
     const user = await userRepository.register({
@@ -58,7 +68,8 @@ const register = async (req, res) => {
       photoURL,
       address,
       listFriend,
-      listRequestSend, listRequestGet
+      listRequestSend,
+      listRequestGet,
     });
     res.status(200).json({
       message: "Register Successfully!",
@@ -71,7 +82,7 @@ const register = async (req, res) => {
     });
   }
 };
-//
+// verify khi đăng ký thì nó sẽ gửi mail để xác nhận 
 const verify = (req, res) => {
   bcrypt.compare(req.query.email, req.query.token, (err, result) => {
     if (result == true) {
@@ -91,6 +102,7 @@ const verify = (req, res) => {
     }
   });
 };
+// gửi link để reset password về email 
 const sendResetLinkEmail = async (req, res) => {
   const { email } = req.body;
   if (!email) {
@@ -127,6 +139,7 @@ const sendResetLinkEmail = async (req, res) => {
     });
   }
 };
+// đặt lại password
 const reset = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -157,6 +170,7 @@ const reset = async (req, res) => {
     });
   }
 };
+// hiển thị thông tin của user
 const getInfor = async (req, res) => {
   try {
     const { phoneNumber } = req.body;
@@ -172,9 +186,18 @@ const getInfor = async (req, res) => {
     });
   }
 };
+// update các trường của user
 const updateUserInfo = async (req, res) => {
   try {
-    const { phoneNumber, email, name, address, listFriend, listRequestSend, listRequestGet } = req.body;
+    const {
+      phoneNumber,
+      email,
+      name,
+      address,
+      listFriend,
+      listRequestSend,
+      listRequestGet,
+    } = req.body;
     // Gọi hàm update để cập nhật thông tin người dùng
     const updatedUser = await userRepository.update({
       phoneNumber,
@@ -182,8 +205,8 @@ const updateUserInfo = async (req, res) => {
       name,
       address,
       listFriend,
-      listRequestSend, 
-      listRequestGet
+      listRequestSend,
+      listRequestGet,
     });
     // Trả về phản hồi thành công
     res.status(200).json({
@@ -201,6 +224,7 @@ const updateUserInfo = async (req, res) => {
     });
   }
 };
+// upload hình ảnh lên s3 
 const uploadAvatar = async (req, res) => {
   try {
     if (!req.file) {
@@ -266,6 +290,7 @@ const uploadAvatar = async (req, res) => {
     });
   }
 };
+// deleteUser xóa collection trong db
 const deleteUser = async (req, res) => {
   try {
     const { phoneNumber } = req.body;
@@ -280,6 +305,7 @@ const deleteUser = async (req, res) => {
     });
   }
 };
+// tìm theo phoneNumber
 const findUserByPhoneNumber = async (req, res) => {
   try {
     const { phoneNumber } = req.body;
@@ -295,11 +321,11 @@ const findUserByPhoneNumber = async (req, res) => {
     });
   }
 };
-const addFriend = async (req, res) => {
+// khi accept thì phone trong listRequestGet sẽ được vào listFriend và xóa phone khỏi listRequestGet
+const acceptRequestGet = async (req, res) => {
   try {
     const { phoneNumberUserSend, phoneNumberUserGet } = req.body;
-    console.log("2", phoneNumberUserSend)
-    await userRepository.addFriend(phoneNumberUserSend, phoneNumberUserGet);
+    await userRepository.acceptRequestGet(phoneNumberUserGet, phoneNumberUserSend);
     res.status(200).json({
       message: "Add Friend Successfully!",
     });
@@ -310,11 +336,46 @@ const addFriend = async (req, res) => {
     });
   }
 };
+// khi accept thì phone trong listRequestSend sẽ được vào listFriend và xóa phone khỏi listRequestSend
+const acceptRequestSend = async (req, res) => {
+  try {
+    const { phoneNumberUserSend, phoneNumberUserGet } = req.body;
+    await userRepository.acceptRequestSend(phoneNumberUserSend, phoneNumberUserGet);
+    res.status(200).json({
+      message: "Add Friend Successfully!",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error",
+    });
+  }
+};
+// khi chấp nhận kết bạn sẽ gọi lại 2 hàm acceptRequestSend và acceptRequestGet
+const acceptFriend = async (req, res) => {
+  try {
+    const { phoneNumberUserSend, phoneNumberUserGet } = req.body;
+    await userRepository.acceptRequestSend(phoneNumberUserSend, phoneNumberUserGet);
+    await userRepository.acceptRequestGet(phoneNumberUserGet, phoneNumberUserSend);
+    res.status(200).json({
+      message: "Add friend successfully!"
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      message: "Cannot add friend!"
+    })
+  }
+}
+// 
 const addRequestSend = async (req, res) => {
   try {
     const { phoneNumberUserSend, phoneNumberUserGet } = req.body;
-    console.log("2", phoneNumberUserSend)
-    await userRepository.addRequestSend(phoneNumberUserSend, phoneNumberUserGet);
+    console.log("2", phoneNumberUserSend);
+    await userRepository.addRequestSend(
+      phoneNumberUserSend,
+      phoneNumberUserGet
+    );
     res.status(200).json({
       message: "Add Friend Successfully!",
     });
@@ -325,11 +386,11 @@ const addRequestSend = async (req, res) => {
     });
   }
 };
+//
 const addRequestGet = async (req, res) => {
   try {
     const { phoneNumberUserSend, phoneNumberUserGet } = req.body;
-    console.log("2", phoneNumberUserSend)
-    await userRepository.addRequestGet(phoneNumberUserSend, phoneNumberUserGet);
+    await userRepository.addRequestGet(phoneNumberUserGet, phoneNumberUserSend);
     res.status(200).json({
       message: "Add Friend Successfully!",
     });
@@ -340,10 +401,30 @@ const addRequestGet = async (req, res) => {
     });
   }
 };
+//
+const getRequestGet = async (req, res) => {
+  try {
+    const { phoneNumber } = req.body;
+    const user =  await userRepository.getRequestGet(phoneNumber);
+    res.status(200).json({
+      message: "Successfully!",
+      data: user
+    })
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error!",
+    });
+  }
+};
+//
 module.exports = {
+  getRequestGet,
+  acceptRequestSend,
+  acceptRequestGet,
   addRequestGet,
   addRequestSend,
-  addFriend,
+  acceptFriend,
   findUserByPhoneNumber,
   deleteUser,
   uploadAvatar,
