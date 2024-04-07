@@ -182,7 +182,7 @@ const acceptRequestGet = async (phoneNumber, phoneNumberUserGet) => {
   try {
     // Tìm kiếm người dùng
     const user = await User.findOne({ phoneNumber });
-    console.log(user)
+    console.log(user);
     if (!user) {
       throw new Error("Người dùng không tồn tại");
     }
@@ -201,7 +201,7 @@ const acceptRequestGet = async (phoneNumber, phoneNumberUserGet) => {
       //   - $pull: loại bỏ phoneNumberUserGet khỏi listRequestGet
       {
         $push: { listFriend: phoneNumberUserGet },
-        $pull: { listRequestGet: phoneNumberUserGet }
+        $pull: { listRequestGet: phoneNumberUserGet },
       },
       // Tùy chọn: trả về bản ghi đã cập nhật
       { new: true }
@@ -240,7 +240,7 @@ const acceptRequestSend = async (phoneNumber, phoneNumberUserGet) => {
       //   - $pull: loại bỏ phoneNumberUserGet khỏi listRequestGet
       {
         $push: { listFriend: phoneNumberUserGet },
-        $pull: { listRequestSend: phoneNumberUserGet }
+        $pull: { listRequestSend: phoneNumberUserGet },
       },
       // Tùy chọn: trả về bản ghi đã cập nhật
       { new: true }
@@ -319,8 +319,70 @@ const getRequestGet = async (phoneNumber) => {
     return user.listRequestGet;
   }
 };
-//
+// delete request send xóa phone trong listRequestSend
+const removeRequestSend = async (phoneNumber, phoneNumberRemove) => {
+  try {
+    const user = await User.findOne({ phoneNumber });
+    if (!user) {
+      throw new Error("User is not exist!");
+    }
+    const phoneExist = user.listRequestSend.includes(phoneNumberRemove);
+    if (!phoneExist) {
+      throw new Error("Phone not exist!");
+    }
+    await User.updateOne(
+      { phoneNumber },
+      { $pull: { listRequestSend: phoneNumberRemove } }
+    );
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
+// delete request send xóa phone trong listRequestGet
+const removeRequestGet = async (phoneNumber, phoneNumberRemove) => {
+  try {
+    const user = await User.findOne({ phoneNumber });
+    if (!user) {
+      throw new Error("User is not exist!");
+    }
+    const phoneExist = user.listRequestGet.includes(phoneNumberRemove);
+    if (!phoneExist) {
+      throw new Error("Phone not exist!");
+    }
+    await User.updateOne(
+      { phoneNumber },
+      { $pull: { listRequestGet: phoneNumberRemove } }
+    );
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
+// delete friend xóa phone trong listFriend của cả 2 bên
+const removeFriend = async (phoneNumber, phoneRemove) => {
+  try {
+    const user = await User.findOne({ phoneNumber });
+    if (!user) {
+      throw new Error("User is not exist!");
+    }
+    const phone = user.listFriend.includes(phoneRemove);
+    if (!phone) {
+      throw new Error("Phone is not exist!");
+    }
+    await User.findOneAndUpdate(
+      { phoneNumber },
+      { $pull: { listFriend: phoneRemove } }
+    );
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
 module.exports = {
+  removeFriend,
+  removeRequestGet,
+  removeRequestSend,
   acceptRequestGet,
   acceptRequestSend,
   addRequestGet,

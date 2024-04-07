@@ -33,5 +33,10 @@ router.post("/getRequestGet", userController.getRequestGet);
 router.post("/acceptRequestGet", userController.acceptRequestGet);
 // acceptRequestSend
 router.post("/acceptRequestSend", userController.acceptRequestSend);
-//
+// removeRequestSend
+router.post("/removeRequestSend", userController.removeRequestSend);
+// removeRequestGet
+router.post("/removeRequestGet", userController.removeRequestGet);
+// removeFriend
+router.post("/removeFriend", userController.removeFriend);
 module.exports = router;
