@@ -394,7 +394,17 @@ const removeFriend = async (phoneNumber, phoneRemove) => {
     throw new Error(error);
   }
 };
+// get List Friend
+const getListFriend = async(phoneNumber) =>{
+  const user = await User.findOne({ phoneNumber });
+  if (!user) {
+    throw new Error();
+  } else {
+    return user.listFriend;
+  }
+}
 module.exports = {
+  getListFriend,
   getRequestSend,
   removeFriend,
   removeRequestGet,

@@ -41,4 +41,6 @@ router.post("/removeRequestSend", userController.removeRequestSend);
 router.post("/removeRequestGet", userController.removeRequestGet);
 // removeFriend
 router.post("/removeFriend", userController.removeFriend);
+// getListFriend
+router.post("/getListFriend", userController.getListFriend);
 module.exports = router;

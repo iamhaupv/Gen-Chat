@@ -2,18 +2,20 @@ import { TextInput, ScrollView, View, Pressable, Text, Modal, Image } from "reac
 import { collection, getDocs, doc } from "firebase/firestore";
 import config from "../firebase/config.js";
 import ChatUser from "./ChatUser";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRoute } from "@react-navigation/native";
 import getRequestSend from '../services/getRequestSend'
 import getRequestGet from '../services/getRequestGet'
 import getInfor from "../services/getInfor.js";
+import getListFriend from "../services/getListFriend.js";
 import findUserByPhoneNumber from "../services/findUserByPhoneNumber.js";
 
 import GlobalStyle from "../GlobalStyle.js";
 import GlobalAsset from '../GlobalAsset';
 
-export default function ChatHistory({ navigation }) {
+function ChatHistory({ navigation }) {
   const [phoneNumber, onChangePhoneNumber] = useState("");
+  const [friends, onChangeFriends] = useState([]);
 
   const styles = GlobalStyle();
 
@@ -57,9 +59,22 @@ export default function ChatHistory({ navigation }) {
     navigation.navigate("ReceivedFriendRequest", {user: userSend, userSends: users})
   }
 
-  const getFriends = async () => {
-    // const friends = await 
-  }
+  useEffect(() => {
+    // write your code here, it's like componentWillMount
+    (async () => {
+      const friends = [];
+      const friendList = await getListFriend(userSend.phoneNumber);
+      // console.log(friends);
+  
+      for (let i = 0; i < friendList.data.length; i++) {
+        const user = await getInfor(friendList.data[i]);
+        friends.push(user.data);
+      }
+  
+      onChangeFriends(friends);
+      console.log(friends);
+    })();
+  }, [])
 
   return (
     <ScrollView>
@@ -130,6 +145,8 @@ export default function ChatHistory({ navigation }) {
         </View>
 
         <View>
+          {friends.map((elem, i) => <ChatUser navigation={navigation} key={i} user={elem}/>)}
+{/* 
           <ChatUser navigation={navigation} />
           <ChatUser navigation={navigation} />
           <ChatUser navigation={navigation} />
@@ -141,9 +158,11 @@ export default function ChatHistory({ navigation }) {
           <ChatUser navigation={navigation} />
           <ChatUser navigation={navigation} />
           <ChatUser navigation={navigation} />
-          <ChatUser navigation={navigation} />
+          <ChatUser navigation={navigation} /> */}
         </View>
       </View>
     </ScrollView>
   );
 }
+
+export default ChatHistory;

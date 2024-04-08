@@ -437,6 +437,7 @@ const getRequestGet = async (req, res) => {
   }
 };
 //
+
 const getRequestSend = async (req, res) => {
   try {
     const { phoneNumber } = req.body;
@@ -498,7 +499,24 @@ const removeFriend = async (req, res) => {
   }
 };
 //
+const getListFriend = async (req, res) => {
+  try {
+    const { phoneNumber } = req.body;
+    const user = await userRepository.getListFriend(phoneNumber);
+    res.status(200).json({
+      message: "Successfully!",
+      data: user,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error!",
+    });
+  }
+};
+//
 module.exports = {
+  getListFriend,
   getRequestSend,
   removeFriend,
   removeRequestGet,

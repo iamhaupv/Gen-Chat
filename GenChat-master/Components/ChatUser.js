@@ -2,7 +2,7 @@ import React from 'react'
 import { TextInput, ScrollView, Text, View, Image, Pressable } from 'react-native'
 import GlobalAsset from "../GlobalAsset.js";
 
-export default function ChatUser({ navigation }) {
+export default function ChatUser({ navigation, user }) {
   return (
     <Pressable
       onPress={() => {navigation.navigate("ChatUserDetail")}}
@@ -33,8 +33,8 @@ export default function ChatUser({ navigation }) {
           gap: 10
         }}
       >
-        <Text style={{fontWeight: 'bold'}}>Nguyen Thanh Khoa</Text>
-        <Text>lmao lmao</Text>
+        <Text style={{fontWeight: 'bold'}}>{user.name}</Text>
+        <Text>{user.phoneNumber}</Text>
       </View>
     </Pressable>
   )
