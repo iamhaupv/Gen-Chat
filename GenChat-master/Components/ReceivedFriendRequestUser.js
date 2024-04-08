@@ -4,12 +4,21 @@ import { TextInput, ScrollView, Text, View, Image, Pressable } from 'react-nativ
 import GlobalAsset from "../GlobalAsset.js";
 import GlobalStyle from '../GlobalStyle.js';
 import acceptFriend from '../services/acceptFriend.js';
+import removeRequestSend from '../services/removeRequestSend.js';
+import removeRequestGet from '../services/removeRequestGet.js';
 
 export default function ReceivedFriendRequestUser({ navigation, user, userRoot }) {
   const acceptFriendRequest = async () => {
     await acceptFriend(userRoot.phoneNumber, user.phoneNumber);
     await acceptFriend(user.phoneNumber, userRoot.phoneNumber);
     alert("Added friend Successfully!");
+    navigation.navigate("ChatHistory");
+  }
+
+  const declineFriendRequest = async () => {
+    await removeRequestSend(userRoot.phoneNumber, user.phoneNumber);
+    await removeRequestGet(user.phoneNumber, userRoot.phoneNumber);
+    alert("Remove friend request Successfully!");
     navigation.navigate("ChatHistory");
   }
 
@@ -81,7 +90,9 @@ export default function ReceivedFriendRequestUser({ navigation, user, userRoot }
           >
           </Image>
         </Pressable>
-        <Pressable>
+        <Pressable
+          onPress={declineFriendRequest}
+        >
           <Image
             source={GlobalAsset.cancelIcon}
             style={{

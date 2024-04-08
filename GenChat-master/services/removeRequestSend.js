@@ -1,9 +1,9 @@
 import axios from "axios";
-const addRequestGet = async (phoneNumberUserSend, phoneNumberUserGet) => {
+const removeRequestSend = async (phoneNumberUserSend, phoneNumberUserGet) => {
   try {
     const userData = {
-      phoneNumberUserSend: phoneNumberUserSend,
-      phoneNumberUserGet: phoneNumberUserGet,
+      phoneNumber: phoneNumberUserSend,
+      phoneRemove: phoneNumberUserGet,
     };
     const response = await axios.post(
       "http://localhost:6969/users/removeRequestSend",
@@ -22,4 +22,4 @@ const addRequestGet = async (phoneNumberUserSend, phoneNumberUserGet) => {
     throw new Error(error);
   }
 };
-export default addRequestGet;
+export default removeRequestSend;

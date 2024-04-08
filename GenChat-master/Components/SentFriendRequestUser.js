@@ -2,10 +2,19 @@ import React from 'react'
 import { TextInput, ScrollView, Text, View, Image, Pressable } from 'react-native'
 import GlobalAsset from "../GlobalAsset.js";
 import GlobalStyle from '../GlobalStyle.js';
+import removeRequestSend from '../services/removeRequestSend.js';
+import removeRequestGet from '../services/removeRequestGet.js';
 
 export default function SentFriendRequestUser({ navigation, user, userRoot }) {
   console.log(userRoot);
   const styles = GlobalStyle();
+
+  const declineRequestSent = async () => {
+    await removeRequestSend(user.phoneNumber, userRoot.phoneNumber);
+    await removeRequestGet(userRoot.phoneNumber, user.phoneNumber);
+    alert("Remove request sent Successfully!");
+    navigation.navigate("ChatHistory");
+  }
 
   return (
     <View
@@ -63,7 +72,9 @@ export default function SentFriendRequestUser({ navigation, user, userRoot }) {
       }}>
         {/* <Text style={{}}>Remove Friend Request?</Text> */}
         
-        <Pressable>
+        <Pressable
+          onPress={declineRequestSent}
+        >
           <Image
             source={GlobalAsset.cancelIcon}
             style={{

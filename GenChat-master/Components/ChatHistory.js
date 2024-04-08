@@ -57,6 +57,10 @@ export default function ChatHistory({ navigation }) {
     navigation.navigate("ReceivedFriendRequest", {user: userSend, userSends: users})
   }
 
+  const getFriends = async () => {
+    // const friends = await 
+  }
+
   return (
     <ScrollView>
       <View style={{
