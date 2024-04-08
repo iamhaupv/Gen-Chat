@@ -403,7 +403,25 @@ const getListFriend = async(phoneNumber) =>{
     return user.listFriend;
   }
 }
+// change password by phoneNumber
+const changePassword = async (phoneNumber, newPassword) => {
+  try {
+    const user = await User.findOne({phoneNumber})
+    if(!user){
+      throw new Error("User is not exist!")
+    }
+    const hashPassword = await bcrypt.hash(
+      newPassword,
+      parseInt(process.env.SALT_ROUNDS)
+    );
+    await user.updateOne({password: hashPassword})
+  } catch (error) {
+    console.log(error)
+    throw new Error(error)
+  }
+}
 module.exports = {
+  changePassword,
   getListFriend,
   getRequestSend,
   removeFriend,

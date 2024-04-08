@@ -1,11 +1,15 @@
 import React from 'react'
 import { TextInput, ScrollView, Text, View, Image, Pressable } from 'react-native'
 import GlobalAsset from "../GlobalAsset.js";
+import socket from "../utils/socket";
 
 export default function ChatUser({ navigation, user }) {
   return (
     <Pressable
-      onPress={() => {navigation.navigate("ChatUserDetail")}}
+      onPress={() => {
+        // socket.emit("createRoom", "room-1");
+        navigation.navigate("ChatUserDetail")
+      }}
       style={{
         flex: 1, 
         flexDirection: 'row', 

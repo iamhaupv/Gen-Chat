@@ -21,8 +21,8 @@ import auth from "../firebase/config.js";
 //
 import axios from "axios";
 import loginUser from "../services/loginUser.js";
+
 export default function SignIn({ navigation }) {
-  // console.log(auth);
   const [phoneNumber, onChangePhoneNumber] = useState("");
   const [password, onChangePassword] = useState("");
 

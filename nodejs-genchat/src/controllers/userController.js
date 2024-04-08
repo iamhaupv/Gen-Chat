@@ -515,7 +515,24 @@ const getListFriend = async (req, res) => {
   }
 };
 //
+const changePassword = async (req, res) => {
+  try {
+    const { phoneNumber, newPassword } = req.body;
+    console.log(phoneNumber, newPassword)
+    await userRepository.changePassword(phoneNumber, newPassword);
+    res.status(200).json({
+      message: "Change password successfully!",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Cannot change password!",
+    });
+  }
+};
+//
 module.exports = {
+  changePassword,
   getListFriend,
   getRequestSend,
   removeFriend,

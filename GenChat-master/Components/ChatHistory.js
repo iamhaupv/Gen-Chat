@@ -146,19 +146,6 @@ function ChatHistory({ navigation }) {
 
         <View>
           {friends.map((elem, i) => <ChatUser navigation={navigation} key={i} user={elem}/>)}
-{/* 
-          <ChatUser navigation={navigation} />
-          <ChatUser navigation={navigation} />
-          <ChatUser navigation={navigation} />
-          <ChatUser navigation={navigation} />
-          <ChatUser navigation={navigation} />
-          <ChatUser navigation={navigation} />
-          <ChatUser navigation={navigation} />
-          <ChatUser navigation={navigation} />
-          <ChatUser navigation={navigation} />
-          <ChatUser navigation={navigation} />
-          <ChatUser navigation={navigation} />
-          <ChatUser navigation={navigation} /> */}
         </View>
       </View>
     </ScrollView>
