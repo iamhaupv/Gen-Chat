@@ -1,9 +1,9 @@
 const { roomRepository } = require("../repositories/index");
-
+//
 const createRoom = async (req, res) => {
   try {
-    const { users, relationship } = req.body;
-    await roomRepository.createRoom(users, relationship);
+    const { users, relationship, roomId} = req.body;
+    await roomRepository.createRoom(users, roomId, relationship);
     res.status(200).json({
       message: "Successfully!",
     });
@@ -45,8 +45,25 @@ const findRoomByManyPhoneNumber = async(req, res) =>{
       message: "Not Found!"
     })
   }
+} 
+// findRoomByRoomId
+const findRoomByRoomId = async(req, res)=>{
+  try {
+    const {roomId} = req.body
+    const room = await roomRepository.findRoomByRoomId(roomId)
+    res.status(200).json({
+      message: "Successfully!",
+      data: room
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      message: "Room is not exist!"
+    })
+  }
 }
 module.exports = {
+  findRoomByRoomId,
   findRoomByManyPhoneNumber,
   findRoomByPhoneNumber,
   createRoom,
