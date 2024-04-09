@@ -30,6 +30,10 @@ const findRoomByPhoneNumber = async (phoneNumber) => {
 const findRoomByManyPhoneNumber = async (users) => {
   try {
     const room = await Room.findOne({ users: { $all: users } });
+    if(!room){
+      throw new Error("Room is not exist!")
+    }
+    return room;
   } catch (error) {
     console.log(error);
     throw new Error(error);
