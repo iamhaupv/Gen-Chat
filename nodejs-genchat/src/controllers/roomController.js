@@ -15,21 +15,6 @@ const createRoom = async (req, res) => {
   }
 };
 // findRoomByPhoneNumber
-const findRoomByPhoneNumber = async (req, res) => {
-  try {
-    const { phoneNumber } = req.body;
-    const room = await roomRepository.findRoomByPhoneNumber(phoneNumber);
-    res.status(200).json({
-      message: "Successfully!",
-      data: room
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      message: "Room is not exist!",
-    });
-  }
-};
 module.exports = {
   findRoomByPhoneNumber,
   createRoom,
