@@ -6,7 +6,7 @@ const createRoom = async (users, relationship) => {
       relationship: relationship,
     };
     const response = await axios.post(
-      "http://localhost:6969/users/createRoom",
+      "http://localhost:6969/rooms/createRoom",
       userData
     );
     if (response.status === 200) {
