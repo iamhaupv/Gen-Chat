@@ -5,4 +5,6 @@ const {roomController} = require("../controllers/index")
 router.post("/createRoom", roomController.createRoom)
 // findRoomByPhoneNumber
 router.post("/findRoomByPhoneNumber", roomController.findRoomByPhoneNumber)
+// findRoomByManyPhoneNumber
+router.post("/findRoomByManyPhoneNumber", roomController.findRoomByManyPhoneNumber)
 module.exports = router;

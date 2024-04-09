@@ -30,7 +30,24 @@ const findRoomByPhoneNumber = async (req, res) => {
     });
   }
 };
+// findRoomByManyPhoneNumber
+const findRoomByManyPhoneNumber = async(req, res) =>{
+  try {
+    const {users} = req.body
+    const room = await roomRepository.findRoomByManyPhoneNumber(users)
+    res.status(200).json({
+      message: "Successfully!",
+      data: room
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      message: "Not Found!"
+    })
+  }
+}
 module.exports = {
+  findRoomByManyPhoneNumber,
   findRoomByPhoneNumber,
   createRoom,
 };
