@@ -6,6 +6,10 @@ const Room = mongoose.model(
     id: {
       type: mongoose.Schema.Types.ObjectId,
     },
+    roomId: {
+      type: String,
+      required: true
+    },
     users: [
       {
         type: String,
