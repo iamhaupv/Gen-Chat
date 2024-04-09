@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 require("dotenv").config();
 const port = process.env.PORT || 2002;
-const { userRouter, messengerRouter} = require("./src/routes/index");
+const { userRouter, messengerRouter, roomRouter} = require("./src/routes/index");
 const connect = require("./src/databases/mongodb");
 const checkToken = require("./src/authentication/auththentication");
 const cors = require("cors")
@@ -28,6 +28,8 @@ app.use(express.static("./src"))
 app.use("/users", userRouter);
 // url messengers
 app.use("/messengers", messengerRouter)
+// url rooms
+app.use("/rooms", roomRouter)
 app.listen(port, async () => {
   await connect();
   console.log(`Example app on for port ${port}`);

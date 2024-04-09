@@ -53,6 +53,7 @@ const User = mongoose.model(
       required: false,
     },
     messages: [{ type: mongoose.Schema.Types.ObjectId, ref: "Messenger" }],
+    rooms: [{ type: mongoose.Schema.Types.ObjectId, ref: "Room" }],
   })
 );
 User.methods = {
