@@ -10,7 +10,6 @@ export default function Main() {
       <SidebarMenu/>  
       <SidebarChat/>
       <Chats/>
-      <Profile/>
     </div>
   )
 }
