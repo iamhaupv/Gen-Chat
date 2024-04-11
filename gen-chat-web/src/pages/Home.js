@@ -1,6 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SignIn from '../components/SignIn';
+import Main from './Main';
 
 export default function Home() {
   return (

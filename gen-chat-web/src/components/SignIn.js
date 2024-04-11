@@ -22,7 +22,7 @@ export default function SignIn() {
     try {
       const user = await loginUser(phoneNumber, password);
       alert("Log in successfully!")
-      navigate("/SignIn");
+      navigate("/Main");
     } catch (error) {
       console.error("Registration error:", error);
     }
