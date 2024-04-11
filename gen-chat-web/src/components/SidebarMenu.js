@@ -18,7 +18,7 @@ export default function SidebarMenu() {
   return (
     <div className="flex">
       <div className={` ${open ? "w-72" : "w-20 "} bg-blue-400 h-screen p-5 relative duration-300`} >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={`absolute cursor-pointer -right-3 top-9 w-6 border-purple border-2 rounded-full  ${!open && "rotate-180"}`} onClick={() => setOpen(!open)}>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className={`absolute cursor-pointer -right-3 top-9 w-6 border-blue-400 border-2 rounded-full ${!open && "rotate-180"} bg-blue-400`} onClick={() => setOpen(!open)}>
           <path fill-rule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clip-rule="evenodd" />
         </svg>
         
@@ -41,11 +41,11 @@ export default function SidebarMenu() {
                 index === 0 && "bg-light-white"
               } `}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className={`w-6 h-6 duration-500 ${!open && "rotate-[360deg]"}`}>
                 { parse (svg.src) }
               </svg>
           
-              <span className={`${!open && "hidden"} origin-left duration-200`}>
+              <span className={`${!open && "hidden"} origin-left duration-200 text-white`}>
                 {svg.key}
               </span>
             </li>
@@ -55,7 +55,7 @@ export default function SidebarMenu() {
           <li className='mt-auto flex items-center gap-4'>
             <img className='aspect-square h-10 w-10 rounded-full' src='https://lh3.googleusercontent.com/a/ACg8ocLlO1pfA9KPIKdD6CNveeOZ6F7MzO8OPni_FMqOHqjx=s96-c'></img>
             <div>
-              <p className={`${!open && "hidden"} text-gray-300 font-medium text-xl`}>Nguyen Thanh Khoa</p>
+              <p className={`${!open && "hidden"} text-white font-medium text-xl`}>Nguyen Thanh Khoa</p>
             </div>
           </li>
 
