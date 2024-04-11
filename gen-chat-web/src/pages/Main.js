@@ -2,6 +2,7 @@ import React from 'react'
 import SidebarMenu from '../components/SidebarMenu'
 import SidebarChat from '../components/SidebarChat'
 import Chats from '../components/Chats'
+import Profile from '../components/Profile'
 
 export default function Main() {
   return (
@@ -9,6 +10,7 @@ export default function Main() {
       <SidebarMenu/>  
       <SidebarChat/>
       <Chats/>
+      <Profile/>
     </div>
   )
 }

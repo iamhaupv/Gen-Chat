@@ -4,7 +4,7 @@ import Chat from './Chat'
 
 export default function SidebarChat() {
   return (
-   <div className='h-screen w-1/5 bg-gray-100 '>
+   <div className='h-screen w-96 bg-gray-100 '>
       <div className='flex flex-row p-5 justify-between border-solid border-b border-gray-200 font-medium text-xl' >
        <h1 className='text-xl'>Message</h1>
 
