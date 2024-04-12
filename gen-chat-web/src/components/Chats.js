@@ -1,12 +1,55 @@
-import React, {useState} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import ChatData from './ChatData'
 import ChatUser from './ChatUser'
 import ChatInput from './ChatInput'
 import Profile from './Profile';
 
+import socketIOClient from "socket.io-client";
+
+const host = "http://localhost:6969";
+
 export default function Chats() {
   const [openRight, setOpenRight] = useState(true);
   const [open, setOpen] = useState(true);
+
+  const [mess, setMess] = useState([]);
+  const [message, setMessage] = useState('');
+  const [id, setId] = useState();
+
+  const socketRef = useRef();
+
+  useEffect(() => {
+    socketRef.current = socketIOClient.connect(host);
+
+    socketRef.current.on('getId', data => {
+      console.log("-----------------------------Called get id-----------------------------");
+      console.log("Id");
+      console.log(data);
+      setId(data)
+
+      // socketRef.current.emit(data, {"id": data});
+    }) // phần này đơn giản để gán id cho mỗi phiên kết nối vào page. Mục đích chính là để phân biệt đoạn nào là của mình đang chat.
+
+    socketRef.current.on('sendDataServer', dataGot => {
+      console.log("-----------------------------Called send data server-----------------------------");
+      setMess(oldMsgs => [...oldMsgs, dataGot.data])
+      // setMess(oldMsgs => [...oldMsgs, dataGot.data])
+    }) // mỗi khi có tin nhắn thì mess sẽ được render thêm 
+
+    return () => {
+      socketRef.current.disconnect();
+    };
+  }, []);
+
+  const renderMess = mess.map((m, index) => {
+    let chat = (m.id == id) ? 
+      <ChatUser message={m} key={index}/> : 
+      <ChatData message={m} key={index}/>
+
+    console.log("-----------------------Chat---------------------");
+    console.log(chat);
+    return chat;
+  });
 
   return (
     <div className={`flex w-full`}>
@@ -97,7 +140,7 @@ export default function Chats() {
         </nav>
 
         <div className='h-4/5 overflow-y-scroll bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 '>
-          <ChatData/>
+          {/* <ChatData/>
           <ChatUser/>
           <ChatData/>
           <ChatUser/>
@@ -109,10 +152,12 @@ export default function Chats() {
           <ChatData/>
           <ChatData/>
           <ChatData/>
-          <ChatData/>
+          <ChatData/> */}
+
+          {renderMess.map((elem, i) => elem)}
         </div>
 
-        <ChatInput />
+        <ChatInput socketRef={socketRef} id={id} />
 
       </div>
 

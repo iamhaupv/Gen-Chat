@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
+const http = require("http");
 const port = process.env.PORT || 2002;
 const { userRouter, messengerRouter, roomRouter} = require("./src/routes/index");
 const connect = require("./src/databases/mongodb");
@@ -9,7 +10,7 @@ const cors = require("cors")
 const { createServer } = require("node:http");
 const { join } = require("node:path");
 const { Server } = require("socket.io");
-const server = createServer(app);
+const server = http.createServer(app);
 const io = new Server(server);
 //
 app.get("/", (req, res) => {
@@ -30,55 +31,31 @@ app.use("/users", userRouter);
 app.use("/messengers", messengerRouter)
 // url rooms
 app.use("/rooms", roomRouter)
-app.listen(port, async () => {
+
+const socketIo = require("socket.io")(server, {
+  cors: {
+      origin: "*",
+  }
+}); 
+// nhớ thêm cái cors này để tránh bị Exception nhé :D  ở đây mình làm nhanh nên cho phép tất cả các trang đều cors được. 
+
+socketIo.on("connection", (socket) => { ///Handle khi có connect từ client tới
+  console.log("New client connected" + socket.id); 
+
+  socket.emit("getId", socket.id);
+
+  socket.on("sendDataClient", function(data) { // Handle khi có sự kiện tên là sendDataClient từ phía client
+    console.log("-----------------------------Called send data client-----------------------------");
+    console.log(data);
+    socketIo.emit("sendDataServer", { data });// phát sự kiện  có tên sendDataServer cùng với dữ liệu tin nhắn từ phía server
+  })
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected"); // Khi client disconnect thì log ra terminal.
+  });
+});
+
+server.listen(port, async () => {
   await connect();
   console.log(`Example app on for port ${port}`);
 });
-//
-io.on("connection", (socket) => {
-  socket.on("chat message", (msg) => {
-    console.log("message: " + msg);
-  });
-});
-io.on("connection", (socket) => {
-  socket.on("chat message", (msg) => {
-    io.emit("chat message", msg);
-  });
-});
-
-// -------------------------------------------------------------------------
-
-// const express = require("express");
-// const app = express();
-// const PORT = 4000;
-
-// app.use(express.urlencoded({ extended: true }));
-// app.use(express.json());
-
-// const http = require("http").Server(app);
-// const cors = require("cors");
-
-// const socketIO = require('socket.io')(http, {
-//   cors: {
-//       origin: "<http://localhost:3000>"
-//   }
-// });
-
-// socketIO.on('connection', (socket) => {
-//   console.log(`⚡: ${socket.id} user just connected!`);
-
-//   socket.on('disconnect', () => {
-//     socket.disconnect()
-//     console.log('🔥: A user disconnected');
-//   });
-// });
-
-// app.get("/api", (req, res) => {
-//     res.json({
-//         message: "Hello world",
-//     });
-// });
-
-// app.listen(PORT, () => {
-//     console.log(`Server listening on ${PORT}`);
-// });

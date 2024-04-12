@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function ChatData() {
+export default function ChatData({message}) {
   return (
     // <div className='p-5 flex'>
     //     <div className='size-12'>
@@ -28,10 +28,10 @@ export default function ChatData() {
         </div>
       </div>
       <div className="chat-header">
-        Obi-Wan Kenobi 
-        <time className="text-xs opacity-50">12:45</time>
+        {message.sender}
+        <time className="text-xs opacity-50">{message.date}</time>
       </div>
-      <div className="chat-bubble bg-white text-black">You were the Chosen One!</div>
+      <div className="chat-bubble bg-white text-black">{message.content}</div>
   {/* <div className="chat-footer opacity-50">
     Delivered
   </div> */}

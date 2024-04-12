@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function ChatUser() {
+export default function ChatUser({message}) {
   return (
     // <div className='p-5 flex justify-end'>
     //     <div className='flex flex-col items-end'>
@@ -15,9 +15,9 @@ export default function ChatUser() {
     <div className="chat chat-end">
 
   <div className="chat-header">
-    <time className="text-xs opacity-50">12:46</time>
+    <time className="text-xs opacity-50">{message.date}</time>
   </div>
-  <div className="chat-bubble bg-white text-black">I hate you!</div>
+  <div className="chat-bubble bg-white text-black">{message.content}</div>
   {/* <div className="chat-footer opacity-50">
     Seen at 12:46
   </div> */}
