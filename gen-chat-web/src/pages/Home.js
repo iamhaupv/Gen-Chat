@@ -5,12 +5,13 @@ import SignUp from '../components/SignUp';
 import OTP from '../components/OTP';
 
 export default function Home() {
+
   return (
     <div className="bg-gray-100 flex justify-center items-center h-screen">
 
       <Routes>
         <Route index path="/" element={<SignIn />}></Route>
-        <Route path="/SignUp" element={<SignUp/>}></Route>
+        <Route path="/SignUp" element={<SignUp />}></Route>
         <Route path="/OTP" element={<OTP/>}></Route>
       </Routes>
 

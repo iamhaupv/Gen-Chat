@@ -5,15 +5,18 @@ import parse from 'html-react-parser';
 import logo from '../assets/logo.png';
 import { useNavigate } from 'react-router-dom';
 
-export default function SidebarMenu() {
+export default function SidebarMenu({user}) {
   const [open, setOpen] = useState(true);
 
   const navigate = useNavigate();
 
-  // const signOut = () => {
-  //   auth.signOut();
-  //   navigate('/');
-  // };
+  console.log("Side bar menu");
+  console.log(user);
+
+  const signOut = () => {
+    console.log("Pressed Sign Out");
+    navigate('/', {user: null});
+  };
   
   return (
     <div className="flex">
@@ -36,12 +39,14 @@ export default function SidebarMenu() {
           {svgs.map((svg, index) => (
             <li
               key={index}
-              className={`flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-xl items-center gap-x-4 
-              ${svg.gap ? "mt-9" : "mt-2"} ${
-                index === 0 && "bg-light-white"
-              } `}
+              className={`flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-xl items-center gap-x-4 mt-2`}
+              onClick={() => {
+                if (svg.onClick == "signOut")
+                  signOut();
+              }}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className={`w-6 h-6 duration-500 ${!open && "rotate-[360deg]"}`}>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className={`w-6 h-6 duration-500 ${!open && "rotate-[360deg]"}`}
+              >
                 { parse (svg.src) }
               </svg>
           
@@ -55,11 +60,9 @@ export default function SidebarMenu() {
           <li className='mt-auto flex items-center gap-4'>
             <img className='aspect-square h-10 w-10 rounded-full' src='https://lh3.googleusercontent.com/a/ACg8ocLlO1pfA9KPIKdD6CNveeOZ6F7MzO8OPni_FMqOHqjx=s96-c'></img>
             <div>
-              <p className={`${!open && "hidden"} text-white font-medium text-xl`}>Nguyen Thanh Khoa</p>
+              <p className={`${!open && "hidden"} text-white font-medium text-xl`}>{user.name}</p>
             </div>
           </li>
-
-          {/* <a src="signOut"></a> */}
         </ul>
       </div>
     </div>
