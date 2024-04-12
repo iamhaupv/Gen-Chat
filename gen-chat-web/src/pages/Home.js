@@ -1,14 +1,17 @@
 import React from 'react'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import SignIn from '../components/SignIn';
-import Main from './Main';
+import SignUp from '../components/SignUp';
+import OTP from '../components/OTP';
 
 export default function Home() {
   return (
     <div className="bg-gray-100 flex justify-center items-center h-screen">
 
       <Routes>
-        <Route path="/" element={<SignIn />}></Route>
+        <Route index path="/" element={<SignIn />}></Route>
+        <Route path="/SignUp" element={<SignUp/>}></Route>
+        <Route path="/OTP" element={<OTP/>}></Route>
       </Routes>
 
       <div className="w-1/2 h-screen hidden lg:block">

@@ -28,6 +28,11 @@ export default function SignIn() {
     }
   };
 
+  const goToSignUpPage = () => {
+    console.log("Go to sign up");
+    navigate("/SignUp");
+  }
+
   return (
     <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
       <img className="mb-4" src={logo}></img>
@@ -62,7 +67,7 @@ export default function SignIn() {
         <div className="flex justify-between mb-4">
           {/* <!-- Sign up  Link --> */}
           <div className="text-blue-500">
-            <a href="#" className="hover:underline">Sign up Here</a>
+          <a href="../SignUp" className="hover:underline">Sign Up Here</a>
           </div>
 
           {/* <!-- Forgot Password Link --> */}

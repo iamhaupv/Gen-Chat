@@ -7,9 +7,10 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+      {/* <Home/> */}
+
         <Route path="/" element={<Home />}></Route>
         <Route path="/Main" element={<Main />}></Route>
-        {/* <Route path="/" element={<Main />}></Route> */}
       </Routes>
     </BrowserRouter>
   );
