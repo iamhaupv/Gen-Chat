@@ -8,7 +8,7 @@ import socketIOClient from "socket.io-client";
 
 const host = "http://localhost:6969";
 
-export default function Chats() {
+export default function Chats({user}) {
   const [openRight, setOpenRight] = useState(true);
   const [open, setOpen] = useState(true);
 
@@ -157,7 +157,7 @@ export default function Chats() {
           {renderMess.map((elem, i) => elem)}
         </div>
 
-        <ChatInput socketRef={socketRef} id={id} />
+        <ChatInput socketRef={socketRef} id={id} user={user} />
 
       </div>
 

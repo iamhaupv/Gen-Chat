@@ -1,6 +1,6 @@
 import React, {useState, useRef, useEffect} from 'react';
 
-export default function ChatInput({socketRef, id}) {
+export default function ChatInput({socketRef, id, user}) {
   const [message, setMessage] = useState('');
 
   const handleMessage = event => {
@@ -14,7 +14,7 @@ export default function ChatInput({socketRef, id}) {
 
     if (message) {
       const msg = {
-        sender: "Nghia", 
+        sender: user.name, 
         date: new Date().toLocaleString(),
         content: message, 
         id: id
