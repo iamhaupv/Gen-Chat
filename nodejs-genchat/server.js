@@ -34,24 +34,29 @@ app.use("/rooms", roomRouter)
 
 const socketIo = require("socket.io")(server, {
   cors: {
-      origin: "*",
+    origin: "*",
   }
 }); 
 // nhớ thêm cái cors này để tránh bị Exception nhé :D  ở đây mình làm nhanh nên cho phép tất cả các trang đều cors được. 
 
-socketIo.on("connection", (socket) => { ///Handle khi có connect từ client tới
+socketIo.on("connection", (socket) => {
+  ///Handle khi có connect từ client tới
   console.log("New client connected" + socket.id); 
 
   socket.emit("getId", socket.id);
 
-  socket.on("sendDataClient", function(data) { // Handle khi có sự kiện tên là sendDataClient từ phía client
+  socket.on("sendDataClient", function (data) {
+    // Handle khi có sự kiện tên là sendDataClient từ phía client
     console.log("-----------------------------Called send data client-----------------------------");
     console.log(data);
-    socketIo.emit("sendDataServer", { data });// phát sự kiện  có tên sendDataServer cùng với dữ liệu tin nhắn từ phía server
+
+    // phát sự kiện  có tên sendDataServer cùng với dữ liệu tin nhắn từ phía server
+    socketIo.emit("sendDataServer", { data });
   })
 
   socket.on("disconnect", () => {
-    console.log("Client disconnected"); // Khi client disconnect thì log ra terminal.
+    // Khi client disconnect thì log ra terminal.
+    console.log("Client disconnected");
   });
 });
 
