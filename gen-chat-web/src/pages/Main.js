@@ -7,7 +7,7 @@ import Profile from '../components/Profile'
 export default function Main() {
   return (
     <div className='flex items-center w-full overflow-hidden'>
-      <SidebarMenu/>  
+      <SidebarMenu/>
       <SidebarChat/>
       <Chats/>
     </div>
