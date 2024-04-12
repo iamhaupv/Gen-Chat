@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Chat from './Chat'
 import FriendRequest from './FriendRequest'
 import getListFriend from '../services/getListFriend';
@@ -14,6 +14,10 @@ export default function SidebarChat({user}) {
     console.log(friends);
     setFriends(friendList.data);
   }
+
+  useEffect(() => {
+    getFriendList();
+  }, []);
 
   return (
     <div className={`h-screen bg-white duration-300 ${!open ? 'w-96' : "w-0"}`}>

@@ -13,7 +13,6 @@ export default function Chats({user}) {
   const [open, setOpen] = useState(true);
 
   const [mess, setMess] = useState([]);
-  const [id, setId] = useState();
 
   const socketRef = useRef();
 
