@@ -20,18 +20,19 @@ export default function Chats({user}) {
   useEffect(() => {
     socketRef.current = socketIOClient.connect(host);
 
-    socketRef.current.on('getId', data => {
-      console.log("-----------------------------Called get id-----------------------------");
-      console.log(data);
-      setId(data)
-      // socketRef.current.emit(data, {"id": data});
-    }) // phần này đơn giản để gán id cho mỗi phiên kết nối vào page. Mục đích chính là để phân biệt đoạn nào là của mình đang chat.
+    socketRef.current.emit('sendUserIdToServer', user);
+
+    // socketRef.current.on('getId', data => {
+    //   console.log("-----------------------------Called get id-----------------------------");
+    //   console.log(data);
+    //   setId(data)
+    //   // socketRef.current.emit(data, {"id": data});
+    // })
 
     socketRef.current.on('sendDataServer', dataGot => {
       console.log("-----------------------------Called send data server-----------------------------");
       setMess(oldMsgs => [...oldMsgs, dataGot.data])
-      // setMess(oldMsgs => [...oldMsgs, dataGot.data])
-    }) // mỗi khi có tin nhắn thì mess sẽ được render thêm 
+    });
 
     return () => {
       socketRef.current.disconnect();
@@ -39,12 +40,9 @@ export default function Chats({user}) {
   }, []);
 
   const renderMess = mess.map((m, index) => {
-    let chat = (m.id == id) ? 
+    let chat = (m.sender == user.phoneNumber) ? 
       <ChatUser message={m} key={index}/> : 
       <ChatData message={m} key={index}/>
-
-    console.log("-----------------------Chat---------------------");
-    console.log(chat);
     return chat;
   });
 
@@ -154,7 +152,7 @@ export default function Chats({user}) {
           {renderMess.map((elem, i) => elem)}
         </div>
 
-        <ChatInput socketRef={socketRef} id={id} user={user} />
+        <ChatInput socketRef={socketRef} user={user} />
 
       </div>
 

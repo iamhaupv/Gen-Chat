@@ -41,18 +41,17 @@ const socketIo = require("socket.io")(server, {
 
 socketIo.on("connection", (socket) => {
   ///Handle khi có connect từ client tới
-  console.log("New client connected" + socket.id); 
+  console.log("New client connected" + socket.id);
 
-  socket.emit("getId", socket.id);
+  socket.on('sendUserIdToServer', user => {
+    // console.log("New user connected: ");
+    // console.log(user);
 
-  socket.on("sendDataClient", function (data) {
-    // Handle khi có sự kiện tên là sendDataClient từ phía client
-    console.log("-----------------------------Called send data client-----------------------------");
-    console.log(data);
-
-    // phát sự kiện  có tên sendDataServer cùng với dữ liệu tin nhắn từ phía server
-    socketIo.emit("sendDataServer", { data });
-  })
+    socket.on(user.phoneNumber, data => {
+      console.log("Listening on " + user.phoneNumber);
+      socketIo.emit("sendDataServer", { data });
+    })
+  });
 
   socket.on("disconnect", () => {
     // Khi client disconnect thì log ra terminal.

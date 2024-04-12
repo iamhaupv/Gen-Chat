@@ -2,7 +2,6 @@ import React from 'react'
 import {useState} from 'react'
 
 export default function ChatOption() {
-  const [open, setOpen] = useState(true);
 
   return (
     <div className='h-screen grow w-5 p-5 border-solid border-l bg-gray-100'>

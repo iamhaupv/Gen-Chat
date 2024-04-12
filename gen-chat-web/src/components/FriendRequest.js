@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function FriendRequest() {
   return (
-    <div className='flex flex-row mt-5 ml-5 mr-5 pb-0 w-full justify-center'>
+    <div className='flex flex-row pt-5 pl-5 pr-5 pb-0 w-full justify-center'>
       <div className='flex items-center justify-center w-1/5 grow'>
         <img
           className="h-12 w-12 rounded-full ring-2 ring-white"

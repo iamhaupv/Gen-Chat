@@ -6,7 +6,7 @@ import logo from '../assets/logo.png';
 import { useNavigate } from 'react-router-dom';
 
 export default function SidebarMenu({user}) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const navigate = useNavigate();
 

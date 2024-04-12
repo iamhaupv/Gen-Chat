@@ -4,7 +4,7 @@ export default function Profile(props) {
   const isOpen = props.state;
 
   return (
-    <div className={`${isOpen ? 'w-3/5' : 'hidden'} flex flex-col`}>
+    <div className={`flex flex-col duration-300 ${isOpen ? 'w-3/5' : 'hidden'}`}>
       <h1 className='text-center font-medium text-xl mt-5 border-b-2 pb-2'>Information</h1>
 
       <div className="avatar items-center justify-center pt-8">

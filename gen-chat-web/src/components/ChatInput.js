@@ -1,6 +1,6 @@
 import React, {useState, useRef, useEffect} from 'react';
 
-export default function ChatInput({socketRef, id, user}) {
+export default function ChatInput({socketRef, user}) {
   const [message, setMessage] = useState('');
 
   const handleMessage = event => {
@@ -14,12 +14,12 @@ export default function ChatInput({socketRef, id, user}) {
 
     if (message) {
       const msg = {
-        sender: user.name, 
+        sender: user.phoneNumber, 
+        receiver: "2", 
         date: new Date().toLocaleString(),
         content: message, 
-        id: id
       }
-      socketRef.current.emit('sendDataClient', msg)
+      socketRef.current.emit(user.phoneNumber, msg)
 
       document.getElementById("message").value = "";
       setMessage("");
