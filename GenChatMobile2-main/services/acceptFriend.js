@@ -1,4 +1,5 @@
 import axios from "axios";
+import host from "../GlobalVariables";
 const acceptFriend = async (phoneNumberUserSend, phoneNumberUserGet) => {
   try {
     const userData = {
@@ -6,7 +7,7 @@ const acceptFriend = async (phoneNumberUserSend, phoneNumberUserGet) => {
       phoneNumberUserGet: phoneNumberUserGet,
     };
     const response = await axios.post(
-      "https://a1c9-2001-ee0-50c4-3bf0-e871-bbf9-63f4-d1bd.ngrok-free.app/users/acceptFriend",
+      host.api_host + "/users/acceptFriend",
       userData
     );
     if (response.status === 200) {
