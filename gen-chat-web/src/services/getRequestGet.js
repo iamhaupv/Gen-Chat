@@ -5,7 +5,7 @@ const getRequestGet = async (phoneNumber) => {
       phoneNumber: phoneNumber,
     };
     const response = await axios.post(
-      "http://localhost:6969/users/getRequestGet",
+      "https://a1c9-2001-ee0-50c4-3bf0-e871-bbf9-63f4-d1bd.ngrok-free.app/users/getRequestGet",
       userData
     );
     if (response.status === 200) {
