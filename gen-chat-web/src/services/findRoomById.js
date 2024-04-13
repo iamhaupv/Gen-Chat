@@ -1,3 +1,4 @@
+import {api_host, socket_host} from "../GlobalVariable";
 import axios from "axios";
 const findRoomByRoomId = async (roomId) => {
   try {
@@ -5,7 +6,7 @@ const findRoomByRoomId = async (roomId) => {
         roomId: roomId
     };
     const response = await axios.post(
-      "https://a1c9-2001-ee0-50c4-3bf0-e871-bbf9-63f4-d1bd.ngrok-free.app/rooms/findRoomByRoomId",
+      api_host + "/rooms/findRoomByRoomId",
       userData
     );
     if (response.status === 200) {

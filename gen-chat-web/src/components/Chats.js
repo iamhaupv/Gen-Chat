@@ -6,7 +6,8 @@ import Profile from './Profile';
 
 import socketIOClient from "socket.io-client";
 
-const host = "http://localhost:6969";
+// const host = "http://localhost:6969";
+const host = "http://0.tcp.ap.ngrok.io:11086";
 
 export default function Chats({user}) {
   const [openRight, setOpenRight] = useState(true);

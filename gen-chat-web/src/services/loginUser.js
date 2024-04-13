@@ -1,12 +1,14 @@
+import host from "../GlobalVariable";
 import axios from "axios";
 const loginUser = async (phoneNumber, password) => {
   console.log("Go to login user service");
+  // console.log(api_host.api_host);
   try {
     const userData = {
       phoneNumber: phoneNumber,
       password: password,
     };
-    const response = await axios.post("https://a1c9-2001-ee0-50c4-3bf0-e871-bbf9-63f4-d1bd.ngrok-free.app/users/login", userData);
+    const response = await axios.post(host.api_host + "/users/login", userData);
     if (response.status === 200) {
       console.log("Login successful:", response.data);
       

@@ -1,4 +1,5 @@
 import axios from "axios";
+import {api_host, socket_host} from "../GlobalVariable";
 const removeRequestGet = async (phoneNumberUserSend, phoneNumberUserGet) => {
   try {
     const userData = {
@@ -6,7 +7,7 @@ const removeRequestGet = async (phoneNumberUserSend, phoneNumberUserGet) => {
       phoneRemove: phoneNumberUserGet,
     };
     const response = await axios.post(
-      "https://a1c9-2001-ee0-50c4-3bf0-e871-bbf9-63f4-d1bd.ngrok-free.app/users/removeRequestGet",
+      api_host + "/users/removeRequestGet",
       userData
     );
     if (response.status === 200) {

@@ -1,4 +1,5 @@
 import axios from "axios";
+import {api_host, socket_host} from "../GlobalVariable";
 const createRoom = async (users, relationship) => {
   try {
     const userData = {
@@ -6,7 +7,7 @@ const createRoom = async (users, relationship) => {
       relationship: relationship,
     };
     const response = await axios.post(
-      "https://a1c9-2001-ee0-50c4-3bf0-e871-bbf9-63f4-d1bd.ngrok-free.app/rooms/createRoom",
+      api_host + "/rooms/createRoom",
       userData
     );
     if (response.status === 200) {

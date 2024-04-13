@@ -503,8 +503,6 @@ const getListFriend = async (req, res) => {
   try {
     const { phoneNumber } = req.body;
     const user = await userRepository.getListFriend(phoneNumber);
-    console.log("Get list friend");
-    console.log(user);
     res.status(200).json({
       message: "Successfully!",
       data: user,

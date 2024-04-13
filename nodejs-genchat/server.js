@@ -45,8 +45,8 @@ socketIo.on("connection", (socket) => {
   console.log("New client connected" + socket.id);
 
   socket.on('sendUserIdToServer', user => {
-    // console.log("New user connected: ");
-    // console.log(user);
+    console.log("New user connected: ");
+    console.log(user);
 
     socket.on(user.phoneNumber, data => {
       console.log("Listening on " + user.phoneNumber);
