@@ -15,7 +15,7 @@ export default function Home() {
         <Route path="/OTP" element={<OTP/>}></Route>
       </Routes>
 
-      <div className="w-1/2 h-screen hidden lg:block">
+      <div className="w-1/2 h-screen hidden  lg:block">
         <img src="https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80" alt="Placeholder Image" className="object-cover w-full h-full"></img>
       </div>
     </div>
