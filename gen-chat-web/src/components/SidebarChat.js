@@ -2,22 +2,58 @@ import React, { useState, useEffect } from 'react'
 import Chat from './Chat'
 import FriendRequest from './FriendRequest'
 import getListFriend from '../services/getListFriend';
+import findUserByPhoneNumber from '../services/findUserByPhoneNumber';
 
 export default function SidebarChat({user}) {
   const [showListFriendRequest, setShowListFriendRequest] = useState("");
+  const [searchPhoneNumber, setSearchPhoneNumber] = useState("");
+  const [showSearchResult, setShowSearchResult] = useState(false);
+  const [searchedUser, setSearchedUser] = useState(null);
   const [friends, setFriends] = useState([]);
   const [open, setOpen] = useState(false);
 
   const getFriendList = async () => {
     const friendList = await getListFriend(user.phoneNumber);
-    console.log("Friend list");
-    console.log(friends);
-    setFriends(friendList.data);
+
+    const friendFound = []
+
+    for (let i = 0; i < friendList.length; i++) {
+      const friend = await findUserByPhoneNumber(friendList[i]);
+      friendFound.push(friend.data);
+    }
+
+    setFriends(friendFound);
   }
 
   useEffect(() => {
     getFriendList();
   }, []);
+
+  const handleSearchPhoneNumber = e => {
+    setSearchPhoneNumber(e.target.value);
+  }
+
+  const handleShowSearchResult = e => {
+    setSearchPhoneNumber("");
+    setShowSearchResult(!showSearchResult);
+  }
+
+  const searchUserByPhone = async () => {
+    handleShowSearchResult();
+
+    if (searchPhoneNumber) {
+      try {
+        const userFound = await findUserByPhoneNumber(searchPhoneNumber);
+        setSearchedUser(userFound)
+      } catch (error) {
+        console.error("Error finding user: " + error);
+        setSearchedUser(null);        
+      }
+    }
+    
+    console.log(searchedUser != null);
+    setShowSearchResult(true);
+  }
 
   return (
     <div className={`h-screen bg-white duration-300 ${!open ? 'w-96' : "w-0"}`}>
@@ -35,16 +71,52 @@ export default function SidebarChat({user}) {
       </svg>
     </div>
 
-    {/* Search Message */}
+    {/* Search Phone Number */}
     <div className='flex items-center justify-center pt-5'>
-      <input className='p-2 ml-4 mr-4 mb-0 w-5/6 rounded-full'placeholder='Search Message'/>
-      
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-10 h-10 mr-4">
-        <path strokeLinecap="round" strokeLinejoin="round" d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-      </svg>
+      <input className='p-2 ml-4 mr-4 mb-0 w-5/6 rounded-full'placeholder='Search Message'
+        type='tel'
+        value={searchPhoneNumber}
+        onChange={handleSearchPhoneNumber}
+      />
+
+      {
+        !showSearchResult ?
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-10 h-10 mr-4"
+          onClick={searchUserByPhone}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg> :
+
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="black"  className="w-10 h-10 mr-4"
+          onClick={handleShowSearchResult}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg>
+      }
     </div>
 
     {
+      showSearchResult ? <>
+        <div className='flex items-center justify-center pt-5 cursor-pointer'
+          onClick={() => setShowListFriendRequest(!showListFriendRequest)}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="white" className="w-8 h-8 ml-4 rounded-lg bg-blue-400 p-1">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+          </svg>
+
+          <p className='p-2 ml-4 mr-4 mb-0 w-5/6 rounded-full'>Search Result</p>
+        </div>
+
+        <h1 className='pt-6 pl-5 pr-5 font-medium'>All Result</h1>
+
+        <div className='h-4/5 overflow-y-scroll'>
+          {
+            searchedUser != null ?
+              <Chat user={searchedUser.data} /> : 
+              <p className='ml-4'>Phone number does not exists</p>
+          }
+        </div>
+      </> :
       !showListFriendRequest ? (
         <>
           <div className='flex items-center justify-center pt-5 cursor-pointer'
@@ -60,13 +132,11 @@ export default function SidebarChat({user}) {
           <h1 className='pt-6 pl-5 pr-5 font-medium'>All Message</h1>
 
           <div className='h-4/5 overflow-y-scroll'>
-            <Chat/>
-            <Chat/>
-            <Chat/>
-            <Chat/>
-            <Chat/>
-            <Chat/>
-            <Chat/>     
+
+            {
+              friends.map((elem, i) => <Chat key={i} user={elem} />)
+            }
+
           </div>
         </>
       ) : (
