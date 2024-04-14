@@ -4,13 +4,21 @@ import FriendRequest from './FriendRequest'
 import getListFriend from '../services/getListFriend';
 import findUserByPhoneNumber from '../services/findUserByPhoneNumber';
 
-export default function SidebarChat({user}) {
+export default function SidebarChat({user, handleCurrentFriend}) {
   const [showListFriendRequest, setShowListFriendRequest] = useState("");
   const [searchPhoneNumber, setSearchPhoneNumber] = useState("");
   const [showSearchResult, setShowSearchResult] = useState(false);
   const [searchedUser, setSearchedUser] = useState(null);
   const [friends, setFriends] = useState([]);
   const [open, setOpen] = useState(false);
+  const [currentFriend, setCurrentFriend] = useState({});
+
+  const handleCurrentFriend2 = friend => {
+    console.log("Called handle current friend");
+    console.log(friend);
+    setCurrentFriend(friend);
+    handleCurrentFriend(friend);
+  }
 
   const getFriendList = async () => {
     const friendList = await getListFriend(user.phoneNumber);
@@ -134,7 +142,7 @@ export default function SidebarChat({user}) {
           <div className='h-4/5 overflow-y-scroll'>
 
             {
-              friends.map((elem, i) => <Chat key={i} user={elem} />)
+              friends.map((elem, i) => <Chat key={i} user={elem} setCurrentFriend={() => handleCurrentFriend2(elem)} />)
             }
 
           </div>

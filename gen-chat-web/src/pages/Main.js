@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import SidebarMenu from '../components/SidebarMenu'
 import SidebarChat from '../components/SidebarChat'
 import Chats from '../components/Chats'
@@ -7,12 +7,16 @@ import { useLocation } from "react-router-dom";
 export default function Main() {
   const {state} = useLocation();
   const user = state.user.data; // Read values passed on state
+
+  const [currentFriend, setCurrentFriend] = useState({})
+
+  const handleCurrentFriend = friend => setCurrentFriend(friend);
   
   return (
     <div className='flex items-center w-full overflow-hidden'>
-      <SidebarMenu user={user}/>
-      <SidebarChat user={user}/>
-      <Chats user={user}/>
+      <SidebarMenu user={user} />
+      <SidebarChat user={user} handleCurrentFriend={handleCurrentFriend} />
+      <Chats user={user} currentFriend={currentFriend} />
     </div>
   )
 }

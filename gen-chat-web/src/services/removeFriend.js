@@ -7,7 +7,7 @@ const addRequestGet = async (phoneNumberUserSend, phoneNumberUserGet) => {
       phoneNumberUserGet: phoneNumberUserGet,
     };
     const response = await axios.post(
-      api_host + "/users/removeFriend",
+      api_host + "/users/remove-friend",
       userData
     );
     if (response.status === 200) {

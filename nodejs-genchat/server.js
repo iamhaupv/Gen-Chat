@@ -55,7 +55,6 @@ socketIo.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    // Khi client disconnect thì log ra terminal.
     console.log("Client disconnected");
   });
 });
