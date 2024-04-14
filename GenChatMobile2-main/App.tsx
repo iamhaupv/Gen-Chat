@@ -5,7 +5,7 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './Pages/Home';
 import Main from './Pages/Main';
 
-import routes from './Pages/routes';
+// import routes from './Pages/routes';
 
 export default function App() {
   const Stack = createNativeStackNavigator();

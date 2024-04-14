@@ -250,7 +250,6 @@ const uploadAvatar = async (req, res) => {
       const userWithEmptyPhotoURL = await User.findOne({
         phoneNumber: phoneNumber,
       });
-      console.log("111");
       const params = {
         Bucket: bucketName,
         Key: userWithEmptyPhotoURL.photoURL.split("/").pop(), // Lấy tên file từ URL

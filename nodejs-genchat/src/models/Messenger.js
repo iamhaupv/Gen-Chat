@@ -17,8 +17,13 @@ const Messenger = mongoose.model(
       required: true,
     },
     message: {
-      type: String,
-      required: true,
+      type: {
+        type: String, // Loại dữ liệu của message
+        enum: ["text", "file"], // Các loại dữ liệu được chấp nhận
+      },
+      content: {
+        type: String, // Dữ liệu thực sự của message
+      },
     },
     sentAt: {
       type: Date,

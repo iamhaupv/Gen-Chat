@@ -52,7 +52,36 @@ const User = mongoose.model(
       type: [String],
       required: false,
     },
-    messages: [{ type: mongoose.Schema.Types.ObjectId, ref: "Messenger" }],
+    messageReceiver: [
+      {
+        phone: {
+          type: String,
+          required: true,
+        },
+        mess: [
+          {
+            type: String,
+            required: true,
+            ref: 'Messenger',
+          },
+        ],
+      },
+    ],
+    messageSender: [
+      {
+        phone: {
+          type: String,
+          required: true,
+        },
+        mess: [
+          {
+            type: String,
+            required: true,
+            ref: 'Messenger',
+          },
+        ],
+      },
+    ],
     rooms: [{ type: mongoose.Schema.Types.ObjectId, ref: "Room" }],
   })
 );
