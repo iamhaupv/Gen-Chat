@@ -62,7 +62,7 @@ const User = mongoose.model(
           {
             type: String,
             required: true,
-            ref: 'Messenger',
+            ref: "Messenger",
           },
         ],
       },
@@ -77,12 +77,18 @@ const User = mongoose.model(
           {
             type: String,
             required: true,
-            ref: 'Messenger',
+            ref: "Messenger",
           },
         ],
       },
     ],
-    rooms: [{ type: mongoose.Schema.Types.ObjectId, ref: "Room" }],
+    rooms: [
+      {
+        type: String,
+        requred: false,
+        ref: "Room",
+      },
+    ],
   })
 );
 User.methods = {

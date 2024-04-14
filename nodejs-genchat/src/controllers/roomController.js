@@ -77,7 +77,23 @@ const deleteRoomByRoomId = async (req, res) => {
     });
   }
 };
+// join room by roomId
+const joinRoomByRoomId = async (req, res) => {
+  try {
+    const { roomId, phoneNumber } = req.body;
+    await roomRepository.joinRoomByRoomId(roomId, phoneNumber);
+    res.status(200).json({
+      message: "Join room successfully!",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Cannot join this room!",
+    });
+  }
+};
 module.exports = {
+  joinRoomByRoomId,
   deleteRoomByRoomId,
   findRoomByRoomId,
   findRoomByManyPhoneNumber,
