@@ -9,4 +9,6 @@ router.post("/find-room-by-phoneNumber", roomController.findRoomByPhoneNumber)
 router.post("/find-room-by-many-phoneNumber", roomController.findRoomByManyPhoneNumber)
 // findRoomByRoomId
 router.post("/find-room-by-roomId", roomController.findRoomByRoomId)
+// delete room by roomId
+router.post("/delete-room-by-roomId", roomController.deleteRoomByRoomId)
 module.exports = router;

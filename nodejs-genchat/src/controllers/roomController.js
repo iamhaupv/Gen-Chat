@@ -2,7 +2,7 @@ const { roomRepository } = require("../repositories/index");
 //
 const createRoom = async (req, res) => {
   try {
-    const { users, relationship, roomId} = req.body;
+    const { users, relationship, roomId } = req.body;
     await roomRepository.createRoom(users, roomId, relationship);
     res.status(200).json({
       message: "Successfully!",
@@ -21,7 +21,7 @@ const findRoomByPhoneNumber = async (req, res) => {
     const room = await roomRepository.findRoomByPhoneNumber(phoneNumber);
     res.status(200).json({
       message: "Successfully!",
-      data: room
+      data: room,
     });
   } catch (error) {
     console.log(error);
@@ -31,38 +31,54 @@ const findRoomByPhoneNumber = async (req, res) => {
   }
 };
 // findRoomByManyPhoneNumber
-const findRoomByManyPhoneNumber = async(req, res) =>{
+const findRoomByManyPhoneNumber = async (req, res) => {
   try {
-    const {users} = req.body
-    const room = await roomRepository.findRoomByManyPhoneNumber(users)
+    const { users } = req.body;
+    const room = await roomRepository.findRoomByManyPhoneNumber(users);
     res.status(200).json({
       message: "Successfully!",
-      data: room
-    })
+      data: room,
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({
-      message: "Not Found!"
-    })
+      message: "Not Found!",
+    });
   }
-} 
+};
 // findRoomByRoomId
-const findRoomByRoomId = async(req, res)=>{
+const findRoomByRoomId = async (req, res) => {
   try {
-    const {roomId} = req.body
-    const room = await roomRepository.findRoomByRoomId(roomId)
+    const { roomId } = req.body;
+    const room = await roomRepository.findRoomByRoomId(roomId);
     res.status(200).json({
       message: "Successfully!",
-      data: room
-    })
+      data: room,
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({
-      message: "Room is not exist!"
-    })
+      message: "Room is not exist!",
+    });
   }
-}
+};
+// delete room by roomId
+const deleteRoomByRoomId = async (req, res) => {
+  try {
+    const { roomId } = req.body;
+    await roomRepository.deleteRoomByRoomId(roomId);
+    res.status(200).json({
+      message: "Delete room successfully!",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Cannot delete room!",
+    });
+  }
+};
 module.exports = {
+  deleteRoomByRoomId,
   findRoomByRoomId,
   findRoomByManyPhoneNumber,
   findRoomByPhoneNumber,

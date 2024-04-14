@@ -52,7 +52,21 @@ const findRoomByRoomId = async (roomId) => {
     throw new Error(error);
   }
 };
+// delete room by id
+const deleteRoomByRoomId = async(roomId) =>{
+  try {
+    const room = await Room.findOneAndDelete({roomId})
+    if(!room){
+      throw new Error("Room is not exist!")
+    }
+    return room;
+  } catch (error) {
+    console.log(error)
+    throw new Error(error)
+  }
+}
 module.exports = {
+  deleteRoomByRoomId,
   findRoomByRoomId,
   findRoomByManyPhoneNumber,
   findRoomByPhoneNumber,
