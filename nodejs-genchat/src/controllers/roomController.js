@@ -83,6 +83,7 @@ const joinRoomByRoomId = async (req, res) => {
   try {
     const { roomId, phoneNumber } = req.body;
     const room = await roomRepository.joinRoomByRoomId(roomId, phoneNumber);
+    
     res.status(200).json({
       message: "Join room successfully!",
       data: room,
@@ -168,7 +169,24 @@ const authorizationRoomMembers = async (req, res) => {
     });
   }
 };
+// remove member out group
+const removeMemberOutGroup = async (req, res) => {
+  try {
+    const {roomId, phoneNumber} = req.body
+    const remove = roomRepository.removeMemberOutGroup(roomId, phoneNumber);
+    res.status(200).json({
+      message: "Remove member out group successfully!",
+      data: remove,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Cannot remove member out group!",
+    });
+  }
+};
 module.exports = {
+  removeMemberOutGroup,
   authorizationRoomMembers,
   authorizationRoomElders,
   authorizationRoomLeader,

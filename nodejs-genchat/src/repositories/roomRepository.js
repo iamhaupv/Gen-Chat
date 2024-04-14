@@ -163,7 +163,29 @@ const authorizationRoomMembers = async (roomId, phoneNumber) => {
     throw new Error(error);
   }
 };
+// remove member elder out group
+const removeMemberOutGroup = async (roomId, phoneNumber) => {
+  try {
+    const room = await Room.findOne({ roomId });
+    if (!room) {
+      throw new Error("Room is not exist!");
+    }
+    const user = await User.findOne({ phoneNumber });
+    if (!user) {
+      throw new Error("User is not exist!");
+    }
+    room.users.pull(user.phoneNumber);
+    room.roles.members.pull(user.phoneNumber);
+    await room.save();
+    user.rooms.pull(room.roomId);
+    await user.save();
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
 module.exports = {
+  removeMemberOutGroup,
   authorizationRoomMembers,
   authorizationRoomElders,
   authorizationRoomLeader,
