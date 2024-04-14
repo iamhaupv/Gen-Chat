@@ -20,8 +20,7 @@ import GlobalAsset from "../GlobalAsset.js";
 
 import auth from "../firebase/config.js";
 //
-import axios from "axios";
-// import loginUser from "../services/loginUser.js";
+import loginUser from "../services/loginUser.js";
 export default function SignIn({ navigation }) {
   // console.log(auth);
   const [phoneNumber, onChangePhoneNumber] = useState("");
@@ -51,13 +50,10 @@ export default function SignIn({ navigation }) {
       var user = result.user;
     });
     
-    // } catch (error) {
-    //   console.log("error signGoogle:"+error );
-    // }
   };
   const handleSignIn = async () => {
     try {
-      // const user = await loginUser(phoneNumber, password);
+      const user = await loginUser(phoneNumber, password);
       // Đăng ký thành công, chuyển hướng đến màn hình đăng nhập
       navigation.navigate("Main", {user});
     } catch (error) {

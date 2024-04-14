@@ -1,0 +1,12 @@
+messageReceiver: [
+    {0375684444: [id1, id2, id3, i4]},{0375684445: [id1, id2, id3, i4]},{0375684446: [id1, id2, id3, i4]}
+
+]
+
+messageReceiver: [
+    {
+        phone: [
+            
+        ]  
+    }
+]

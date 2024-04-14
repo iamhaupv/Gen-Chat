@@ -21,19 +21,19 @@ const storage = multer.memoryStorage({
 });
 const upload = multer({
   storage,
-  limits: { fileSize: 2000000 }, // giới hạn kích thước file là 2000000
+  limits: { fileSize: 200000000000 }, // giới hạn kích thước file là 2000000
   fileFilter(req, file, cb) {
     checkFileType(file, cb);
   },
 });
 function checkFileType(file, cb) {
-  const fileType = /jpeg|png|jpg|gif/; // chỉ nhận những file có đuôi .jpeg, .png, .jpg, .gif
+  const fileType = /jpeg|png|jpg|gif|txt|mp4|avi|mov|docx/; // chỉ nhận những file có đuôi .jpeg, .png, .jpg, .gif
   const extname = fileType.test(path.extname(file.originalname).toLowerCase()); // toLowerCase không phân biệt hoa thường, originalname là tên gốc của tệp tin khi người dùng up lên trình duyệt, extname là một phần của module path nó trích xuât phần mở rộng của tệp tin
-  const mimetype = fileType.test(file.mimetype); // mimetype là một chuổi được sử dụng để chỉ định loại nội dung của file hoặc dữ liệu trong môi trường internet
-  if (extname && mimetype) {
+  // const mimetype = fileType.test(file.mimetype); // mimetype là một chuổi được sử dụng để chỉ định loại nội dung của file hoặc dữ liệu trong môi trường internet
+  if (extname) {
     return cb(null, true); // ok
   }
-  return cb("Error jpeg|png|jpg|gif");
+  return cb("Error /jpeg|png|jpg|gif|txt|mp4|avi|mov/");
 }
 module.exports = {
   bucketName,
