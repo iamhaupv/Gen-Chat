@@ -23,4 +23,8 @@ router.post("/authorization-room-elders", roomController.authorizationRoomElders
 router.post("/authorization-room-members", roomController.authorizationRoomMembers);
 // remove member out group
 router.post("/remove-member-out-group", roomController.removeMemberOutGroup)
+// remove elder out group
+router.post("/remove-elder-out-group", roomController.removeElderOutGroup)
+// remove leader out group
+router.post("/remove-leader-out-group", roomController.removeLeaderOutGroup)
 module.exports = router;
