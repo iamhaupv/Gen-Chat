@@ -93,8 +93,18 @@ const joinRoomByRoomId = async (roomId, phoneNumber) => {
   }
 };
 // authorization room
-const authorizationRoom = async () => {
+const authorizationRoomLeader = async (roomId, phoneNumber) => {
   try {
+    const room = await Room.findOne({ roomId });
+    if (!room) {
+      throw new Error("Room is not exits!");
+    }
+    const user = await User.findOne({ phoneNumber });
+    if (!user) {
+      throw new Error("User is not exist!");
+    }
+    room.roles.leader = user.phoneNumber; // Cập nhật trường leader
+    await room.save();
   } catch (error) {
     console.log(error);
     throw new Error(error);
@@ -117,7 +127,46 @@ const updateInforRoom = async (roomId, newData) => {
     throw new Error(error);
   }
 };
+// authorization room elders
+const authorizationRoomElders = async (roomId, phoneNumber) => {
+  try {
+    const room = await Room.findOne({ roomId });
+    if (!room) {
+      throw new Error("Room is not exist!");
+    }
+    const user = await User.findOne({ phoneNumber });
+    if (!user) {
+      throw new Error("User is not exist! ");
+    }
+    room.roles.elders.push(user.phoneNumber);
+    await room.save();
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
+// authorization room members
+const authorizationRoomMembers = async (roomId, phoneNumber) => {
+  try {
+    const room = await Room.findOne({ roomId });
+    if (!room) {
+      throw new Error("Room is not exist!");
+    }
+    const user = await User.findOne({ phoneNumber });
+    if (!user) {
+      throw new Error("User is not exist!");
+    }
+    room.roles.members.push(user.phoneNumber);
+    room.save();
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
 module.exports = {
+  authorizationRoomMembers,
+  authorizationRoomElders,
+  authorizationRoomLeader,
   updateInforRoom,
   joinRoomByRoomId,
   deleteRoomByRoomId,
