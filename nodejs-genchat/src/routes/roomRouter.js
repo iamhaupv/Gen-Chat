@@ -2,11 +2,11 @@ const express = require("express");
 const router = express.Router();
 const {roomController} = require("../controllers/index")
 // createRoom
-router.post("/createRoom", roomController.createRoom)
+router.post("/create-room", roomController.createRoom)
 // findRoomByPhoneNumber
-router.post("/findRoomByPhoneNumber", roomController.findRoomByPhoneNumber)
+router.post("/find-room-by-phoneNumber", roomController.findRoomByPhoneNumber)
 // findRoomByManyPhoneNumber
-router.post("/findRoomByManyPhoneNumber", roomController.findRoomByManyPhoneNumber)
+router.post("/find-room-by-many-phoneNumber", roomController.findRoomByManyPhoneNumber)
 // findRoomByRoomId
-router.post("/findRoomByRoomId", roomController.findRoomByRoomId)
+router.post("/find-room-by-roomId", roomController.findRoomByRoomId)
 module.exports = router;

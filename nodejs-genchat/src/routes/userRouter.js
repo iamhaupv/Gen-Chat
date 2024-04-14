@@ -8,41 +8,41 @@ router.post("/login", userController.login);
 // url register
 router.post("/register", userController.register);
 // url sendResetLinkEmail
-router.post("/sendResetLinkEmail", userController.sendResetLinkEmail);
+router.post("/send-reset-link-email", userController.sendResetLinkEmail);
 // url reset
 router.post("/reset", userController.reset);
 // getInfor
-router.post("/getInfor", userController.getInfor);
+router.post("/get-infor", userController.getInfor);
 // update userInfor
 router.patch("/update", userController.updateUserInfo);
 // uploadImage
-router.post("/uploadAvatar", upload.single("image"), userController.uploadAvatar);
+router.post("/upload-avatar", upload.single("image"), userController.uploadAvatar);
 // delete
-router.delete("/deleteUser", userController.deleteUser);
+router.delete("/delete-user", userController.deleteUser);
 // findUserByPhoneNumber
-router.post("/findUserByPhoneNumber", userController.findUserByPhoneNumber);
+router.post("/find-user-by-phoneNumber", userController.findUserByPhoneNumber);
 // aceptFriend
-router.post("/acceptFriend", userController.acceptFriend);
+router.post("/accept-friend", userController.acceptFriend);
 // addRequestSend
-router.post("/addRequestSend", userController.addRequestSend);
+router.post("/add-request-send", userController.addRequestSend);
 // addRequestGet
-router.post("/addRequestGet", userController.addRequestGet);
+router.post("/add-request-get", userController.addRequestGet);
 // getRequestGet
-router.post("/getRequestGet", userController.getRequestGet);
+router.post("/get-request-get", userController.getRequestGet);
 // getRequestSend
-router.post("/getRequestSend", userController.getRequestSend);
+router.post("/get-request-send", userController.getRequestSend);
 // acceptRequestGet
-router.post("/acceptRequestGet", userController.acceptRequestGet);
+router.post("/accept-request-get", userController.acceptRequestGet);
 // acceptRequestSend
-router.post("/acceptRequestSend", userController.acceptRequestSend);
+router.post("/accept-request-send", userController.acceptRequestSend);
 // removeRequestSend
-router.post("/removeRequestSend", userController.removeRequestSend);
+router.post("/remove-request-send", userController.removeRequestSend);
 // removeRequestGet
-router.post("/removeRequestGet", userController.removeRequestGet);
+router.post("/remove-request-get", userController.removeRequestGet);
 // removeFriend
-router.post("/removeFriend", userController.removeFriend);
+router.post("/remove-friend", userController.removeFriend);
 // getListFriend
-router.post("/getListFriend", userController.getListFriend);
+router.post("/get-list-friend", userController.getListFriend);
 // changePassword
-router.post("/changePassword", userController.changePassword);
+router.post("/change-password", userController.changePassword);
 module.exports = router;

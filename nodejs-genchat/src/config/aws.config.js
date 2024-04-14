@@ -27,7 +27,7 @@ const upload = multer({
   },
 });
 function checkFileType(file, cb) {
-  const fileType = /jpeg|png|jpg|gif|txt|mp4|avi|mov|docx/; // chỉ nhận những file có đuôi .jpeg, .png, .jpg, .gif
+  const fileType = /jpeg|png|jpg|gif|txt|mp4|avi|mov|docx|pdf/; // chỉ nhận những file có đuôi .jpeg, .png, .jpg, .gif
   const extname = fileType.test(path.extname(file.originalname).toLowerCase()); // toLowerCase không phân biệt hoa thường, originalname là tên gốc của tệp tin khi người dùng up lên trình duyệt, extname là một phần của module path nó trích xuât phần mở rộng của tệp tin
   // const mimetype = fileType.test(file.mimetype); // mimetype là một chuổi được sử dụng để chỉ định loại nội dung của file hoặc dữ liệu trong môi trường internet
   if (extname) {
