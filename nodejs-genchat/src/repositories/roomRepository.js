@@ -1,12 +1,15 @@
 const { Room, User } = require("../models/index");
 const generateID = () => Math.random().toString(36).substring(2, 10);
-const createRoom = async (users, relationship) => {
+const createRoom = async (name, roles, updateAt) => {
   try {
     const roomId = generateID();
     await Room.create({
-      users,
+      users: [],
       roomId,
-      relationship,
+      name,
+      roles,
+      createAt: Date.now(),
+      updateAt,
     });
   } catch (error) {
     console.log(error);
@@ -81,7 +84,7 @@ const joinRoomByRoomId = async (roomId, phoneNumber) => {
       throw new Error("User has joined this room!");
     }
     room.users.push(phoneNumber);
-    user.rooms.push(roomId)
+    user.rooms.push(roomId);
     await room.save();
     await user.save();
   } catch (error) {
@@ -89,7 +92,33 @@ const joinRoomByRoomId = async (roomId, phoneNumber) => {
     throw new Error(error);
   }
 };
+// authorization room
+const authorizationRoom = async () => {
+  try {
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
+// update infor room
+const updateInforRoom = async (roomId, newData) => {
+  try {
+    const { name, updateAt } = newData;
+    const room = await Room.findOne({ roomId });
+    if (!room) {
+      throw new Error("Room is not exist!");
+    }
+    if (!name && !updateAt) {
+      throw new Error("Missing room identification information!");
+    }
+    await Room.findOneAndUpdate({ roomId }, newData, { new: true });
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
 module.exports = {
+  updateInforRoom,
   joinRoomByRoomId,
   deleteRoomByRoomId,
   findRoomByRoomId,

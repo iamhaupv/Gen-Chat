@@ -2,10 +2,11 @@ const { roomRepository } = require("../repositories/index");
 //
 const createRoom = async (req, res) => {
   try {
-    const { users, relationship, roomId } = req.body;
-    await roomRepository.createRoom(users, roomId, relationship);
+    const { name, roles, updateAt } = req.body;
+    const room = await roomRepository.createRoom(name, roles, updateAt);
     res.status(200).json({
       message: "Successfully!",
+      data: room,
     });
   } catch (error) {
     console.log(error);
@@ -81,9 +82,10 @@ const deleteRoomByRoomId = async (req, res) => {
 const joinRoomByRoomId = async (req, res) => {
   try {
     const { roomId, phoneNumber } = req.body;
-    await roomRepository.joinRoomByRoomId(roomId, phoneNumber);
+    const room = await roomRepository.joinRoomByRoomId(roomId, phoneNumber);
     res.status(200).json({
       message: "Join room successfully!",
+      data: room,
     });
   } catch (error) {
     console.log(error);
@@ -92,7 +94,28 @@ const joinRoomByRoomId = async (req, res) => {
     });
   }
 };
+// update room infor by roomId
+const updateInforRoom = async (req, res) => {
+  try {
+    const { roomId, name } = req.body;
+    const updateAt = Date.now();
+    const room = await roomRepository.updateInforRoom(roomId, {
+      name,
+      updateAt,
+    });
+    res.status(200).json({
+      message: "Update room infor successfully!",
+      data: room,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Cannot update room infor!",
+    });
+  }
+};
 module.exports = {
+  updateInforRoom,
   joinRoomByRoomId,
   deleteRoomByRoomId,
   findRoomByRoomId,

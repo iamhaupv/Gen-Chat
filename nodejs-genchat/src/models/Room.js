@@ -8,7 +8,11 @@ const Room = mongoose.model(
     },
     roomId: {
       type: String,
-      required: true
+      required: true,
+    },
+    name: {
+      type: String,
+      required: false,
     },
     users: [
       {
@@ -16,9 +20,31 @@ const Room = mongoose.model(
         ref: "User", // Assuming there's a User model defined
       },
     ],
-    relationship: {
-      type: String,
-      required: false,
+    roles: {
+      leader: {
+        type: String,
+        required: false,
+      },
+      elders: [
+        {
+          type: String,
+          required: false,
+        },
+      ],
+      members: [
+        {
+          type: String,
+          required: false,
+        },
+      ],
+    },
+    createAt: {
+      type: Date,
+      default: Date.now(),
+    },
+    updateAt: {
+      type: Date,
+      default: Date.now(),
     },
   })
 );

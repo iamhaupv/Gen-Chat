@@ -13,4 +13,6 @@ router.post("/find-room-by-roomId", roomController.findRoomByRoomId)
 router.post("/delete-room-by-roomId", roomController.deleteRoomByRoomId)
 // join room by roomId
 router.post("/join-room-by-roomId", roomController.joinRoomByRoomId)
+// update room infor
+router.post("/update-room-infor", roomController.updateInforRoom)
 module.exports = router;
