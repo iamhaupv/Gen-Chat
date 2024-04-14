@@ -3,11 +3,9 @@ import ChatData from './ChatData'
 import ChatUser from './ChatUser'
 import ChatInput from './ChatInput'
 import Profile from './Profile';
+import host from '../GlobalVariable';
 
 import socketIOClient from "socket.io-client";
-
-// const host = "http://localhost:6969";
-const host = "http://0.tcp.ap.ngrok.io:16233"; // tcp trong url doi thanh http nha
 
 export default function Chats({user}) {
   const [openRight, setOpenRight] = useState(true);
@@ -18,7 +16,7 @@ export default function Chats({user}) {
   const socketRef = useRef();
 
   useEffect(() => {
-    socketRef.current = socketIOClient.connect(host);
+    socketRef.current = socketIOClient.connect(host.socket_host);
 
     socketRef.current.emit('sendUserIdToServer', user);
 
