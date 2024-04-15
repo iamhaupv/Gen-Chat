@@ -1,13 +1,11 @@
 import React, {useState, useRef, useEffect} from 'react';
 import Picker from '@emoji-mart/react'
 import data from '@emoji-mart/data'
-import InputEmoji from 'react-input-emoji';
 
 export default function ChatInput({socketRef, user, currentFriend}) {
   const [message, setMessage] = useState('');
   const [isPickerVisible, setPickerVisible] = useState(false);
   const [currentEmoji, setCurrentEmoji] = useState(null);
-  const [text, setText] = useState('');
 
   const openInputFile = () => {
     document.getElementById("file").click();
@@ -18,32 +16,61 @@ export default function ChatInput({socketRef, user, currentFriend}) {
   }
 
   const selectEmoji = e => {
+    console.log("Emoji");
+    console.log(e);
     setCurrentEmoji(e.native);
+    console.log("Current Emoji");
+    console.log(currentEmoji);
     setPickerVisible(false);
-    document.getElementById("message").value += currentEmoji;
+    document.getElementById("message").value += e.native;
   }
 
   const handleMessage = event => {
     setMessage(event.target.value);
   }
 
-  const sendMessage = () => {
-    console.log("Pressed send message button");
-    console.log("-----------------------Messsage---------------------");
-    console.log(message);
+  const handleFile = e => {
+    let file = e.target.files[0];
+    let reader = new FileReader();
+    const objectURL = URL.createObjectURL(file);
 
+    reader.onloadend = function () {
+      sendFileMessage(file, reader.result, objectURL)
+    }
+
+    reader.readAsDataURL(file);
+  }
+
+  const sendTextMessage = () => {
     if (message) {
       const msg = {
         sender: user.phoneNumber, 
         receiver: currentFriend.phoneNumber, 
         date: new Date().toLocaleString(),
         content: message, 
+        type: "text"
       }
       socketRef.current.emit(user.phoneNumber, msg)
 
       document.getElementById("message").value = "";
       setMessage("");
     }
+  }
+
+  const sendFileMessage = (file, content, link) => {
+      const msg = {
+        sender: user.phoneNumber, 
+        receiver: currentFriend.phoneNumber, 
+        date: new Date().toLocaleString(),
+        filename: file.name, 
+        type: file.type, 
+        link: link, 
+        content: content, 
+      }
+      socketRef.current.emit(user.phoneNumber, msg)
+
+      document.getElementById("message").value = "";
+      setMessage("");
   }
 
   return (
@@ -53,13 +80,13 @@ export default function ChatInput({socketRef, user, currentFriend}) {
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
       </svg>
 
-      {/* Input file */}
+      {/* Sending file */}
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6"
         onClick={openInputFile}
       >
         <path strokeLinecap="round" strokeLinejoin="round" d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13" />
       </svg>
-      <input type='file' id='file' className='hidden'></input>
+      <input type='file' id='file' className='hidden' onChange={handleFile}></input>
 
       {/* Sending text */}
       <input type='text' id='message' placeholder='Type your message...' className='border-2 rounded-full p-2 grow'
@@ -80,7 +107,7 @@ export default function ChatInput({socketRef, user, currentFriend}) {
 
       {/* Send button */}
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 -rotate-45" 
-        onClick={sendMessage}
+        onClick={sendTextMessage}
       >
         <path strokeLinecap="round" strokeLinejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
       </svg>
