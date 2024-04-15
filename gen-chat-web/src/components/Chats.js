@@ -15,9 +15,6 @@ export default function Chats({user, currentFriend}) {
 
   const socketRef = useRef();
 
-  console.log("Current friend");
-  console.log(currentFriend);
-
   useEffect(() => {
     socketRef.current = socketIOClient.connect(host.socket_host);
 
@@ -29,6 +26,16 @@ export default function Chats({user, currentFriend}) {
     //   setId(data)
     //   // socketRef.current.emit(data, {"id": data});
     // })
+
+    console.log("User phone number");
+    console.log(user.phoneNumber);
+
+    socketRef.current.on(user.phoneNumber, data => {
+      console.log(data);
+    })
+    socketRef.current.on("1", data => {
+      console.log(data);
+    })
 
     socketRef.current.on('sendDataServer', dataGot => {
       console.log("-----------------------------Called send data server-----------------------------");

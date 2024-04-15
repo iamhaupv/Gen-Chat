@@ -7,7 +7,7 @@ const login = async ({ phoneNumber, password }) => {
   let existUser = await User.findOne({ phoneNumber }).exec();
   console.log("---------Go to log in repo");
   console.log("Exist User");
-  console.log(existUser);
+  console.log(existUser.phoneNumber);
   if (existUser) {
     let isMatch = await bcrypt.compare(password, existUser.password);
     if (!!isMatch) {
