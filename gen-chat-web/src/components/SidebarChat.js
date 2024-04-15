@@ -73,7 +73,7 @@ export default function SidebarChat({user, handleCurrentFriend}) {
   return (
     <div className={`h-screen bg-white duration-300 ${!open ? 'w-96' : "w-0"}`}>
 
-    <dialog id="my_modal_1" className="modal">
+    <dialog id="my_modal_1" className="modal"add >
       <div className="modal-box">
 
 
