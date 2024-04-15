@@ -32,7 +32,7 @@ export default function ChatData({message}) {
         <time className="text-xs opacity-50">{message.date}</time>
       </div>
       <div className="chat-bubble bg-white text-black">
-        {/* {
+        {
           message.type == "text" ? 
             message.content : 
               message.type == "image/png" || 
@@ -46,7 +46,7 @@ export default function ChatData({message}) {
                   </video>
                    :
                   <a download={message.filename} href={message.link} className='underline text-blue-400'>{message.filename}</a>
-        } */}
+        }
       </div>
   {/* <div className="chat-footer opacity-50">
     Delivered
