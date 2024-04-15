@@ -62,7 +62,7 @@ socketIo.on("connection", (socket) => {
       console.log(user.listFriend[i]);
 
       socket.emit(user.listFriend[i], `You are connected to user ${user.phoneNumber}`);
-      socket.emit("1", `You are connected to user ${user.listFriend[i]}`);
+      // socket.emit("1", `You are connected to user ${user.listFriend[i]}`);
     }
   });
 

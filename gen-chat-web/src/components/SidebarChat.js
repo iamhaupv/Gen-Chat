@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react'
+
 import Chat from './Chat'
 import FriendRequest from './FriendRequest'
+import UserProfile from './UserProfile';
+
 import getListFriend from '../services/users/getListFriend';
 import findUserByPhoneNumber from '../services/users/findUserByPhoneNumber';
-import UserProfile from './UserProfile';
+import addRequestGet from '../services/users/addRequestGet';
+import addRequestSend from '../services/users/addRequestSend';
 
 export default function SidebarChat({user, handleCurrentFriend}) {
   const [showListFriendRequest, setShowListFriendRequest] = useState("");
@@ -16,7 +20,6 @@ export default function SidebarChat({user, handleCurrentFriend}) {
   const [currentUser, setCurrentUser] = useState({});
 
   const handleCurrentFriend2 = friend => {
-    alert("Called handle current friend");
     console.log(friend);
     setCurrentFriend(friend);
     handleCurrentFriend(friend);
@@ -26,6 +29,11 @@ export default function SidebarChat({user, handleCurrentFriend}) {
     setCurrentUser(user);
     document.getElementById('my_modal_1').showModal()
   }
+
+  useEffect(() => {
+    getFriendList();
+  }, []);
+
 
   const getFriendList = async () => {
     const friendList = await getListFriend(user.phoneNumber);
@@ -40,10 +48,6 @@ export default function SidebarChat({user, handleCurrentFriend}) {
     setFriends(friendFound);
   }
 
-  useEffect(() => {
-    getFriendList();
-  }, []);
-
   const handleSearchPhoneNumber = e => {
     setSearchPhoneNumber(e.target.value);
   }
@@ -53,8 +57,10 @@ export default function SidebarChat({user, handleCurrentFriend}) {
     setShowSearchResult(!showSearchResult);
   }
 
-  const handleAddFriend = () => {
-    
+  const handleAddFriend = async () => {
+    console.log("Called add friend");
+    await addRequestSend(user.phoneNumber, currentUser.phoneNumber);
+    await addRequestGet(user.phoneNumber, currentUser.phoneNumber);
   }
 
   const searchUserByPhone = async () => {

@@ -12,8 +12,7 @@ export default function ChatOption() {
         <p className='font-medium text-xl grow-1'>Info</p>
       </div>
       <div className='flex items-center flex-col justify-center p-8'>
-        <img className='aspect-square w-2/3 rounded-full' src='https://lh3.googleusercontent.com/a/ACg8ocLlO1pfA9KPIKdD6CNveeOZ6F7MzO8OPni_FMqOHqjx=s96-c
-'></img>
+        <img className='aspect-square w-2/3 rounded-full' src='https://lh3.googleusercontent.com/a/ACg8ocLlO1pfA9KPIKdD6CNveeOZ6F7MzO8OPni_FMqOHqjx=s96-c'></img>
         <p className='font-medium text-xl p-3'>Nguyen Thanh Khoa</p>
       </div>
       <div className='flex justify-between'>

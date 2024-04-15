@@ -33,9 +33,9 @@ export default function Chats({user, currentFriend}) {
     socketRef.current.on(user.phoneNumber, data => {
       console.log(data);
     })
-    socketRef.current.on("1", data => {
-      console.log(data);
-    })
+    // socketRef.current.on("1", data => {
+    //   console.log(data);
+    // })
 
     socketRef.current.on('sendDataServer', dataGot => {
       console.log("-----------------------------Called send data server-----------------------------");

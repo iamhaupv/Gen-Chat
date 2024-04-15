@@ -1,5 +1,5 @@
 import axios from "axios";
-import {api_host, socket_host} from "../../GlobalVariable";
+import host from "../../GlobalVariable";
 const addRequestSend = async (phoneNumberUserSend, phoneNumberUserGet) => {
   try {
     const userData = {
@@ -7,7 +7,7 @@ const addRequestSend = async (phoneNumberUserSend, phoneNumberUserGet) => {
       phoneNumberUserGet: phoneNumberUserGet,
     };
     const response = await axios.post(
-      api_host + "/users/add-request-send",
+      host.api_host + "/users/add-request-send",
       userData
     );
     if (response.status === 200) {

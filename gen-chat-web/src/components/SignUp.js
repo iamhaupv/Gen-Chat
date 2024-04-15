@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import logo from '../assets/logo.png'
 import { useNavigate } from "react-router-dom";
 import { RecaptchaVerifier } from "firebase/auth";
-import loginUser from '../services/users/loginUser.js'
 import config from '../firebase/config.js';
+import loginUser from '../services/users/loginUser.js'
 
 export default function SignUp() {
   const [phoneNumber, setPhoneNumber] = useState('');
