@@ -6,7 +6,7 @@ const findRoomByRoomId = async (roomId) => {
         roomId: roomId
     };
     const response = await axios.post(
-      api_host + "/rooms/findRoomByRoomId",
+      api_host + "/rooms/find-room-by-roomId",
       userData
     );
     if (response.status === 200) {
