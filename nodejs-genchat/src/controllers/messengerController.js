@@ -5,9 +5,6 @@ const { bucketName, s3 } = require("../config/aws.config");
 const createMessenger = async (req, res) => {
   try {
     const { sender, receiver, message } = req.body;
-    if (message.type != "text") {
-      sendFile(req, res);
-    }
     const mess = await messengerRepository.createMessenger(
       sender,
       receiver,
