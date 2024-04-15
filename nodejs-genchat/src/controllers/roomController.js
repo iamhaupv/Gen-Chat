@@ -1,5 +1,5 @@
 const { roomRepository } = require("../repositories/index");
-//
+// create room
 const createRoom = async (req, res) => {
   try {
     const { name, users, updateAt } = req.body;

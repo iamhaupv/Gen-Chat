@@ -1,13 +1,13 @@
 import axios from "axios";
 import {api_host, socket_host} from "../../GlobalVariable";
-const createRoom = async (users, relationship) => {
+const createRoom = async (users, name) => {
   try {
     const userData = {
       users: users,
-      relationship: relationship,
+      name: name,
     };
     const response = await axios.post(
-      api_host + "/rooms/createRoom",
+      api_host + "/rooms/create-room",
       userData
     );
     if (response.status === 200) {
