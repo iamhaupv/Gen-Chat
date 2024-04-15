@@ -5,7 +5,6 @@ import data from '@emoji-mart/data'
 export default function ChatInput({socketRef, user, currentFriend}) {
   const [message, setMessage] = useState('');
   const [isPickerVisible, setPickerVisible] = useState(false);
-  const [currentEmoji, setCurrentEmoji] = useState(null);
 
   const openInputFile = () => {
     document.getElementById("file").click();
@@ -16,13 +15,9 @@ export default function ChatInput({socketRef, user, currentFriend}) {
   }
 
   const selectEmoji = e => {
-    console.log("Emoji");
-    console.log(e);
-    setCurrentEmoji(e.native);
-    console.log("Current Emoji");
-    console.log(currentEmoji);
     setPickerVisible(false);
     document.getElementById("message").value += e.native;
+    setMessage(document.getElementById("message").value);
   }
 
   const handleMessage = event => {
