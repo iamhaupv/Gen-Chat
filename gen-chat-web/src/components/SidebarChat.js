@@ -14,7 +14,7 @@ export default function SidebarChat({user, handleCurrentFriend}) {
   const [currentFriend, setCurrentFriend] = useState({});
 
   const handleCurrentFriend2 = friend => {
-    console.log("Called handle current friend");
+    alert("Called handle current friend");
     console.log(friend);
     setCurrentFriend(friend);
     handleCurrentFriend(friend);
@@ -120,7 +120,7 @@ export default function SidebarChat({user, handleCurrentFriend}) {
         <div className='h-4/5 overflow-y-scroll'>
           {
             searchedUser != null ?
-              <Chat user={searchedUser.data} /> : 
+              <Chat user={searchedUser.data}  /> : 
               <p className='ml-4'>Phone number does not exists</p>
           }
         </div>
