@@ -10,59 +10,50 @@ import socketIOClient from "socket.io-client";
 export default function Chats({user, currentFriend}) {
   const [openRight, setOpenRight] = useState(true);
   const [open, setOpen] = useState(true);
-  const [currentReceiver, setCurrentReceiver] = useState({});
 
   const [mess, setMess] = useState([]);
 
   const socketRef = useRef();
-
-  // setCurrentReceiver(currentFriend);
-
-  console.log("User phone number")
-  console.log(user.phoneNumber)
-  console.log("Current user number")
-  console.log(currentReceiver.phoneNumber)
 
   useEffect(() => {
     socketRef.current = socketIOClient.connect(host.socket_host);
 
     socketRef.current.emit('sendUserIdToServer', user);
 
-    // socketRef.current.on('getId', data => {
-    //   console.log("-----------------------------Called get id-----------------------------");
-    //   console.log(data);
-    //   setId(data)
-    //   // socketRef.current.emit(data, {"id": data});
-    // })
-
-    socketRef.current.on('sendDataServer', dataGot => {
+    socketRef.current.on(user.phoneNumber, dataGot => {
       console.log("-----------------------------Called send data server-----------------------------");
-
-      console.log("Receiver phone")
-      console.log(dataGot.data.receiver)
-      console.log("Sender phone")
-      console.log(dataGot.data.sender)
-      console.log("User phone number")
-      console.log(user.phoneNumber)
-      console.log("Current user number")
-      console.log(currentReceiver.phoneNumber)
-
-      if (
-        dataGot.data.receiver == user.phoneNumber 
-        // && dataGot.data.sender == currentFriend.phoneNumber
-      )
-        setMess(oldMsgs => [...oldMsgs, dataGot.data])
+      setMess(oldMsgs => [...oldMsgs, dataGot.data])
     });
 
     return () => {
       socketRef.current.disconnect();
     };
-  }, []);
+  }, [currentFriend]);
 
   const renderMess = mess.map((m, index) => {
-    let chat = (m.sender == user.phoneNumber) ? 
+    console.log("Called render mess");
+
+    console.log("-------------------------------");
+    console.log("Sender");
+    console.log(m.sender);
+    console.log("Receiver");
+    console.log(m.receiver);
+    console.log("User phone number");
+    console.log(user.phoneNumber);
+    console.log("Current friend number");
+    console.log(currentFriend.phoneNumber);
+
+    let chat
+    if (
+      (m.sender == user.phoneNumber & m.receiver == currentFriend.phoneNumber) ||
+      (m.receiver == user.phoneNumber & m.sender == currentFriend.phoneNumber) 
+    ) {
+      console.log("Go to chat");
+      chat = (m.sender == user.phoneNumber) ? 
       <ChatUser message={m} key={index}/> : 
       <ChatData message={m} key={index}/>
+    }
+      
     return chat;
   });
 

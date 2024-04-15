@@ -45,20 +45,24 @@ socketIo.on("connection", (socket) => {
   console.log("New client connected" + socket.id);
 
   socket.on('sendUserIdToServer', user => {
+    console.log("----------------------------------------");
     console.log("New user connected: ");
     console.log(user.phoneNumber);
     console.log("Friend list of that user");
     console.log(user.listFriend);
 
     socket.on(user.phoneNumber, data => {
-      console.log("Listening on " + user.phoneNumber);
+    console.log("----------------------------------------");
+    console.log("Listening on " + user.phoneNumber);
       console.log("Message data");
       console.log(data);
-      socketIo.emit("sendDataServer", { data });
+      socketIo.emit(data.receiver, { data });
+      socketIo.emit(data.sender, { data });
     })
 
     for (let i = 0; i < user.listFriend.length; i++) {
-      console.log("Friends phone number");
+    console.log("----------------------------------------");
+    console.log("Friends phone number");
       console.log(user.listFriend[i]);
 
       socket.emit(user.listFriend[i], `You are connected to user ${user.phoneNumber}`);
