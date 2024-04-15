@@ -6,7 +6,7 @@ const findRoomByManyPhoneNumber = async (users) => {
       users: users
     };
     const response = await axios.post(
-      api_host + "/rooms/findRoomByManyPhoneNumber",
+      api_host + "/rooms/find-room-by-phoneNumber",
       userData
     );
     if (response.status === 200) {
