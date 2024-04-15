@@ -18,7 +18,7 @@ export default function ChatUser({message}) {
     <time className="text-xs opacity-50">{message.date}</time>
   </div>
   <div className="chat-bubble bg-white text-black">
-    {
+    {/* {
       message.type == "text" ? 
         message.content : 
           message.type == "image/png" || 
@@ -32,11 +32,11 @@ export default function ChatUser({message}) {
               </video>
                 :
               <a download={message.filename} href={message.link} className='underline text-blue-400'>{message.filename}</a>
-    }
-    {/* <video width="400" controls>
+    } */}
+    <video width="400" controls>
                 <source src="mov_bbb.mp4" type="video/mp4" />
                 Your browser does not support HTML video.
-              </video> */}
+              </video>
   </div>
   {/* <div className="chat-footer opacity-50">
     Seen at 12:46
