@@ -6,7 +6,7 @@ const sendResetLinkEmail = async (email) => {
     const userData = {
       email: email
     };
-    const response = await axios.post(api_host + "/users/sendResetLinkEmail", userData);
+    const response = await axios.post(api_host + "/users/send-reset-link-email", userData);
     if (response.status === 200) {
       console.log("Registration successful:", response.data);
       return response.data;

@@ -5,9 +5,6 @@ const { bucketName, s3 } = require("../config/aws.config");
 const createMessenger = async (req, res) => {
   try {
     const { sender, receiver, message } = req.body;
-    if (message.type != "text") {
-      sendFile(req, res);
-    }
     const mess = await messengerRepository.createMessenger(
       sender,
       receiver,
@@ -42,13 +39,15 @@ const sendFile = async (req, res) => {
       ContentType: req.file.mimetype,
     };
 
-    s3.upload(paramsS3, (err, data) => {
+    s3.upload(paramsS3, async (err, data) => {
       if (err) {
         console.log(err);
         return res.status(500).json({ message: "Failed to upload file to S3" });
       }
-
       const fileURL = data.Location;
+      const { sender, receiver } = req.body;
+      const messageContent = { type: "file", content: fileURL };
+      await messengerRepository.createMessenger(sender, receiver, messageContent);
       res.status(200).json({ message: "File uploaded successfully", fileURL });
     });
   } catch (error) {
@@ -62,8 +61,8 @@ const deleteMessenger = async (req, res) => {
     const { _id } = req.body;
     await messengerRepository.deleteMessenger(_id);
     res.status(200).json({
-      message: "Delete message successfully!"
-    })
+      message: "Delete message successfully!",
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
