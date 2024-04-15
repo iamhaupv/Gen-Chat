@@ -1,13 +1,13 @@
 import axios from "axios";
-import {api_host, socket_host} from "../GlobalVariable";
-const addRequestGet = async (phoneNumberUserSend, phoneNumberUserGet) => {
+import {api_host, socket_host} from "../../GlobalVariable";
+const removeRequestSend = async (phoneNumberUserSend, phoneNumberUserGet) => {
   try {
     const userData = {
-      phoneNumberUserSend: phoneNumberUserSend,
-      phoneNumberUserGet: phoneNumberUserGet,
+      phoneNumber: phoneNumberUserSend,
+      phoneRemove: phoneNumberUserGet,
     };
     const response = await axios.post(
-      api_host + "/users/removeFriend",
+      api_host + "/users/removeRequestSend",
       userData
     );
     if (response.status === 200) {
@@ -23,4 +23,4 @@ const addRequestGet = async (phoneNumberUserSend, phoneNumberUserGet) => {
     throw new Error(error);
   }
 };
-export default addRequestGet;
+export default removeRequestSend;

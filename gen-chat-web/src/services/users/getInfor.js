@@ -1,12 +1,12 @@
-import {api_host, socket_host} from "../GlobalVariable";
+import {api_host, socket_host} from "../../GlobalVariable";
 import axios from "axios";
-const getRequestSend = async (phoneNumber) => {
+const getInfor = async (phoneNumber) => {
   try {
     const userData = {
       phoneNumber: phoneNumber,
     };
     const response = await axios.post(
-      api_host + "/users/getRequestSend",
+      api_host + "/users/getInfor",
       userData
     );
     if (response.status === 200) {
@@ -22,4 +22,4 @@ const getRequestSend = async (phoneNumber) => {
     throw new Error(error);
   }
 };
-export default getRequestSend;
+export default getInfor;

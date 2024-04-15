@@ -1,13 +1,12 @@
+import {api_host, socket_host} from "../../GlobalVariable";
 import axios from "axios";
-import {api_host, socket_host} from "../GlobalVariable";
-const removeRequestSend = async (phoneNumberUserSend, phoneNumberUserGet) => {
+const findRoomByRoomId = async (roomId) => {
   try {
     const userData = {
-      phoneNumber: phoneNumberUserSend,
-      phoneRemove: phoneNumberUserGet,
+        roomId: roomId
     };
     const response = await axios.post(
-      api_host + "/users/removeRequestSend",
+      api_host + "/rooms/findRoomByRoomId",
       userData
     );
     if (response.status === 200) {
@@ -23,4 +22,4 @@ const removeRequestSend = async (phoneNumberUserSend, phoneNumberUserGet) => {
     throw new Error(error);
   }
 };
-export default removeRequestSend;
+export default findRoomByRoomId;

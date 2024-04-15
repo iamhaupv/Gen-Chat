@@ -1,5 +1,5 @@
 import axios from "axios";
-import {api_host, socket_host} from "../GlobalVariable";
+import {api_host, socket_host} from "../../GlobalVariable";
 
 const acceptFriend = async (phoneNumberUserSend, phoneNumberUserGet) => {
   try {

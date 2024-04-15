@@ -1,4 +1,4 @@
-import host from "../GlobalVariable";
+import host from "../../GlobalVariable";
 import axios from "axios";
 const loginUser = async (phoneNumber, password) => {
   console.log("Go to login user service");

@@ -1,18 +1,19 @@
 import axios from "axios";
-import host from "../GlobalVariable";
-const getListFriend = async (phoneNumberUserSend) => {
+import {api_host, socket_host} from "../../GlobalVariable";
+const removeRequestGet = async (phoneNumberUserSend, phoneNumberUserGet) => {
   try {
     const userData = {
       phoneNumber: phoneNumberUserSend,
+      phoneRemove: phoneNumberUserGet,
     };
     const response = await axios.post(
-      host.api_host + "/users/getListFriend",
+      api_host + "/users/removeRequestGet",
       userData
     );
     if (response.status === 200) {
-      console.log("Found successful:", response.data.data);
+      console.log("Found successful:", response.data);
 
-      return response.data.data;
+      return response.data;
     } else {
       console.error("Found failed:", response.data);
       throw new Error("Found failed");
@@ -22,4 +23,4 @@ const getListFriend = async (phoneNumberUserSend) => {
     throw new Error(error);
   }
 };
-export default getListFriend;
+export default removeRequestGet;

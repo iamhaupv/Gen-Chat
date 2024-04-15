@@ -1,15 +1,14 @@
+
+import host from "../../GlobalVariable";
 import axios from "axios";
-import {api_host, socket_host} from "../GlobalVariable";
-const addRequestGet = async (phoneNumberUserSend, phoneNumberUserGet) => {
+const findUserByPhoneNumber = async (phoneNumber) => {
   try {
     const userData = {
-      phoneNumberUserSend: phoneNumberUserSend,
-      phoneNumberUserGet: phoneNumberUserGet,
+      phoneNumber: phoneNumber,
     };
     const response = await axios.post(
-      api_host + "/users/addRequestGet",
+      host.api_host + "/users/findUserByPhoneNumber",
       userData
-
     );
     if (response.status === 200) {
       console.log("Found successful:", response.data);
@@ -24,4 +23,4 @@ const addRequestGet = async (phoneNumberUserSend, phoneNumberUserGet) => {
     throw new Error(error);
   }
 };
-export default addRequestGet;
+export default findUserByPhoneNumber;

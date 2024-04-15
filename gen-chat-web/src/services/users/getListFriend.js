@@ -1,19 +1,18 @@
-
-import host from "../GlobalVariable";
 import axios from "axios";
-const findUserByPhoneNumber = async (phoneNumber) => {
+import host from "../../GlobalVariable";
+const getListFriend = async (phoneNumberUserSend) => {
   try {
     const userData = {
-      phoneNumber: phoneNumber,
+      phoneNumber: phoneNumberUserSend,
     };
     const response = await axios.post(
-      host.api_host + "/users/findUserByPhoneNumber",
+      host.api_host + "/users/getListFriend",
       userData
     );
     if (response.status === 200) {
-      console.log("Found successful:", response.data);
+      console.log("Found successful:", response.data.data);
 
-      return response.data;
+      return response.data.data;
     } else {
       console.error("Found failed:", response.data);
       throw new Error("Found failed");
@@ -23,4 +22,4 @@ const findUserByPhoneNumber = async (phoneNumber) => {
     throw new Error(error);
   }
 };
-export default findUserByPhoneNumber;
+export default getListFriend;
