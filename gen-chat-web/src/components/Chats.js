@@ -30,16 +30,23 @@ export default function Chats({user, currentFriend}) {
     console.log("User phone number");
     console.log(user.phoneNumber);
 
-    socketRef.current.on(user.phoneNumber, data => {
-      console.log(data);
-    })
-    // socketRef.current.on("1", data => {
-    //   console.log(data);
-    // })
-
     socketRef.current.on('sendDataServer', dataGot => {
       console.log("-----------------------------Called send data server-----------------------------");
-      setMess(oldMsgs => [...oldMsgs, dataGot.data])
+
+      console.log("Receiver phone")
+      console.log(dataGot.data.receiver)
+      console.log("Sender phone")
+      console.log(dataGot.data.sender)
+      console.log("User phone number")
+      console.log(user.phoneNumber)
+      console.log("Current user number")
+      console.log(currentFriend)
+
+      if (
+        dataGot.data.receiver == user.phoneNumber 
+        // && dataGot.data.sender == currentFriend.phoneNumber
+      )
+        setMess(oldMsgs => [...oldMsgs, dataGot.data])
     });
 
     return () => {
