@@ -10,10 +10,18 @@ import socketIOClient from "socket.io-client";
 export default function Chats({user, currentFriend}) {
   const [openRight, setOpenRight] = useState(true);
   const [open, setOpen] = useState(true);
+  const [currentReceiver, setCurrentReceiver] = useState({});
 
   const [mess, setMess] = useState([]);
 
   const socketRef = useRef();
+
+  // setCurrentReceiver(currentFriend);
+
+  console.log("User phone number")
+  console.log(user.phoneNumber)
+  console.log("Current user number")
+  console.log(currentReceiver.phoneNumber)
 
   useEffect(() => {
     socketRef.current = socketIOClient.connect(host.socket_host);
@@ -27,9 +35,6 @@ export default function Chats({user, currentFriend}) {
     //   // socketRef.current.emit(data, {"id": data});
     // })
 
-    console.log("User phone number");
-    console.log(user.phoneNumber);
-
     socketRef.current.on('sendDataServer', dataGot => {
       console.log("-----------------------------Called send data server-----------------------------");
 
@@ -40,7 +45,7 @@ export default function Chats({user, currentFriend}) {
       console.log("User phone number")
       console.log(user.phoneNumber)
       console.log("Current user number")
-      console.log(currentFriend)
+      console.log(currentReceiver.phoneNumber)
 
       if (
         dataGot.data.receiver == user.phoneNumber 

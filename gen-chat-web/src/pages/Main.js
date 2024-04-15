@@ -10,7 +10,10 @@ export default function Main() {
 
   const [currentFriend, setCurrentFriend] = useState({})
 
-  const handleCurrentFriend = friend => setCurrentFriend(friend);
+  const handleCurrentFriend = friend => {
+    console.log("Called handle current friend");
+    setCurrentFriend(friend);
+  }
   
   return (
     <div className='flex items-center w-full overflow-hidden'>

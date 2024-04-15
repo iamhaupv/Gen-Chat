@@ -20,7 +20,7 @@ export default function SidebarChat({user, handleCurrentFriend}) {
   const [currentUser, setCurrentUser] = useState({});
 
   const handleCurrentFriend2 = friend => {
-    console.log(friend);
+    console.log("Called handle current friend 2");
     setCurrentFriend(friend);
     handleCurrentFriend(friend);
   }
