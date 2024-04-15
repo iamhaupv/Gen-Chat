@@ -1,11 +1,10 @@
 import axios from "axios";
 import {api_host, socket_host} from "../../GlobalVariable";
-const sendFile = async (sender, receiver, message) => {
+const sendFile = async (sender, receiver) => {
   try {
     const userData = {
       sender: sender,
       receiver: receiver,
-      message: message
     };
     const response = await axios.post(
       api_host + "/messengers/send-file",
