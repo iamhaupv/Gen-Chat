@@ -52,6 +52,8 @@ socketIo.on("connection", (socket) => {
 
     socket.on(user.phoneNumber, data => {
       console.log("Listening on " + user.phoneNumber);
+      console.log("Message data");
+      console.log(data);
       socketIo.emit("sendDataServer", { data });
     })
 
