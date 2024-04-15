@@ -8,7 +8,7 @@ const acceptFriend = async (phoneNumberUserSend, phoneNumberUserGet) => {
       phoneNumberUserGet: phoneNumberUserGet,
     };
     const response = await axios.post(
-      api_host + "/users/acceptFriend",
+      api_host + "/users/accept-friend",
       userData
     );
     if (response.status === 200) {

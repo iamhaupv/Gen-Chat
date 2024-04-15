@@ -31,7 +31,17 @@ export default function ChatData({message}) {
         {message.sender}
         <time className="text-xs opacity-50">{message.date}</time>
       </div>
-      <div className="chat-bubble bg-white text-black">{message.content}</div>
+      <div className="chat-bubble bg-white text-black">
+        {
+          message.type == "text" ? 
+            message.content : 
+              message.type == "image/png" || 
+              message.type == "image/jpeg" || 
+              message.type == "image/jpg" ?
+                <img src={message.content} width={200}></img> :
+                <a download={message.filename} href={message.link} className='underline text-blue-400'>{message.filename}</a>
+        }
+      </div>
   {/* <div className="chat-footer opacity-50">
     Delivered
   </div> */}

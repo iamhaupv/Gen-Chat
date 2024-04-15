@@ -7,7 +7,7 @@ const removeRequestSend = async (phoneNumberUserSend, phoneNumberUserGet) => {
       phoneRemove: phoneNumberUserGet,
     };
     const response = await axios.post(
-      api_host + "/users/removeRequestSend",
+      api_host + "/users/remove-request-send",
       userData
     );
     if (response.status === 200) {

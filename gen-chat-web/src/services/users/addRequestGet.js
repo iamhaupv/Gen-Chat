@@ -7,7 +7,7 @@ const addRequestGet = async (phoneNumberUserSend, phoneNumberUserGet) => {
       phoneNumberUserGet: phoneNumberUserGet,
     };
     const response = await axios.post(
-      api_host + "/users/addRequestGet",
+      api_host + "/users/add-request-get",
       userData
 
     );

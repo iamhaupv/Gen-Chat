@@ -4,11 +4,10 @@ const jwt = require("jsonwebtoken");
 const mailer = require("../utils/mailer");
 // login (đăng nhập)
 const login = async ({ phoneNumber, password }) => {
-  console.log(phoneNumber);
-  console.log(password);
   let existUser = await User.findOne({ phoneNumber }).exec();
+  console.log("---------Go to log in repo");
   console.log("Exist User");
-  console.log(existUser);
+  console.log(existUser.phoneNumber);
   if (existUser) {
     let isMatch = await bcrypt.compare(password, existUser.password);
     if (!!isMatch) {
@@ -40,15 +39,8 @@ const register = async ({
   phoneNumber,
   photoURL,
   address,
-  listFriend,
-  listRequestSend,
-  listRequestGet,
-  messages,
 }) => {
-  // console.log("------------------------------");
-  // console.log(email);
-  // console.log(password);
-  // console.log("------------------------------");
+  console.log("---------------Go to register repo---------------")
   try {
     const existUser = await User.findOne({ phoneNumber }).exec(); // tìm kiếm dựa trên số diện thoại hoặc email
     if (!!existUser) {
@@ -111,7 +103,6 @@ const findUserByPhoneNumber = async (phoneNumber) => {
   try {
     // Tìm người dùng dựa trên số điện thoại
     const existUser = await User.findOne({ phoneNumber }).exec();
-    console.log(phoneNumber);
     // Nếu người dùng không tồn tại, ném ra một lỗi
     if (!existUser) {
       throw new Error("User is not exist!");

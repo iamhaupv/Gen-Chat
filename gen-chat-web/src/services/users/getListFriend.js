@@ -6,7 +6,7 @@ const getListFriend = async (phoneNumberUserSend) => {
       phoneNumber: phoneNumberUserSend,
     };
     const response = await axios.post(
-      host.api_host + "/users/getListFriend",
+      host.api_host + "/users/get-list-friend",
       userData
     );
     if (response.status === 200) {

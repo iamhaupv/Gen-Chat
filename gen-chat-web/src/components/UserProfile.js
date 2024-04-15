@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function Chat({user, setCurrentFriend}) {
+export default function UserProfile({user, openModel}) {
   return (
     <div className='cursor-pointer flex flex-row pt-5 pl-5 pr-5 pb-0 w-full justify-center'
-      onClick={() => setCurrentFriend(user)}
+      onClick={() => openModel(user)}
     >
       <div className='flex items-center justify-center w-1/5 grow'>
       <img

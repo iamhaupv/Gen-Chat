@@ -3,14 +3,29 @@ import Chat from './Chat'
 import FriendRequest from './FriendRequest'
 import getListFriend from '../services/getListFriend';
 import findUserByPhoneNumber from '../services/findUserByPhoneNumber';
+import UserProfile from './UserProfile';
 
-export default function SidebarChat({user}) {
+export default function SidebarChat({user, handleCurrentFriend}) {
   const [showListFriendRequest, setShowListFriendRequest] = useState("");
   const [searchPhoneNumber, setSearchPhoneNumber] = useState("");
   const [showSearchResult, setShowSearchResult] = useState(false);
   const [searchedUser, setSearchedUser] = useState(null);
   const [friends, setFriends] = useState([]);
   const [open, setOpen] = useState(false);
+  const [currentFriend, setCurrentFriend] = useState({});
+  const [currentUser, setCurrentUser] = useState({});
+
+  const handleCurrentFriend2 = friend => {
+    alert("Called handle current friend");
+    console.log(friend);
+    setCurrentFriend(friend);
+    handleCurrentFriend(friend);
+  }
+
+  const openUserModal = user => {
+    setCurrentUser(user);
+    document.getElementById('my_modal_1').showModal()
+  }
 
   const getFriendList = async () => {
     const friendList = await getListFriend(user.phoneNumber);
@@ -57,6 +72,32 @@ export default function SidebarChat({user}) {
 
   return (
     <div className={`h-screen bg-white duration-300 ${!open ? 'w-96' : "w-0"}`}>
+
+    <dialog id="my_modal_1" className="modal"add >
+      <div className="modal-box">
+
+
+      <form method="dialog">
+      {/* if there is a button in form, it will close the modal */}
+      <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+    </form>
+
+        
+
+    <div class="flex flex-col items-center pb-10">
+        <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="User image"/>
+        <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{currentUser.name}</h5>
+        <span class="text-sm text-gray-500 dark:text-gray-400">{currentUser.phoneNumber}</span>
+        <div class="flex mt-4 md:mt-6">
+            <a href="#" class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add friend</a>
+            {/* <a href="#" class="py-2 px-4 ms-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Message</a> */}
+        </div>
+    </div>
+
+
+
+      </div>
+    </dialog>
 
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className={`absolute cursor-pointer -right-3 top-9 w-6 border-blue-400 border-2 rounded-full ${!open && "rotate-180"} bg-blue-400`} onClick={() => setOpen(!open)}>
       <path fillRule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clipRule="evenodd" />
@@ -112,7 +153,7 @@ export default function SidebarChat({user}) {
         <div className='h-4/5 overflow-y-scroll'>
           {
             searchedUser != null ?
-              <Chat user={searchedUser.data} /> : 
+              <UserProfile user={searchedUser.data} openModel={() => openUserModal(searchedUser.data)} /> : 
               <p className='ml-4'>Phone number does not exists</p>
           }
         </div>
@@ -134,7 +175,7 @@ export default function SidebarChat({user}) {
           <div className='h-4/5 overflow-y-scroll'>
 
             {
-              friends.map((elem, i) => <Chat key={i} user={elem} />)
+              friends.map((elem, i) => <Chat key={i} user={elem} setCurrentFriend={() => handleCurrentFriend2(elem)} />)
             }
 
           </div>

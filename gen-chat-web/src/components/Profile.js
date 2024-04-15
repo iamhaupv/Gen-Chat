@@ -2,6 +2,7 @@ import React from 'react'
 
 export default function Profile(props) {
   const isOpen = props.state;
+  const user = props.user;
 
   return (
     <div className={`flex flex-col duration-300 ${isOpen ? 'w-3/5' : 'hidden'}`}>
@@ -14,7 +15,7 @@ export default function Profile(props) {
       </div>
 
       <div className='flex flex-row mt-5 items-center justify-center gap-4'>
-        <h1 className='font-medium text-xl'>Nguyen Thanh Khoa</h1>
+        <h1 className='font-medium text-xl'>{user.name}</h1>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 h-8 rounded-full bg-gray-200 p-1 border-none">
           <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
         </svg>
@@ -29,10 +30,27 @@ export default function Profile(props) {
         </div>
 
         <div className='flex flex-col items-center'>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 h-8 rounded-full bg-gray-200 p-1 border-none">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 h-8 rounded-full bg-gray-200 p-1 border-none"
+            onClick={()=>document.getElementById('my_modal_1').showModal()}
+          >
             <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
           </svg>
           <p className='text-sm text-center'>Tạo nhóm trò chuyện</p>
+
+          <dialog id="my_modal_1" className="modal">
+            <div className="modal-box">
+              <h3 className="font-bold text-lg">Hello!</h3>
+              <p className="py-4">Press ESC key or click the button below to close</p>
+              <div className="modal-action">
+                <form method="dialog">
+                  {/* if there is a button in form, it will close the modal */}
+                  <button className="btn">Close</button>
+                </form>
+              </div>
+            </div>
+          </dialog>
+
+
         </div>
 
         <div className='flex flex-col items-center'>
