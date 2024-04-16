@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import Chat from './Chat'
 import FriendRequest from './FriendRequest'
@@ -8,10 +8,8 @@ import getListFriend from '../services/users/getListFriend';
 import findUserByPhoneNumber from '../services/users/findUserByPhoneNumber';
 import addRequestGet from '../services/users/addRequestGet';
 import addRequestSend from '../services/users/addRequestSend';
-import createRoom from '../services/rooms/createRoom';
-import Group from './Group';
 
-export default function SidebarChat({user, handleCurrentFriend, socketRef}) {
+export default function SidebarChat({user, handleCurrentFriend}) {
   const [showListFriendRequest, setShowListFriendRequest] = useState("");
   const [searchPhoneNumber, setSearchPhoneNumber] = useState("");
   const [showSearchResult, setShowSearchResult] = useState(false);
@@ -21,16 +19,15 @@ export default function SidebarChat({user, handleCurrentFriend, socketRef}) {
   const [currentFriend, setCurrentFriend] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [roomName, setRoomName] = useState("New Room");
-  const [rooms, setRooms] = useState([]);
-
-  // const rooms = useRef();
-  // rooms.current = [];
 
   const handleCurrentFriend2 = friend => {
     console.log("Called handle current friend 2");
-    console.log(friend);
     setCurrentFriend(friend);
     handleCurrentFriend(friend);
+  }
+
+  const handleRoomName = e => {
+    setRoomName(e.target.value)
   }
 
   const openUserModal = user => {
@@ -38,13 +35,13 @@ export default function SidebarChat({user, handleCurrentFriend, socketRef}) {
     document.getElementById('my_modal_1').showModal()
   }
 
-  const handleRoomName = e => {
-    setRoomName(e.target.value)
-  }
-
   const openCreateGroupModal = user => {
     document.getElementById('group_modal').showModal()
   }
+
+  useEffect(() => {
+    getFriendList();
+  }, []);
 
   const handleCreateGroup = async () => {
     let checkedUsers = getCheckedBoxes("userInGroup");
@@ -53,7 +50,7 @@ export default function SidebarChat({user, handleCurrentFriend, socketRef}) {
 
     try {
       // await createRoom(checkedUsers, new Date().valueOf());
-      socketRef.current.emit("createRoom", {roomName: roomName, user: checkedUsers});
+      // socketRef.current.emit("createRoom", {roomName: roomName, user: checkedUsers});
       alert("Create room successfully!");
       document.getElementById("btnCloseModal").click();
     } catch (error) {
@@ -61,7 +58,6 @@ export default function SidebarChat({user, handleCurrentFriend, socketRef}) {
     }
   }
 
-  // Pass the checkbox name to the function
   function getCheckedBoxes(chkboxName) {
     var checkboxes = document.getElementsByName(chkboxName);
     var checkboxesChecked = [];
@@ -75,21 +71,6 @@ export default function SidebarChat({user, handleCurrentFriend, socketRef}) {
     // Return the array if it is non-empty, or null
     return checkboxesChecked.length > 0 ? checkboxesChecked : null;
   }
-
-  useEffect(() => {
-    socketRef.current.on("returnRoom", data => {
-      console.log("Called return room");
-      console.log(data);
-      
-      // rooms.current.push(rooms)
-      setRooms(data);
-
-      console.log("Rooms");
-      console.log(rooms);
-    })
-
-    getFriendList();
-  }, [rooms]);
 
   const getFriendList = async () => {
     const friendList = await getListFriend(user.phoneNumber);
@@ -136,33 +117,33 @@ export default function SidebarChat({user, handleCurrentFriend, socketRef}) {
     setShowSearchResult(true);
   }
 
-  const renderRoom = rooms.map(r => {
-    return r;
-  });
-
   return (
     <div className={`h-screen bg-white duration-300 ${!open ? 'w-96' : "w-0"}`}>
 
-    {/* User Profile */}
-    <dialog id="my_modal_1" className="modal"add={true} >
+    <dialog id="my_modal_1" className="modal"add >
       <div className="modal-box">
 
-        <form method="dialog">
-          {/* if there is a button in form, it will close the modal */}
-          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-        </form>
 
-        <div class="flex flex-col items-center pb-10">
-            <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="User image"/>
-            <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{currentUser.name}</h5>
-            <span class="text-sm text-gray-500 dark:text-gray-400">{currentUser.phoneNumber}</span>
-            <div class="flex mt-4 md:mt-6">
-                <p class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                  onClick={handleAddFriend}
-                >Add friend</p>
-                {/* <a href="#" class="py-2 px-4 ms-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Message</a> */}
-            </div>
-        </div>
+      <form method="dialog">
+        {/* if there is a button in form, it will close the modal */}
+        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+      </form>
+
+        
+
+      <div class="flex flex-col items-center pb-10">
+          <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="User image"/>
+          <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{currentUser.name}</h5>
+          <span class="text-sm text-gray-500 dark:text-gray-400">{currentUser.phoneNumber}</span>
+          <div class="flex mt-4 md:mt-6">
+              <p class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                onClick={handleAddFriend}
+              >Add friend</p>
+              {/* <a href="#" class="py-2 px-4 ms-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Message</a> */}
+          </div>
+      </div>
+
+
 
       </div>
     </dialog>
@@ -226,6 +207,7 @@ export default function SidebarChat({user, handleCurrentFriend, socketRef}) {
       </div>
     </dialog>
 
+
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className={`absolute cursor-pointer -right-3 top-9 w-6 border-blue-400 border-2 rounded-full ${!open && "rotate-180"} bg-blue-400`} onClick={() => setOpen(!open)}>
       <path fillRule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clipRule="evenodd" />
     </svg>
@@ -235,7 +217,7 @@ export default function SidebarChat({user, handleCurrentFriend, socketRef}) {
       <h1 className={`text-xl ${!open ? 'w-auto' : "hidden"}`}>Message</h1>
 
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6"
-        onClick={() => openCreateGroupModal()}
+        onClick={openCreateGroupModal}
       >
         <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
       </svg>
@@ -305,11 +287,6 @@ export default function SidebarChat({user, handleCurrentFriend, socketRef}) {
 
             {
               friends.map((elem, i) => <Chat key={i} user={elem} setCurrentFriend={() => handleCurrentFriend2(elem)} />)
-            }
-            {
-              renderRoom.map((elem, i) => {
-                return <Group key={i} group={elem} setCurrentRoom={() => handleCurrentFriend2(elem)} />
-              })
             }
 
           </div>
