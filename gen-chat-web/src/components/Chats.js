@@ -20,9 +20,10 @@ export default function Chats({user, currentFriend}) {
 
     socketRef.current.emit('sendUserIdToServer', user);
 
-    socketRef.current.on(user.phoneNumber, dataGot => {
+    socketRef.current.on(user.phoneNumber, datas => {
       console.log("-----------------------------Called send data server-----------------------------");
-      setMess(oldMsgs => [...oldMsgs, dataGot.data])
+      console.log(datas);
+      setMess(datas);
     });
 
     return () => {
@@ -31,8 +32,10 @@ export default function Chats({user, currentFriend}) {
   }, [currentFriend]);
 
   const renderMess = mess.map((m, index) => {
+    console.log("-------------------------------");
     console.log("Called render mess");
-    console.log(m);
+    console.log(m.content);
+    console.log(m.status);
 
     // console.log("-------------------------------");
     // console.log("Sender");
@@ -45,7 +48,6 @@ export default function Chats({user, currentFriend}) {
     // console.log(currentFriend.phoneNumber);
 
     let chat;
-    console.log(m.status);
     if (m.status == "ready") {
 
       if (
@@ -57,9 +59,6 @@ export default function Chats({user, currentFriend}) {
           <ChatData message={m} key={index} socketRef={socketRef}/>
       }
 
-    }
-    else {
-      chat = <p>Deleted</p>
     }
       
     return chat;

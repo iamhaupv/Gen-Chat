@@ -30,6 +30,10 @@ export default function SidebarChat({user, handleCurrentFriend}) {
     document.getElementById('my_modal_1').showModal()
   }
 
+  const openCreateGroupModal = user => {
+    document.getElementById('group_modal').showModal()
+  }
+
   useEffect(() => {
     getFriendList();
   }, []);
@@ -83,31 +87,83 @@ export default function SidebarChat({user, handleCurrentFriend}) {
   return (
     <div className={`h-screen bg-white duration-300 ${!open ? 'w-96' : "w-0"}`}>
 
+    {/* User Profile */}
     <dialog id="my_modal_1" className="modal"add >
       <div className="modal-box">
 
+        <form method="dialog">
+          {/* if there is a button in form, it will close the modal */}
+          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+        </form>
 
-      <form method="dialog">
-        {/* if there is a button in form, it will close the modal */}
-        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-      </form>
+        <div class="flex flex-col items-center pb-10">
+            <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="User image"/>
+            <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{currentUser.name}</h5>
+            <span class="text-sm text-gray-500 dark:text-gray-400">{currentUser.phoneNumber}</span>
+            <div class="flex mt-4 md:mt-6">
+                <p class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  onClick={handleAddFriend}
+                >Add friend</p>
+                {/* <a href="#" class="py-2 px-4 ms-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Message</a> */}
+            </div>
+        </div>
 
-        
-
-      <div class="flex flex-col items-center pb-10">
-          <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="User image"/>
-          <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{currentUser.name}</h5>
-          <span class="text-sm text-gray-500 dark:text-gray-400">{currentUser.phoneNumber}</span>
-          <div class="flex mt-4 md:mt-6">
-              <p class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                onClick={handleAddFriend}
-              >Add friend</p>
-              {/* <a href="#" class="py-2 px-4 ms-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Message</a> */}
-          </div>
       </div>
+    </dialog>
 
+    {/* Group Modal */}
+    <dialog id="group_modal" className="modal" add >
+      <div className="modal-box">
 
+        <form method="dialog">
+          {/* if there is a button in form, it will close the modal */}
+          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+        </form>
 
+        <h1 className='pb-5 font-bold'>Create group</h1>
+
+        {/* Group name */}
+        <input className='p-2 ml-4 mr-4 mb-0 w-5/6 rounded-full'placeholder='Group name'
+          type='tel'
+          value={searchPhoneNumber}
+          onChange={handleSearchPhoneNumber}
+        />
+
+        {/* Search user by name */}
+        <div className='flex items-center justify-center pt-5 pb-5 border-b-2 border-gray-200'>
+          <input className='p-2 ml-4 mr-4 mb-0 w-5/6 rounded-full'placeholder='Search Message'
+            type='tel'
+            value={searchPhoneNumber}
+            onChange={handleSearchPhoneNumber}
+          />
+
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-10 h-10 mr-4"
+            onClick={searchUserByPhone}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg> 
+        </div>
+
+        {/* All friend title */}
+        <p className='font-bold pb-5'>Friend list</p>
+
+        {/* All friend title */}
+        <div className='border-b-2 border-gray-200'>
+          {
+            friends.map((elem, i) => 
+              <div className='flex items-center'>
+                <input type='radio'></input>
+                <Chat key={i} user={elem} setCurrentFriend={() => handleCurrentFriend2(elem)} />
+              </div>
+            )
+          }
+        </div>
+
+        {/* Create group */}
+        <div className='flex justify-end'>
+        <button className="btn-primary bg-blue-400 p-2 m-5 rounded-md btn text-white">Create Group</button>
+
+        </div>
       </div>
     </dialog>
 
@@ -119,7 +175,9 @@ export default function SidebarChat({user, handleCurrentFriend}) {
     <div className='flex flex-row p-5 justify-between border-solid border-b border-gray-200 font-medium text-xl' >
       <h1 className={`text-xl ${!open ? 'w-auto' : "hidden"}`}>Message</h1>
 
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6"
+        onClick={() => openCreateGroupModal()}
+      >
         <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
       </svg>
     </div>

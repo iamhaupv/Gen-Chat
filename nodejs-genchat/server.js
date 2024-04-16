@@ -62,8 +62,10 @@ socketIo.on("connection", (socket) => {
       messages.push(data);
       console.log("Array messages");
       console.log(messages);
-      socketIo.emit(data.receiver, { data });
-      socketIo.emit(data.sender, { data });
+      // socketIo.emit(data.receiver, { data });
+      // socketIo.emit(data.sender, { data });
+      socketIo.emit(data.receiver, messages);
+      socketIo.emit(data.sender, messages);
     })
 
     // for (let i = 0; i < user.listFriend.length; i++) {
@@ -81,19 +83,19 @@ socketIo.on("connection", (socket) => {
   });
 
   socket.on("deleteMessage", idMessage => {
-    let messageToDelete = messages.find(x => x.id === idMessage);
+    let messageToDelete = messages.findIndex(x => x.id === idMessage);
 
-    console.log("Want to Delete message");
-    console.log(messageToDelete);
+    // console.log("Want to Delete message");
+    // console.log(messageToDelete);
 
-    if (messageToDelete != undefined)
-      messageToDelete.status = "delete";
+    if (messageToDelete != -1)
+      messages[ messages.findIndex(x => x.id === idMessage) ].status = "deleted";
 
-    console.log("message after deleted");
-    console.log(messageToDelete);
+    console.log("New message after deleted");
+    console.log(messages);
 
-    socketIo.emit(messageToDelete.receiver, { data: messageToDelete });
-    socketIo.emit(messageToDelete.sender, { data: messageToDelete });
+    // socketIo.emit(messageToDelete.receiver, messages);
+    // socketIo.emit(messageToDelete.sender, messages);
   });
 });
 
