@@ -1,5 +1,5 @@
 import axios from "axios";
-import {api_host, socket_host} from "../../GlobalVariable";
+import host from "../../GlobalVariable";
 const createRoom = async (users, name) => {
   try {
     const userData = {
@@ -7,9 +7,10 @@ const createRoom = async (users, name) => {
       name: name,
     };
     const response = await axios.post(
-      api_host + "/rooms/create-room",
+      host.api_host + "/rooms/create-room",
       userData
     );
+    console.log(userData);
     if (response.status === 200) {
       console.log("Found successful:", response.data);
 

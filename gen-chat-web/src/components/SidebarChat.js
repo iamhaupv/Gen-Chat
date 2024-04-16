@@ -8,6 +8,7 @@ import getListFriend from '../services/users/getListFriend';
 import findUserByPhoneNumber from '../services/users/findUserByPhoneNumber';
 import addRequestGet from '../services/users/addRequestGet';
 import addRequestSend from '../services/users/addRequestSend';
+import createRoom from '../services/rooms/createRoom';
 
 export default function SidebarChat({user, handleCurrentFriend}) {
   const [showListFriendRequest, setShowListFriendRequest] = useState("");
@@ -32,6 +33,33 @@ export default function SidebarChat({user, handleCurrentFriend}) {
 
   const openCreateGroupModal = user => {
     document.getElementById('group_modal').showModal()
+  }
+
+  const handleCreateGroup = async () => {
+    let checkedUsers = getCheckedBoxes("userInGroup");
+    
+    try {
+      await createRoom(checkedUsers, new Date().valueOf());
+      alert("Create room successfully!");
+      document.getElementById("btnCloseModal").click();
+    } catch (error) {
+      console.log("Error create room: " + error);
+    }
+  }
+
+  // Pass the checkbox name to the function
+  function getCheckedBoxes(chkboxName) {
+    var checkboxes = document.getElementsByName(chkboxName);
+    var checkboxesChecked = [];
+    // loop over them all
+    for (var i=0; i<checkboxes.length; i++) {
+      // And stick the checked ones onto an array...
+      if (checkboxes[i].checked) {
+        checkboxesChecked.push(checkboxes[i].value);
+      }
+    }
+    // Return the array if it is non-empty, or null
+    return checkboxesChecked.length > 0 ? checkboxesChecked : null;
   }
 
   useEffect(() => {
@@ -117,7 +145,7 @@ export default function SidebarChat({user, handleCurrentFriend}) {
 
         <form method="dialog">
           {/* if there is a button in form, it will close the modal */}
-          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+          <button id='btnCloseModal' className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
         </form>
 
         <h1 className='pb-5 font-bold'>Create group</h1>
@@ -152,7 +180,7 @@ export default function SidebarChat({user, handleCurrentFriend}) {
           {
             friends.map((elem, i) => 
               <div className='flex items-center'>
-                <input type='radio'></input>
+                <input type='checkbox' name='userInGroup' value={elem.phoneNumber}></input>
                 <Chat key={i} user={elem} setCurrentFriend={() => handleCurrentFriend2(elem)} />
               </div>
             )
@@ -161,8 +189,11 @@ export default function SidebarChat({user, handleCurrentFriend}) {
 
         {/* Create group */}
         <div className='flex justify-end'>
-        <button className="btn-primary bg-blue-400 p-2 m-5 rounded-md btn text-white">Create Group</button>
-
+          <button className="btn-primary bg-blue-400 p-2 m-5 rounded-md btn text-white"
+            onClick={handleCreateGroup}
+          >
+            Create Group
+          </button>
         </div>
       </div>
     </dialog>
