@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 import Chat from './Chat'
 import FriendRequest from './FriendRequest'
@@ -8,8 +8,10 @@ import getListFriend from '../services/users/getListFriend';
 import findUserByPhoneNumber from '../services/users/findUserByPhoneNumber';
 import addRequestGet from '../services/users/addRequestGet';
 import addRequestSend from '../services/users/addRequestSend';
+import createRoom from '../services/rooms/createRoom';
+import Group from './Group';
 
-export default function SidebarChat({user, handleCurrentFriend}) {
+export default function SidebarChat({user, handleCurrentFriend, socketRef}) {
   const [showListFriendRequest, setShowListFriendRequest] = useState("");
   const [searchPhoneNumber, setSearchPhoneNumber] = useState("");
   const [showSearchResult, setShowSearchResult] = useState(false);
@@ -18,9 +20,15 @@ export default function SidebarChat({user, handleCurrentFriend}) {
   const [open, setOpen] = useState(false);
   const [currentFriend, setCurrentFriend] = useState({});
   const [currentUser, setCurrentUser] = useState({});
+  const [roomName, setRoomName] = useState("New Room");
+  const [rooms, setRooms] = useState([]);
+
+  // const rooms = useRef();
+  // rooms.current = [];
 
   const handleCurrentFriend2 = friend => {
     console.log("Called handle current friend 2");
+    console.log(friend);
     setCurrentFriend(friend);
     handleCurrentFriend(friend);
   }
@@ -30,14 +38,58 @@ export default function SidebarChat({user, handleCurrentFriend}) {
     document.getElementById('my_modal_1').showModal()
   }
 
+  const handleRoomName = e => {
+    setRoomName(e.target.value)
+  }
+
   const openCreateGroupModal = user => {
     document.getElementById('group_modal').showModal()
   }
 
-  useEffect(() => {
-    getFriendList();
-  }, []);
+  const handleCreateGroup = async () => {
+    let checkedUsers = getCheckedBoxes("userInGroup");
+    console.log("Checked user");
+    console.log(checkedUsers);
 
+    try {
+      // await createRoom(checkedUsers, new Date().valueOf());
+      socketRef.current.emit("createRoom", {roomName: roomName, user: checkedUsers});
+      alert("Create room successfully!");
+      document.getElementById("btnCloseModal").click();
+    } catch (error) {
+      console.log("Error create room: " + error);
+    }
+  }
+
+  // Pass the checkbox name to the function
+  function getCheckedBoxes(chkboxName) {
+    var checkboxes = document.getElementsByName(chkboxName);
+    var checkboxesChecked = [];
+    // loop over them all
+    for (var i=0; i<checkboxes.length; i++) {
+      // And stick the checked ones onto an array...
+      if (checkboxes[i].checked) {
+        checkboxesChecked.push(checkboxes[i].value);
+      }
+    }
+    // Return the array if it is non-empty, or null
+    return checkboxesChecked.length > 0 ? checkboxesChecked : null;
+  }
+
+  useEffect(() => {
+    socketRef.current.on("returnRoom", data => {
+      console.log("Called return room");
+      console.log(data);
+      
+      // rooms.current.push(rooms)
+      setRooms(data);
+
+      console.log("Rooms");
+      console.log(rooms);
+    })
+
+    getFriendList();
+  }, [rooms]);
 
   const getFriendList = async () => {
     const friendList = await getListFriend(user.phoneNumber);
@@ -84,11 +136,15 @@ export default function SidebarChat({user, handleCurrentFriend}) {
     setShowSearchResult(true);
   }
 
+  const renderRoom = rooms.map(r => {
+    return r;
+  });
+
   return (
     <div className={`h-screen bg-white duration-300 ${!open ? 'w-96' : "w-0"}`}>
 
     {/* User Profile */}
-    <dialog id="my_modal_1" className="modal"add >
+    <dialog id="my_modal_1" className="modal"add={true} >
       <div className="modal-box">
 
         <form method="dialog">
@@ -112,21 +168,21 @@ export default function SidebarChat({user, handleCurrentFriend}) {
     </dialog>
 
     {/* Group Modal */}
-    <dialog id="group_modal" className="modal" add >
+    <dialog id="group_modal" className="modal" add={true} >
       <div className="modal-box">
 
         <form method="dialog">
           {/* if there is a button in form, it will close the modal */}
-          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+          <button id='btnCloseModal' className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
         </form>
 
         <h1 className='pb-5 font-bold'>Create group</h1>
 
         {/* Group name */}
         <input className='p-2 ml-4 mr-4 mb-0 w-5/6 rounded-full'placeholder='Group name'
-          type='tel'
-          value={searchPhoneNumber}
-          onChange={handleSearchPhoneNumber}
+          type='text'
+          value={roomName}
+          onChange={handleRoomName}
         />
 
         {/* Search user by name */}
@@ -152,7 +208,7 @@ export default function SidebarChat({user, handleCurrentFriend}) {
           {
             friends.map((elem, i) => 
               <div className='flex items-center'>
-                <input type='radio'></input>
+                <input type='checkbox' name='userInGroup' value={elem.phoneNumber}></input>
                 <Chat key={i} user={elem} setCurrentFriend={() => handleCurrentFriend2(elem)} />
               </div>
             )
@@ -161,8 +217,11 @@ export default function SidebarChat({user, handleCurrentFriend}) {
 
         {/* Create group */}
         <div className='flex justify-end'>
-        <button className="btn-primary bg-blue-400 p-2 m-5 rounded-md btn text-white">Create Group</button>
-
+          <button className="btn-primary bg-blue-400 p-2 m-5 rounded-md btn text-white"
+            onClick={handleCreateGroup}
+          >
+            Create Group
+          </button>
         </div>
       </div>
     </dialog>
@@ -246,6 +305,11 @@ export default function SidebarChat({user, handleCurrentFriend}) {
 
             {
               friends.map((elem, i) => <Chat key={i} user={elem} setCurrentFriend={() => handleCurrentFriend2(elem)} />)
+            }
+            {
+              renderRoom.map((elem, i) => {
+                return <Group key={i} group={elem} setCurrentRoom={() => handleCurrentFriend2(elem)} />
+              })
             }
 
           </div>

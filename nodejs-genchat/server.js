@@ -42,6 +42,8 @@ const socketIo = require("socket.io")(server, {
 
 let messages = [];
 
+let rooms = []
+
 socketIo.on("connection", (socket) => {
   ///Handle khi có connect từ client tới
   console.log("New client connected" + socket.id);
@@ -96,6 +98,26 @@ socketIo.on("connection", (socket) => {
 
     // socketIo.emit(messageToDelete.receiver, messages);
     // socketIo.emit(messageToDelete.sender, messages);
+  });
+
+  socket.on("createRoom", data => {
+    console.log("Called create room");
+    console.log(data);
+    console.log(data.users);
+
+    let room = {
+      id: "room" + new Date().valueOf(), 
+      name: data.roomName, 
+      users: data.user, 
+      status: "alive", 
+      messages: [
+
+      ]
+    }
+    
+    rooms.push(room);
+    
+    socket.emit("returnRoom", rooms)
   });
 });
 

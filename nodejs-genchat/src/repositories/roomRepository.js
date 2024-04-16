@@ -33,11 +33,14 @@ const createRoom = async (name, users, updateAt) => {
 };
 // findRoomByPhoneNumber
 const findRoomByPhoneNumber = async (phoneNumber) => {
+  console.log("36: " + phoneNumber);
   try {
-    const room = await Room.findOne({ phoneNumber });
+    // const room = await Room.findOne({ phoneNumber });
+    const room = await Room.findOne({ users: { $in: 5 }  });
     if (!room) {
       throw new Error("Room is not exist!");
     }
+    // console.log("42: " + room);
     return room;
   } catch (error) {
     console.log(error);
