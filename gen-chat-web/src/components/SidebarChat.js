@@ -65,6 +65,11 @@ export default function SidebarChat({user, handleCurrentFriend, socketRef}) {
   }
 
   useEffect(() => {
+    socketRef.current.on("returnRoom", data => {
+      console.log("Called return room");
+      console.log(data);
+    })
+
     getFriendList();
   }, []);
 

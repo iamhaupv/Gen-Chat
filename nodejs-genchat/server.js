@@ -103,7 +103,20 @@ socketIo.on("connection", (socket) => {
   socket.on("createRoom", data => {
     console.log("Called create room");
     console.log(data);
-  })
+
+    let room = {
+      id: "room" + new Date().valueOf(), 
+      name: data.roomName, 
+      users: data.users, 
+      messages: [
+
+      ]
+    }
+    
+    rooms.push(room);
+    
+    socket.emit("returnRoom", room.id)
+  });
 });
 
 server.listen(port, async () => {
