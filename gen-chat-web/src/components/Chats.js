@@ -34,28 +34,32 @@ export default function Chats({user, currentFriend}) {
     console.log("Called render mess");
     console.log(m);
 
-    console.log("-------------------------------");
-    console.log("Sender");
-    console.log(m.sender);
-    console.log("Receiver");
-    console.log(m.receiver);
-    console.log("User phone number");
-    console.log(user.phoneNumber);
-    console.log("Current friend number");
-    console.log(currentFriend.phoneNumber);
+    // console.log("-------------------------------");
+    // console.log("Sender");
+    // console.log(m.sender);
+    // console.log("Receiver");
+    // console.log(m.receiver);
+    // console.log("User phone number");
+    // console.log(user.phoneNumber);
+    // console.log("Current friend number");
+    // console.log(currentFriend.phoneNumber);
 
-    let chat
-    if (
-      (m.sender == user.phoneNumber & m.receiver == currentFriend.phoneNumber) ||
-      (m.receiver == user.phoneNumber & m.sender == currentFriend.phoneNumber) 
-    ) {
-      console.log("Go to chat");
+    let chat;
+    console.log(m.status);
+    if (m.status == "ready") {
 
-      if (m.status = "ready") {
-        chat = (m.sender == user.phoneNumber) ? 
-        <ChatUser message={m} key={index} socketRef={socketRef}/> : 
-        <ChatData message={m} key={index} socketRef={socketRef}/>
+      if (
+        (m.sender == user.phoneNumber & m.receiver == currentFriend.phoneNumber) ||
+        (m.receiver == user.phoneNumber & m.sender == currentFriend.phoneNumber) 
+      ) {
+          chat = (m.sender == user.phoneNumber) ? 
+          <ChatUser message={m} key={index} socketRef={socketRef}/> : 
+          <ChatData message={m} key={index} socketRef={socketRef}/>
       }
+
+    }
+    else {
+      chat = <p>Deleted</p>
     }
       
     return chat;

@@ -92,8 +92,8 @@ socketIo.on("connection", (socket) => {
     console.log("message after deleted");
     console.log(messageToDelete);
 
-    socketIo.emit(messageToDelete.receiver, { messageToDelete });
-    socketIo.emit(messageToDelete.sender, { messageToDelete });
+    socketIo.emit(messageToDelete.receiver, { data: messageToDelete });
+    socketIo.emit(messageToDelete.sender, { data: messageToDelete });
   });
 });
 
