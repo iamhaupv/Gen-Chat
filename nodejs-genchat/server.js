@@ -103,11 +103,13 @@ socketIo.on("connection", (socket) => {
   socket.on("createRoom", data => {
     console.log("Called create room");
     console.log(data);
+    console.log(data.users);
 
     let room = {
       id: "room" + new Date().valueOf(), 
       name: data.roomName, 
-      users: data.users, 
+      users: data.user, 
+      status: "alive", 
       messages: [
 
       ]
@@ -115,7 +117,7 @@ socketIo.on("connection", (socket) => {
     
     rooms.push(room);
     
-    socket.emit("returnRoom", room.id)
+    socket.emit("returnRoom", rooms)
   });
 });
 

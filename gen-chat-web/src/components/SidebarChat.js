@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 import Chat from './Chat'
 import FriendRequest from './FriendRequest'
@@ -9,6 +9,7 @@ import findUserByPhoneNumber from '../services/users/findUserByPhoneNumber';
 import addRequestGet from '../services/users/addRequestGet';
 import addRequestSend from '../services/users/addRequestSend';
 import createRoom from '../services/rooms/createRoom';
+import Group from './Group';
 
 export default function SidebarChat({user, handleCurrentFriend, socketRef}) {
   const [showListFriendRequest, setShowListFriendRequest] = useState("");
@@ -19,10 +20,15 @@ export default function SidebarChat({user, handleCurrentFriend, socketRef}) {
   const [open, setOpen] = useState(false);
   const [currentFriend, setCurrentFriend] = useState({});
   const [currentUser, setCurrentUser] = useState({});
-  const [roomName, setRoomName] = useState("");
+  const [roomName, setRoomName] = useState("New Room");
+  const [rooms, setRooms] = useState([]);
+
+  // const rooms = useRef();
+  // rooms.current = [];
 
   const handleCurrentFriend2 = friend => {
     console.log("Called handle current friend 2");
+    console.log(friend);
     setCurrentFriend(friend);
     handleCurrentFriend(friend);
   }
@@ -32,18 +38,24 @@ export default function SidebarChat({user, handleCurrentFriend, socketRef}) {
     document.getElementById('my_modal_1').showModal()
   }
 
+  const handleRoomName = e => {
+    setRoomName(e.target.value)
+  }
+
   const openCreateGroupModal = user => {
     document.getElementById('group_modal').showModal()
   }
 
   const handleCreateGroup = async () => {
     let checkedUsers = getCheckedBoxes("userInGroup");
-    
+    console.log("Checked user");
+    console.log(checkedUsers);
+
     try {
-      await createRoom(checkedUsers, new Date().valueOf());
+      // await createRoom(checkedUsers, new Date().valueOf());
+      socketRef.current.emit("createRoom", {roomName: roomName, user: checkedUsers});
       alert("Create room successfully!");
       document.getElementById("btnCloseModal").click();
-      socketRef.current.emit("createRoom", {roomName: roomName, user: checkedUsers});
     } catch (error) {
       console.log("Error create room: " + error);
     }
@@ -68,11 +80,16 @@ export default function SidebarChat({user, handleCurrentFriend, socketRef}) {
     socketRef.current.on("returnRoom", data => {
       console.log("Called return room");
       console.log(data);
+      
+      // rooms.current.push(rooms)
+      setRooms(data);
+
+      console.log("Rooms");
+      console.log(rooms);
     })
 
     getFriendList();
-  }, []);
-
+  }, [rooms]);
 
   const getFriendList = async () => {
     const friendList = await getListFriend(user.phoneNumber);
@@ -119,6 +136,10 @@ export default function SidebarChat({user, handleCurrentFriend, socketRef}) {
     setShowSearchResult(true);
   }
 
+  const renderRoom = rooms.map(r => {
+    return r;
+  });
+
   return (
     <div className={`h-screen bg-white duration-300 ${!open ? 'w-96' : "w-0"}`}>
 
@@ -159,9 +180,9 @@ export default function SidebarChat({user, handleCurrentFriend, socketRef}) {
 
         {/* Group name */}
         <input className='p-2 ml-4 mr-4 mb-0 w-5/6 rounded-full'placeholder='Group name'
-          type='tel'
+          type='text'
           value={roomName}
-          onChange={setRoomName}
+          onChange={handleRoomName}
         />
 
         {/* Search user by name */}
@@ -284,6 +305,11 @@ export default function SidebarChat({user, handleCurrentFriend, socketRef}) {
 
             {
               friends.map((elem, i) => <Chat key={i} user={elem} setCurrentFriend={() => handleCurrentFriend2(elem)} />)
+            }
+            {
+              renderRoom.map((elem, i) => {
+                return <Group key={i} group={elem} setCurrentRoom={() => handleCurrentFriend2(elem)} />
+              })
             }
 
           </div>

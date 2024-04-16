@@ -17,7 +17,6 @@ export default function Main() {
   socketRef.current = socketIOClient.connect(host.socket_host);
 
   const handleCurrentFriend = friend => {
-    console.log("Called handle current friend");
     setCurrentFriend(friend);
   }
   
