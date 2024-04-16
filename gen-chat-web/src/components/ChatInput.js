@@ -43,7 +43,8 @@ export default function ChatInput({socketRef, user, currentFriend}) {
         receiver: currentFriend.phoneNumber, 
         date: new Date().toLocaleString(),
         content: message, 
-        type: "text"
+        type: "text", 
+        status: "ready"
       }
       socketRef.current.emit(user.phoneNumber, msg)
 

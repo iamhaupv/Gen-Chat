@@ -40,38 +40,60 @@ const socketIo = require("socket.io")(server, {
 }); 
 // nhớ thêm cái cors này để tránh bị Exception nhé :D  ở đây mình làm nhanh nên cho phép tất cả các trang đều cors được. 
 
+let messages = [];
+
 socketIo.on("connection", (socket) => {
   ///Handle khi có connect từ client tới
   console.log("New client connected" + socket.id);
 
   socket.on('sendUserIdToServer', user => {
-    console.log("----------------------------------------");
-    console.log("New user connected: ");
-    console.log(user.phoneNumber);
-    console.log("Friend list of that user");
-    console.log(user.listFriend);
+    // console.log("----------------------------------------");
+    // console.log("New user connected: ");
+    // console.log(user.phoneNumber);
+    // console.log("Friend list of that user");
+    // console.log(user.listFriend);
 
     socket.on(user.phoneNumber, data => {
     console.log("----------------------------------------");
     console.log("Listening on " + user.phoneNumber);
       console.log("Message data");
       console.log(data);
+      data.id = new Date().valueOf();
+      messages.push(data);
+      console.log("Array messages");
+      console.log(messages);
       socketIo.emit(data.receiver, { data });
       socketIo.emit(data.sender, { data });
     })
 
-    for (let i = 0; i < user.listFriend.length; i++) {
-    console.log("----------------------------------------");
-    console.log("Friends phone number");
-      console.log(user.listFriend[i]);
+    // for (let i = 0; i < user.listFriend.length; i++) {
+    // console.log("----------------------------------------");
+    // console.log("Friends phone number");
+    //   console.log(user.listFriend[i]);
 
-      socket.emit(user.listFriend[i], `You are connected to user ${user.phoneNumber}`);
-      // socket.emit("1", `You are connected to user ${user.listFriend[i]}`);
-    }
+    //   socket.emit(user.listFriend[i], `You are connected to user ${user.phoneNumber}`);
+    //   // socket.emit("1", `You are connected to user ${user.listFriend[i]}`);
+    // }
   });
 
   socket.on("disconnect", () => {
     console.log("Client disconnected");
+  });
+
+  socket.on("deleteMessage", idMessage => {
+    let messageToDelete = messages.find(x => x.id === idMessage);
+
+    console.log("Want to Delete message");
+    console.log(messageToDelete);
+
+    if (messageToDelete != undefined)
+      messageToDelete.status = "delete";
+
+    console.log("message after deleted");
+    console.log(messageToDelete);
+
+    socketIo.emit(messageToDelete.receiver, { messageToDelete });
+    socketIo.emit(messageToDelete.sender, { messageToDelete });
   });
 });
 

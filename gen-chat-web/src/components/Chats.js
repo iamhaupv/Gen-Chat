@@ -32,6 +32,7 @@ export default function Chats({user, currentFriend}) {
 
   const renderMess = mess.map((m, index) => {
     console.log("Called render mess");
+    console.log(m);
 
     console.log("-------------------------------");
     console.log("Sender");
@@ -49,9 +50,12 @@ export default function Chats({user, currentFriend}) {
       (m.receiver == user.phoneNumber & m.sender == currentFriend.phoneNumber) 
     ) {
       console.log("Go to chat");
-      chat = (m.sender == user.phoneNumber) ? 
-      <ChatUser message={m} key={index}/> : 
-      <ChatData message={m} key={index}/>
+
+      if (m.status = "ready") {
+        chat = (m.sender == user.phoneNumber) ? 
+        <ChatUser message={m} key={index} socketRef={socketRef}/> : 
+        <ChatData message={m} key={index} socketRef={socketRef}/>
+      }
     }
       
     return chat;
