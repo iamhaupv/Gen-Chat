@@ -10,7 +10,7 @@ import addRequestGet from '../services/users/addRequestGet';
 import addRequestSend from '../services/users/addRequestSend';
 import createRoom from '../services/rooms/createRoom';
 
-export default function SidebarChat({user, handleCurrentFriend}) {
+export default function SidebarChat({user, handleCurrentFriend, socketRef}) {
   const [showListFriendRequest, setShowListFriendRequest] = useState("");
   const [searchPhoneNumber, setSearchPhoneNumber] = useState("");
   const [showSearchResult, setShowSearchResult] = useState(false);
@@ -19,6 +19,7 @@ export default function SidebarChat({user, handleCurrentFriend}) {
   const [open, setOpen] = useState(false);
   const [currentFriend, setCurrentFriend] = useState({});
   const [currentUser, setCurrentUser] = useState({});
+  const [roomName, setRoomName] = useState("");
 
   const handleCurrentFriend2 = friend => {
     console.log("Called handle current friend 2");
@@ -42,6 +43,7 @@ export default function SidebarChat({user, handleCurrentFriend}) {
       await createRoom(checkedUsers, new Date().valueOf());
       alert("Create room successfully!");
       document.getElementById("btnCloseModal").click();
+      socketRef.current.emit("createRoom", {roomName: roomName, user: checkedUsers});
     } catch (error) {
       console.log("Error create room: " + error);
     }
@@ -116,7 +118,7 @@ export default function SidebarChat({user, handleCurrentFriend}) {
     <div className={`h-screen bg-white duration-300 ${!open ? 'w-96' : "w-0"}`}>
 
     {/* User Profile */}
-    <dialog id="my_modal_1" className="modal"add >
+    <dialog id="my_modal_1" className="modal"add={true} >
       <div className="modal-box">
 
         <form method="dialog">
@@ -140,7 +142,7 @@ export default function SidebarChat({user, handleCurrentFriend}) {
     </dialog>
 
     {/* Group Modal */}
-    <dialog id="group_modal" className="modal" add >
+    <dialog id="group_modal" className="modal" add={true} >
       <div className="modal-box">
 
         <form method="dialog">
@@ -153,8 +155,8 @@ export default function SidebarChat({user, handleCurrentFriend}) {
         {/* Group name */}
         <input className='p-2 ml-4 mr-4 mb-0 w-5/6 rounded-full'placeholder='Group name'
           type='tel'
-          value={searchPhoneNumber}
-          onChange={handleSearchPhoneNumber}
+          value={roomName}
+          onChange={setRoomName}
         />
 
         {/* Search user by name */}
