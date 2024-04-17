@@ -39,9 +39,9 @@ export default function Chats({user, currentFriend}) {
     // console.log("User phone number " + user.phoneNumber);
     // console.log("Current friend number " + currentFriend.phoneNumber);
 
-    console.log("Chat type");
-    console.log(m.type);
-    console.log("Chat status: " + m.status);
+    // console.log("Chat type");
+    // console.log(m.type);
+    // console.log("Chat status: " + m.status);
 
     let chat;
     if (m.status == "ready") {

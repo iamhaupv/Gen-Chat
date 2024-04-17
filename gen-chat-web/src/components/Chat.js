@@ -3,7 +3,10 @@ import React from 'react'
 export default function Chat({user, setCurrentFriend}) {
   return (
     <div className='cursor-pointer flex flex-row pt-2 pl-5 pr-5 pb-2 w-full justify-center'
-      onClick={() => setCurrentFriend(user)}
+      onClick={() => {
+        if (setCurrentFriend != undefined)
+          setCurrentFriend(user)
+      }}
     >
       <div className='flex items-center justify-center w-1/5 grow'>
       <img
