@@ -21,8 +21,8 @@ export default function Chats({user, currentFriend}) {
     socketRef.current.emit('sendUserIdToServer', user);
 
     socketRef.current.on(user.phoneNumber, datas => {
-      // console.log("-----------------------------Called send data server-----------------------------");
-      // console.log(datas);
+      console.log("Message send from server");
+      console.log(datas);
       setMess(datas);
     });
 
@@ -32,26 +32,38 @@ export default function Chats({user, currentFriend}) {
   }, [currentFriend]);
 
   const renderMess = mess.map((m, index) => {
-    // console.log("-------------------------------");
-    // console.log("Sender");
-    // console.log(m.sender);
-    // console.log("Receiver");
-    // console.log(m.receiver);
-    // console.log("User phone number");
-    // console.log(user.phoneNumber);
-    // console.log("Current friend number");
-    // console.log(currentFriend.phoneNumber);
+    console.log("-------------------------------");
+    console.log("Type " + m.type);
+    console.log("Sender " + m.sender);
+    console.log("Receiver " + m.receiver);
+    console.log("User phone number " + user.phoneNumber);
+    console.log("Current friend number " + currentFriend.phoneNumber);
 
     let chat;
     if (m.status == "ready") {
 
-      if (
-        (m.sender == user.phoneNumber & m.receiver == currentFriend.phoneNumber) ||
-        (m.receiver == user.phoneNumber & m.sender == currentFriend.phoneNumber) 
-      ) {
-          chat = (m.sender == user.phoneNumber) ? 
-          <ChatUser message={m} key={index} socketRef={socketRef}/> : 
-          <ChatData message={m} key={index} socketRef={socketRef}/>
+      if (m.type == '1-1') {
+
+        if (
+          (m.sender == user.phoneNumber & m.receiver == currentFriend.phoneNumber) ||
+          (m.receiver == user.phoneNumber & m.sender == currentFriend.phoneNumber) 
+        ) {
+            chat = (m.sender == user.phoneNumber) ? 
+            <ChatUser message={m} key={index} socketRef={socketRef}/> : 
+            <ChatData message={m} key={index} socketRef={socketRef}/>
+        }
+
+      } else {
+
+        if (
+          (m.receiver == currentFriend.phoneNumber) ||
+          (m.receiver == user.phoneNumber & m.sender == currentFriend.phoneNumber) 
+        ) {
+            chat = (m.sender == user.phoneNumber) ? 
+            <ChatUser message={m} key={index} socketRef={socketRef}/> : 
+            <ChatData message={m} key={index} socketRef={socketRef}/>
+        }
+
       }
 
     }

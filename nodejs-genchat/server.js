@@ -60,12 +60,40 @@ socketIo.on("connection", (socket) => {
       console.log("Listening on " + user.phoneNumber);
       console.log("Message data");
       console.log(data);
+
       data.id = new Date().valueOf();
-      messages.push(data);
+      
       console.log("Array messages");
       console.log(messages);
-      socketIo.emit(data.receiver, messages);
-      socketIo.emit(data.sender, messages);
+
+      let roomFounds = rooms.filter(room => {
+        return room.phoneNumber == data.receiver
+      });
+
+      console.log("Room found");
+      console.log(roomFounds);
+
+      // Neu tin nhan nay la tin nhan danh cho room
+      if (roomFounds.length > 0) {
+        data.type = "room"
+        messages.push(data);
+
+        for (let i = 0; i < roomFounds[0].user.length; i++) {
+          console.log("User in that room");
+          console.log(roomFounds[0].user[i]);
+
+          socketIo.emit(roomFounds[0].user[i], messages);
+        }
+
+        socketIo.emit(data.receiver, messages);
+        socketIo.emit(data.sender, messages);
+      } else {
+        data.type = "1-1"
+        messages.push(data);
+
+        socketIo.emit(data.receiver, messages);
+        socketIo.emit(data.sender, messages);
+      } 
     })
   });
 
