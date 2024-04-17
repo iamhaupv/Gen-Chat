@@ -32,12 +32,12 @@ export default function Chats({user, currentFriend}) {
   }, [currentFriend]);
 
   const renderMess = mess.map((m, index) => {
-    console.log("-------------------------------");
-    console.log("Type " + m.type);
-    console.log("Sender " + m.sender);
-    console.log("Receiver " + m.receiver);
-    console.log("User phone number " + user.phoneNumber);
-    console.log("Current friend number " + currentFriend.phoneNumber);
+    // console.log("-------------------------------");
+    // console.log("Type " + m.type);
+    // console.log("Sender " + m.sender);
+    // console.log("Receiver " + m.receiver);
+    // console.log("User phone number " + user.phoneNumber);
+    // console.log("Current friend number " + currentFriend.phoneNumber);
 
     let chat;
     if (m.status == "ready") {
