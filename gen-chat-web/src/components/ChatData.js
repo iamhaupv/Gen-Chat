@@ -31,19 +31,19 @@ export default function ChatData({message}) {
     //   </div>
     // </div>
 
-<div class="flex items-start gap-2.5">
-   <img class="w-8 h-8 rounded-full" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="Jese image" />
-   <div class="flex flex-col gap-1">
-      <div class="flex items-center space-x-2 rtl:space-x-reverse">
-         <span class="text-sm font-semibold text-gray-900 dark:text-white">{message.name}</span>
-         <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
+<div className="flex items-start gap-2.5">
+   <img className="w-8 h-8 rounded-full" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="Jese image" />
+   <div className="flex flex-col gap-1">
+      <div className="flex items-center space-x-2 rtl:space-x-reverse">
+         <span className="text-sm font-semibold text-gray-900 dark:text-white">{message.name}</span>
+         <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
          {message.date} {message.id}
          </span>
       </div>
 
       <div className='flex'>
-        <div class="flex flex-col leading-1.5 p-4 border-gray-200 bg-white rounded-e-xl rounded-es-xl dark:bg-gray-700">
-          <p class="text-sm font-normal text-gray-900 dark:text-white">
+        <div className="flex flex-col leading-1.5 p-4 border-gray-200 bg-white rounded-e-xl rounded-es-xl dark:bg-gray-700">
+          <p className="text-sm font-normal text-gray-900 dark:text-white">
               {message.content}
           </p>
         </div>
@@ -62,7 +62,7 @@ export default function ChatData({message}) {
         </details>
       </div>
       
-      <span class="text-sm font-normal text-gray-500 dark:text-gray-400">Delivered</span>
+      <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Delivered</span>
    </div>
    
    

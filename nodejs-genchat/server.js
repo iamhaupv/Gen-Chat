@@ -48,15 +48,8 @@ let messages = [];
 let rooms = []
 
 socketIo.on("connection", (socket) => {
-  ///Handle khi có connect từ client tới
-  console.log("New client connected" + socket.id);
-
   socket.on('sendUserIdToServer', user => {
-    // console.log("----------------------------------------");
-    // console.log("New user connected: ");
-    // console.log(user.phoneNumber);
-    // console.log("Friend list of that user");
-    // console.log(user.listFriend);
+    socketIo.emit(user.phoneNumber, messages);
 
     socket.on(user.phoneNumber, data => {
     console.log("----------------------------------------");
@@ -67,21 +60,12 @@ socketIo.on("connection", (socket) => {
       messages.push(data);
       console.log("Array messages");
       console.log(messages);
-      // socketIo.emit(data.receiver, { data });
-      // socketIo.emit(data.sender, { data });
       socketIo.emit(data.receiver, messages);
       socketIo.emit(data.sender, messages);
     })
-
-    // for (let i = 0; i < user.listFriend.length; i++) {
-    // console.log("----------------------------------------");
-    // console.log("Friends phone number");
-    //   console.log(user.listFriend[i]);
-
-    //   socket.emit(user.listFriend[i], `You are connected to user ${user.phoneNumber}`);
-    //   // socket.emit("1", `You are connected to user ${user.listFriend[i]}`);
-    // }
   });
+
+  console.log("New client connected" + socket.id);
 
   socket.on("disconnect", () => {
     console.log("Client disconnected");
@@ -90,17 +74,11 @@ socketIo.on("connection", (socket) => {
   socket.on("deleteMessage", idMessage => {
     let messageToDelete = messages.findIndex(x => x.id === idMessage);
 
-    // console.log("Want to Delete message");
-    // console.log(messageToDelete);
-
     if (messageToDelete != -1)
       messages[ messages.findIndex(x => x.id === idMessage) ].status = "deleted";
 
     console.log("New message after deleted");
     console.log(messages);
-
-    // socketIo.emit(messageToDelete.receiver, messages);
-    // socketIo.emit(messageToDelete.sender, messages);
   });
 
   socket.on("createRoom", data => {
@@ -126,53 +104,17 @@ socketIo.on("connection", (socket) => {
 
 // Lang nghe CRUD tren group
 socketIo_group.on("connection", (socket_group) => {
-  ///Handle khi có connect từ client tới
-  console.log("Group: New client connected" + socket_group.id);
-
   socket_group.on("createRoom", room => {
     console.log("Currnet room");
     console.log(room);
-  })
+  });
+
+  ///Handle khi có connect từ client tới
+  console.log("Group: New client connected" + socket_group.id);
 
   socket_group.on("disconnect", () => {
     console.log("Group: Client disconnected");
   });
-
-  // socket.on("deleteMessage", idMessage => {
-  //   let messageToDelete = messages.findIndex(x => x.id === idMessage);
-
-  //   // console.log("Want to Delete message");
-  //   // console.log(messageToDelete);
-
-  //   if (messageToDelete != -1)
-  //     messages[ messages.findIndex(x => x.id === idMessage) ].status = "deleted";
-
-  //   console.log("New message after deleted");
-  //   console.log(messages);
-
-  //   // socketIo.emit(messageToDelete.receiver, messages);
-  //   // socketIo.emit(messageToDelete.sender, messages);
-  // });
-
-  // socket.on("createRoom", data => {
-  //   console.log("Called create room");
-  //   console.log(data);
-  //   console.log(data.users);
-
-  //   let room = {
-  //     id: "room" + new Date().valueOf(), 
-  //     name: data.roomName, 
-  //     users: data.user, 
-  //     status: "alive", 
-  //     messages: [
-
-  //     ]
-  //   }
-    
-  //   rooms.push(room);
-    
-  //   socket.emit("returnRoom", rooms)
-  // });
 });
 
 
