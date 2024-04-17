@@ -391,11 +391,11 @@ const removeFriend = async (phoneNumber, phoneRemove) => {
 // get List Friend
 const getListFriend = async(phoneNumber) =>{
   const user = await User.findOne({ phoneNumber });
-  // if (!user) {
-  //   throw new Error();
-  // } else {
+  if (!user) {
+    throw new Error();
+  } else {
     return user.listFriend;
-  // }
+  }
 }
 // change password by phoneNumber
 const changePassword = async (phoneNumber, newPassword) => {
