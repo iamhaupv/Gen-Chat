@@ -6,6 +6,11 @@ export default function ChatUser({message, socketRef}) {
     socketRef.current.emit("deleteMessage", message.id)
   }
 
+  const handleReplyMessage = () => {
+    
+    socketRef.current.emit("deleteMessage", message.id)
+  }
+
   return (
     <div className="flex items-start gap-2.5" dir='rtl'>
       <img className="w-8 h-8 rounded-full" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="Jese image" />
@@ -46,7 +51,7 @@ export default function ChatUser({message, socketRef}) {
               </summary>
               <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-auto">
                 <li><a>Reply</a></li>
-                <li><a>Forward</a></li>
+                <li><a onClick={handleReplyMessage}>Forward</a></li>
                 <li><a onClick={handleDeleteMessage}>Delete</a></li>
               </ul>
             </details>

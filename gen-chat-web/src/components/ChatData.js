@@ -42,7 +42,6 @@ export default function ChatData({message}) {
               <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-auto">
                 <li><a>Reply</a></li>
                 <li><a>Forward</a></li>
-                <li><a>Delete</a></li>
               </ul>
             </details>
           </div>

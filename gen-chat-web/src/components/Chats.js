@@ -41,6 +41,7 @@ export default function Chats({user, currentFriend}) {
 
     console.log("Chat type");
     console.log(m.type);
+    console.log("Chat status: " + m.status);
 
     let chat;
     if (m.status == "ready") {

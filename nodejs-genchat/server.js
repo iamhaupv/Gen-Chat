@@ -103,8 +103,13 @@ socketIo.on("connection", (socket) => {
     if (messageToDelete != -1)
       messages[ messages.findIndex(x => x.id === idMessage) ].status = "deleted";
 
+    console.log("Deleted message");
+    console.log(messageToDelete);
     console.log("New message after deleted");
     console.log(messages);
+
+    socketIo.emit(messages[ messages.findIndex(x => x.id === idMessage) ].sender, messages);
+    socketIo.emit(messages[ messages.findIndex(x => x.id === idMessage) ].receiver, messages);
   });
 
   console.log("New client connected" + socket.id);
