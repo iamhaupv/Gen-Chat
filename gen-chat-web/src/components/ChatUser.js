@@ -59,6 +59,8 @@ export default function ChatUser({message, socketRef}) {
       message.receiver = checkedUsers[i]
       socketRef.current.emit(message.sender, message);
     }
+
+    document.getElementById("btnCloseModal").click();
   }
 
   const getFriendList = async () => {
