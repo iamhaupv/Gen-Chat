@@ -2,35 +2,6 @@ import React from 'react'
 
 export default function ChatData({message}) {
   return (
-    // <div className="chat chat-start ml-5">
-    //   <div className="chat-image avatar">
-    //     <div className="w-10 rounded-full">
-    //       <img alt="Tailwind CSS chat bubble component" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
-    //     </div>
-    //   </div>
-    //   <div className="chat-header">
-    //     {message.sender}
-    //     <time className="text-xs opacity-50">{message.date}</time>
-    //   </div>
-    //   <div className="chat-bubble bg-white text-black">
-    //     {
-    //       message.type == "text" ? 
-    //         message.content : 
-    //           message.type == "image/png" || 
-    //           message.type == "image/jpeg" || 
-    //           message.type == "image/jpg" ?
-    //             <img src={message.content} width={200}></img> :
-    //               message.type == "video" ?
-    //               <video width="400" controls>
-    //                 <source src="C:\Users\Student\Downloads\mov_bbb.mp4" type="video/mp4" />
-    //                 Your browser does not support HTML video.
-    //               </video>
-    //                :
-    //               <a download={message.filename} href={message.link} className='underline text-blue-400'>{message.filename}</a>
-    //     }
-    //   </div>
-    // </div>
-
     <div className="flex items-start gap-2.5">
       <img className="w-8 h-8 rounded-full" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="Jese image" />
       <div className="flex flex-col gap-1">
@@ -44,7 +15,21 @@ export default function ChatData({message}) {
           <div className='flex'>
             <div className="flex flex-col leading-1.5 p-4 border-gray-200 bg-white rounded-e-xl rounded-es-xl dark:bg-gray-700">
               <p className="text-sm font-normal text-gray-900 dark:text-white">
-                {message.content}
+                {
+                  message.type == "text" ? 
+                    message.content : 
+                      message.type == "image/png" || 
+                      message.type == "image/jpeg" || 
+                      message.type == "image/jpg" ?
+                        <img src={message.content} width={200}></img> :
+                        // message.type == "video" ?
+                        // <video width="400" controls>
+                        //   <source src="C:\Users\Student\Downloads\mov_bbb.mp4" type="video/mp4" />
+                        //   Your browser does not support HTML video.
+                        // </video>
+                        // :
+                        <a download={message.filename} href={message.link} className='underline text-blue-400'>{message.filename}</a>
+                }
               </p>
             </div>
 
