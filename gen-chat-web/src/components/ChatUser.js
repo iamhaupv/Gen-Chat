@@ -94,6 +94,29 @@ export default function ChatUser({message, socketRef}) {
     return checkboxesChecked.length > 0 ? checkboxesChecked : null;
   }
 
+  let comp;
+
+  console.log("Message type: " + message.type);
+  console.log(message);
+
+  if (message.type == "text" ) {
+    console.log("Message Text");
+    comp = <div className="text-sm font-normal text-gray-900 dark:text-white">
+      {message.content}
+    </div>
+  }
+  else if (
+    message.type == "image/png" || 
+    message.type == "image/jpeg" || 
+    message.type == "image/jpg"
+  ) {
+    console.log("Message Image");
+    comp = <img src={message.content} width={200}></img>
+  } else {
+    console.log("Message Link");
+    comp = <a download={message.filename} href={message.link} className='underline text-blue-400'>{message.filename}</a>
+  }
+
   return (
     <div className="flex items-start gap-2.5" dir='rtl'>
       
@@ -156,13 +179,13 @@ export default function ChatUser({message, socketRef}) {
           <div className="flex items-center space-x-2 rtl:space-x-reverse">
             <span className="text-sm font-semibold text-gray-900 dark:text-white">{message.name}</span>
             <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-              {message.date} {message.id}
+              {message.sender_name} {message.date}
             </span>
           </div>
 
           <div className='flex'>
             <div className="flex flex-col leading-1.5 p-4 border-gray-200 bg-white rounded-e-xl rounded-es-xl dark:bg-gray-700">              
-              {
+              {/* {
                 message.type == "text" ? 
                   <div className="text-sm font-normal text-gray-900 dark:text-white">
                     {message.content}
@@ -178,7 +201,8 @@ export default function ChatUser({message, socketRef}) {
                       // </video>
                       // : 
                       <a download={message.filename} href={message.link} className='underline text-blue-400'>{message.filename}</a>
-              }
+              } */}
+              {comp}
             </div>
 
             <details className="dropdown bg-transparent border-0">

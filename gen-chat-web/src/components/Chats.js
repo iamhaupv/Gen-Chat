@@ -52,6 +52,7 @@ export default function Chats({user, currentFriend}) {
           (m.sender == user.phoneNumber & m.receiver == currentFriend.phoneNumber) ||
           (m.receiver == user.phoneNumber & m.sender == currentFriend.phoneNumber) 
         ) {
+            console.log("Message 1-1 " + index + " type " + m.type);
             chat = (m.sender == user.phoneNumber) ? 
             <ChatUser message={m} key={index} socketRef={socketRef}/> : 
             <ChatData message={m} key={index} socketRef={socketRef}/>
@@ -63,6 +64,7 @@ export default function Chats({user, currentFriend}) {
           (m.receiver == currentFriend.phoneNumber) ||
           (m.receiver == user.phoneNumber & m.sender == currentFriend.phoneNumber) 
         ) {
+            console.log("Message group " + index + " type " + m.type);
             chat = (m.sender == user.phoneNumber) ? 
             <ChatUser message={m} key={index} socketRef={socketRef}/> : 
             <ChatData message={m} key={index} socketRef={socketRef}/>

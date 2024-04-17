@@ -40,6 +40,7 @@ export default function ChatInput({socketRef, user, currentFriend}) {
     if (message) {
       const msg = {
         sender: user.phoneNumber, 
+        sender_name: user.name, 
         receiver: currentFriend.phoneNumber, 
         date: new Date().toLocaleString(),
         content: message, 
@@ -54,14 +55,18 @@ export default function ChatInput({socketRef, user, currentFriend}) {
   }
 
   const sendFileMessage = (file, content, link) => {
+      console.log("Called send file message");
+
       const msg = {
         sender: user.phoneNumber, 
+        sender_name: user.name, 
         receiver: currentFriend.phoneNumber, 
         date: new Date().toLocaleString(),
         filename: file.name, 
         type: file.type, 
         link: link, 
         content: content, 
+        status: "ready"
       }
       socketRef.current.emit(user.phoneNumber, msg)
 
