@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 import Chat from './Chat'
 import FriendRequest from './FriendRequest'
@@ -8,6 +8,10 @@ import getListFriend from '../services/users/getListFriend';
 import findUserByPhoneNumber from '../services/users/findUserByPhoneNumber';
 import addRequestGet from '../services/users/addRequestGet';
 import addRequestSend from '../services/users/addRequestSend';
+
+import host from '../GlobalVariable';
+
+import socketIOClient from "socket.io-client";
 
 export default function SidebarChat({user, handleCurrentFriend}) {
   const [showListFriendRequest, setShowListFriendRequest] = useState("");
@@ -19,6 +23,8 @@ export default function SidebarChat({user, handleCurrentFriend}) {
   const [currentFriend, setCurrentFriend] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [roomName, setRoomName] = useState("New Room");
+
+  const socketGroupRef = useRef();
 
   const handleCurrentFriend2 = friend => {
     console.log("Called handle current friend 2");
@@ -40,7 +46,13 @@ export default function SidebarChat({user, handleCurrentFriend}) {
   }
 
   useEffect(() => {
+    socketGroupRef.current = socketIOClient.connect(host.socket_host_Group);
+
     getFriendList();
+
+    return () => {
+      socketGroupRef.current.disconnect();
+    };
   }, []);
 
   const handleCreateGroup = async () => {
@@ -188,9 +200,9 @@ export default function SidebarChat({user, handleCurrentFriend}) {
         <div className='border-b-2 border-gray-200'>
           {
             friends.map((elem, i) => 
-              <div className='flex items-center'>
+              <div key={i} className='flex items-center'>
                 <input type='checkbox' name='userInGroup' value={elem.phoneNumber}></input>
-                <Chat key={i} user={elem} setCurrentFriend={() => handleCurrentFriend2(elem)} />
+                <Chat user={elem} setCurrentFriend={() => handleCurrentFriend2(elem)} />
               </div>
             )
           }

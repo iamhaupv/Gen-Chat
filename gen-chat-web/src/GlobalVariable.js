@@ -4,4 +4,4 @@ const api_host = " http://localhost:6969"
 const socket_host = "http://localhost:6969" //chat 1-1
 const socket_host_Group = "http://localhost:7000"//chat group
 
-export default {api_host, socket_host};
+export default {api_host, socket_host, socket_host_Group};
