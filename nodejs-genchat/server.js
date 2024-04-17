@@ -129,37 +129,10 @@ socketIo_group.on("connection", (socket_group) => {
   ///Handle khi có connect từ client tới
   console.log("Group: New client connected" + socket_group.id);
 
-  // socket.on('sendUserIdToServer', user => {
-  //   // console.log("----------------------------------------");
-  //   // console.log("New user connected: ");
-  //   // console.log(user.phoneNumber);
-  //   // console.log("Friend list of that user");
-  //   // console.log(user.listFriend);
-
-  //   socket.on(user.phoneNumber, data => {
-  //   console.log("----------------------------------------");
-  //   console.log("Listening on " + user.phoneNumber);
-  //     console.log("Message data");
-  //     console.log(data);
-  //     data.id = new Date().valueOf();
-  //     messages.push(data);
-  //     console.log("Array messages");
-  //     console.log(messages);
-  //     // socketIo.emit(data.receiver, { data });
-  //     // socketIo.emit(data.sender, { data });
-  //     socketIo.emit(data.receiver, messages);
-  //     socketIo.emit(data.sender, messages);
-  //   })
-
-  //   // for (let i = 0; i < user.listFriend.length; i++) {
-  //   // console.log("----------------------------------------");
-  //   // console.log("Friends phone number");
-  //   //   console.log(user.listFriend[i]);
-
-  //   //   socket.emit(user.listFriend[i], `You are connected to user ${user.phoneNumber}`);
-  //   //   // socket.emit("1", `You are connected to user ${user.listFriend[i]}`);
-  //   // }
-  // });
+  socket_group.on("createRoom", room => {
+    console.log("Currnet room");
+    console.log(room);
+  })
 
   socket_group.on("disconnect", () => {
     console.log("Group: Client disconnected");

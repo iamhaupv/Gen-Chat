@@ -62,7 +62,7 @@ export default function SidebarChat({user, handleCurrentFriend}) {
 
     try {
       // await createRoom(checkedUsers, new Date().valueOf());
-      // socketRef.current.emit("createRoom", {roomName: roomName, user: checkedUsers});
+      socketGroupRef.current.emit("createRoom", {roomName: roomName, admin: user.phoneNumber, user: checkedUsers});
       alert("Create room successfully!");
       document.getElementById("btnCloseModal").click();
     } catch (error) {
@@ -132,7 +132,7 @@ export default function SidebarChat({user, handleCurrentFriend}) {
   return (
     <div className={`h-screen bg-white duration-300 ${!open ? 'w-96' : "w-0"}`}>
 
-    <dialog id="my_modal_1" className="modal"add >
+    <dialog id="my_modal_1" className="modal" add="true" >
       <div className="modal-box">
 
 
@@ -143,15 +143,15 @@ export default function SidebarChat({user, handleCurrentFriend}) {
 
         
 
-      <div class="flex flex-col items-center pb-10">
-          <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="User image"/>
-          <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{currentUser.name}</h5>
-          <span class="text-sm text-gray-500 dark:text-gray-400">{currentUser.phoneNumber}</span>
-          <div class="flex mt-4 md:mt-6">
-              <p class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      <div className="flex flex-col items-center pb-10">
+          <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="User image"/>
+          <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">{currentUser.name}</h5>
+          <span className="text-sm text-gray-500 dark:text-gray-400">{currentUser.phoneNumber}</span>
+          <div className="flex mt-4 md:mt-6">
+              <p className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 onClick={handleAddFriend}
               >Add friend</p>
-              {/* <a href="#" class="py-2 px-4 ms-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Message</a> */}
+              {/* <a href="#" className="py-2 px-4 ms-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Message</a> */}
           </div>
       </div>
 
@@ -161,7 +161,7 @@ export default function SidebarChat({user, handleCurrentFriend}) {
     </dialog>
 
     {/* Group Modal */}
-    <dialog id="group_modal" className="modal" add={true} >
+    <dialog id="group_modal" className="modal" add="true" >
       <div className="modal-box">
 
         <form method="dialog">
