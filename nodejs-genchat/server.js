@@ -65,12 +65,6 @@ socketIo.on("connection", (socket) => {
     })
   });
 
-  console.log("New client connected" + socket.id);
-
-  socket.on("disconnect", () => {
-    console.log("Client disconnected");
-  });
-
   socket.on("deleteMessage", idMessage => {
     let messageToDelete = messages.findIndex(x => x.id === idMessage);
 
@@ -81,24 +75,10 @@ socketIo.on("connection", (socket) => {
     console.log(messages);
   });
 
-  socket.on("createRoom", data => {
-    console.log("Called create room");
-    console.log(data);
-    console.log(data.users);
+  console.log("New client connected" + socket.id);
 
-    let room = {
-      id: "room" + new Date().valueOf(), 
-      name: data.roomName, 
-      users: data.user, 
-      status: "alive", 
-      messages: [
-
-      ]
-    }
-    
-    rooms.push(room);
-    
-    socket.emit("returnRoom", rooms)
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
   });
 });
 
