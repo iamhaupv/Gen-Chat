@@ -1,3 +1,5 @@
+const { register } = require('./src/repositories/userRepository')
+
 const express = require("express");
 const app = express();
 require("dotenv").config();
@@ -47,6 +49,8 @@ let messages = [];
 
 let rooms = []
 
+const generateID = () => Math.random().toString(36).substring(2, 10);
+
 socketIo.on("connection", (socket) => {
   socket.on('sendUserIdToServer', user => {
     socketIo.emit(user.phoneNumber, messages);
@@ -84,12 +88,27 @@ socketIo.on("connection", (socket) => {
 
 // Lang nghe CRUD tren group
 socketIo_group.on("connection", (socket_group) => {
-  socket_group.on("createRoom", room => {
-    console.log("Currnet room");
+  socket_group.on("createRoom", async room => {
+    console.log("Current room");
     console.log(room);
+
+    let data = {
+      name: room.name, 
+      phoneNumber: generateID(), 
+      email: room.name + "@gmail.com",
+      password: generateID(),
+      photoURL: "",
+      address: "",
+      listFriend: room.user,
+      listRequestSend: [],
+      listRequestGet: [],
+    }
+
+    console.log(data);
+    await register(data);
   });
 
-  ///Handle khi có connect từ client tới
+  // Handle khi có connect từ client tới
   console.log("Group: New client connected" + socket_group.id);
 
   socket_group.on("disconnect", () => {
@@ -97,11 +116,11 @@ socketIo_group.on("connection", (socket_group) => {
   });
 });
 
-
 server.listen(port, async () => {
   await connect();
   console.log(`Example app on for port ${port}`);
 });
+
 server_group.listen(port_group, async () => {
   await connect();
   console.log(`Example app on for port group ${port_group}`);

@@ -39,6 +39,9 @@ const register = async ({
   phoneNumber,
   photoURL,
   address,
+  listFriend,
+  listRequestSend,
+  listRequestGet,
 }) => {
   console.log("---------------Go to register repo---------------")
   try {
@@ -57,9 +60,9 @@ const register = async ({
       phoneNumber,
       photoURL,
       address,
-      listFriend: [],
-      listRequestSend: [],
-      listRequestGet: [],
+      listFriend,
+      listRequestSend,
+      listRequestGet,
       messages: [],
     });
     bcrypt

@@ -62,7 +62,7 @@ export default function SidebarChat({user, handleCurrentFriend}) {
 
     try {
       // await createRoom(checkedUsers, new Date().valueOf());
-      socketGroupRef.current.emit("createRoom", {roomName: roomName, admin: user.phoneNumber, user: checkedUsers});
+      socketGroupRef.current.emit("createRoom", {name: roomName, admin: user.phoneNumber, user: checkedUsers});
       alert("Create room successfully!");
       document.getElementById("btnCloseModal").click();
     } catch (error) {
