@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef, useLayoutEffect } from 'react'
 import Chat from './Chat'
 import FriendRequest from './FriendRequest'
 import UserProfile from './UserProfile';
+import RoomChat from './RoomChat';
 
 import getListFriend from '../services/users/getListFriend';
 import findUserByPhoneNumber from '../services/users/findUserByPhoneNumber';
@@ -140,8 +141,12 @@ export default function SidebarChat({user, handleCurrentFriend}) {
   useEffect(() => {
     socketGroupRef.current = socketIOClient.connect(host.socket_host_Group);
 
+    socketGroupRef.current.emit("sendUserIdToServer", user);
+
     socketGroupRef.current.on("roomsList", (rooms) => {
       setRooms(rooms);
+      console.log("All rooms");
+      console.log(rooms);
     });
 
     getFriendList();
@@ -322,6 +327,9 @@ export default function SidebarChat({user, handleCurrentFriend}) {
 
             {
               friends.map((elem, i) => <Chat key={i} user={elem} setCurrentFriend={() => handleCurrentFriend2(elem)} />)
+            }
+            {
+              rooms.map((elem, i) => <RoomChat key={i} user={elem} setCurrentFriend={() => handleCurrentFriend2(elem)} />)
             }
 
           </div>

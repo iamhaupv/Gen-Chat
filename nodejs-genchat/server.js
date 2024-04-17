@@ -56,8 +56,8 @@ socketIo.on("connection", (socket) => {
     socketIo.emit(user.phoneNumber, messages);
 
     socket.on(user.phoneNumber, data => {
-    console.log("----------------------------------------");
-    console.log("Listening on " + user.phoneNumber);
+      console.log("----------------------------------------");
+      console.log("Listening on " + user.phoneNumber);
       console.log("Message data");
       console.log(data);
       data.id = new Date().valueOf();
@@ -88,6 +88,24 @@ socketIo.on("connection", (socket) => {
 
 // Lang nghe CRUD tren group
 socketIo_group.on("connection", (socket_group) => {
+  socket_group.on('sendUserIdToServer', user => {
+    console.log("Group: send user id to server");
+
+    let sub_rooms = rooms.filter(room => {
+      console.log(room);
+      console.log(room.user);
+      console.log(user.phoneNumber);
+      console.log(room.user.includes(user.phoneNumber));
+      return room.user.includes(user.phoneNumber) || room.admin == user.phoneNumber
+    })
+    
+    console.log("Sub Room list");
+    console.log(sub_rooms);
+
+    socket_group.emit("roomsList", sub_rooms);
+  });
+
+
   socket_group.on("createRoom", async room => {
     room.phoneNumber = generateID();
     room.messages = [];
@@ -123,7 +141,7 @@ socketIo_group.on("connection", (socket_group) => {
 });
 
 app.get("/api", (req, res) => {
-  res.json(chatRooms);
+  res.json(rooms);
 });
 
 server.listen(port, async () => {
