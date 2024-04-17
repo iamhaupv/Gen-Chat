@@ -31,7 +31,7 @@ export default function SidebarChat({user, handleCurrentFriend}) {
   // const socketGroup = sockets.socketGroup;
 
   const handleCurrentFriend2 = friend => {
-    console.log("Called handle current friend 2");
+    // console.log("Called handle current friend 2");
     setCurrentFriend(friend);
     handleCurrentFriend(friend);
   }

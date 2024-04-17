@@ -21,8 +21,8 @@ export default function Chats({user, currentFriend}) {
     socketRef.current.emit('sendUserIdToServer', user);
 
     socketRef.current.on(user.phoneNumber, datas => {
-      console.log("-----------------------------Called send data server-----------------------------");
-      console.log(datas);
+      // console.log("-----------------------------Called send data server-----------------------------");
+      // console.log(datas);
       setMess(datas);
     });
 
@@ -32,11 +32,6 @@ export default function Chats({user, currentFriend}) {
   }, [currentFriend]);
 
   const renderMess = mess.map((m, index) => {
-    console.log("-------------------------------");
-    console.log("Called render mess");
-    console.log(m.content);
-    console.log(m.status);
-
     // console.log("-------------------------------");
     // console.log("Sender");
     // console.log(m.sender);
