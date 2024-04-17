@@ -1,4 +1,4 @@
-import {api_host, socket_host} from "../../GlobalVariable";
+import host from "../../GlobalVariable";
 import axios from "axios";
 const getRequestGet = async (phoneNumber) => {
   try {
@@ -6,7 +6,7 @@ const getRequestGet = async (phoneNumber) => {
       phoneNumber: phoneNumber,
     };
     const response = await axios.post(
-      api_host + "/users/get-request-get",
+      host.api_host + "/users/get-request-get",
       userData
     );
     if (response.status === 200) {
