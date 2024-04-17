@@ -89,31 +89,41 @@ socketIo.on("connection", (socket) => {
 // Lang nghe CRUD tren group
 socketIo_group.on("connection", (socket_group) => {
   socket_group.on("createRoom", async room => {
+    room.phoneNumber = generateID();
+    room.messages = [];
     console.log("Current room");
     console.log(room);
 
-    let data = {
-      name: room.name, 
-      phoneNumber: generateID(), 
-      email: room.name + "@gmail.com",
-      password: generateID(),
-      photoURL: "",
-      address: "",
-      listFriend: room.user,
-      listRequestSend: [],
-      listRequestGet: [],
-    }
+    // let data = {
+    //   name: room.name, 
+    //   phoneNumber: generateID(), 
+    //   email: room.name + "@gmail.com",
+    //   password: generateID(),
+    //   photoURL: "",
+    //   address: "",
+    //   listFriend: room.user,
+    //   listRequestSend: [],
+    //   listRequestGet: [],
+    // }
 
-    console.log(data);
-    await register(data);
+    // console.log(data);
+    // await register(data);
+
+    rooms.unshift(room);
+
+    socket_group.emit("roomsList", rooms);
   });
 
   // Handle khi có connect từ client tới
-  console.log("Group: New client connected" + socket_group.id);
+  console.log("Group: New client connected " + socket_group.id);
 
   socket_group.on("disconnect", () => {
     console.log("Group: Client disconnected");
   });
+});
+
+app.get("/api", (req, res) => {
+  res.json(chatRooms);
 });
 
 server.listen(port, async () => {

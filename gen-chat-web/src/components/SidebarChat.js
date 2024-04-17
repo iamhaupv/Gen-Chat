@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react'
 
 import Chat from './Chat'
 import FriendRequest from './FriendRequest'
@@ -9,11 +9,11 @@ import findUserByPhoneNumber from '../services/users/findUserByPhoneNumber';
 import addRequestGet from '../services/users/addRequestGet';
 import addRequestSend from '../services/users/addRequestSend';
 
-// import host from '../GlobalVariable';
+import host from '../GlobalVariable';
 
-// import socketIOClient from "socket.io-client";
+import socketIOClient from "socket.io-client";
 
-import sockets from '../utils/socketGroup';
+// import sockets from '../utils/socketGroup';
 
 export default function SidebarChat({user, handleCurrentFriend}) {
   const [showListFriendRequest, setShowListFriendRequest] = useState("");
@@ -25,9 +25,10 @@ export default function SidebarChat({user, handleCurrentFriend}) {
   const [currentFriend, setCurrentFriend] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [roomName, setRoomName] = useState("New Room");
+  const [rooms, setRooms] = useState([]);
 
-  // const socketGroupRef = useRef();
-  const socketGroup = sockets.socketGroup;
+  const socketGroupRef = useRef();
+  // const socketGroup = sockets.socketGroup;
 
   const handleCurrentFriend2 = friend => {
     console.log("Called handle current friend 2");
@@ -47,18 +48,7 @@ export default function SidebarChat({user, handleCurrentFriend}) {
   const openCreateGroupModal = user => {
     document.getElementById('group_modal').showModal()
   }
-
-  useEffect(() => {
-    // socketGroupRef.current = socketIOClient.connect(host.socket_host_Group);
-
-    getFriendList();
-
-    return () => {
-      // socketGroupRef.current.disconnect();
-      socketGroup.disconnect();
-    };
-  }, []);
-
+  
   const handleCreateGroup = async () => {
     let checkedUsers = getCheckedBoxes("userInGroup");
     console.log("Checked user");
@@ -66,8 +56,8 @@ export default function SidebarChat({user, handleCurrentFriend}) {
 
     try {
       // await createRoom(checkedUsers, new Date().valueOf());
-      // socketGroupRef.current.emit("createRoom", {name: roomName, admin: user.phoneNumber, user: checkedUsers});
-      socketGroup.emit("createRoom", {name: roomName, admin: user.phoneNumber, user: checkedUsers});
+      socketGroupRef.current.emit("createRoom", {name: roomName, admin: user.phoneNumber, user: checkedUsers});
+      // socketGroup.emit("createRoom", {name: roomName, admin: user.phoneNumber, user: checkedUsers});
       alert("Create room successfully!");
       document.getElementById("btnCloseModal").click();
     } catch (error) {
@@ -133,6 +123,34 @@ export default function SidebarChat({user, handleCurrentFriend}) {
     console.log(searchedUser != null);
     setShowSearchResult(true);
   }
+
+  useLayoutEffect(() => {
+    // console.log("Socket group host");
+    // console.log(host.socket_host_Group + "/api");
+
+    function fetchGroups() {
+      fetch(host.socket_host_Group + "/api")
+        .then((res) => res.json())
+        .then((data) => setRooms(data))
+        .catch((err) => console.error(err));
+    }
+    fetchGroups();
+  }, []);
+
+  useEffect(() => {
+    socketGroupRef.current = socketIOClient.connect(host.socket_host_Group);
+
+    socketGroupRef.current.on("roomsList", (rooms) => {
+      setRooms(rooms);
+    });
+
+    getFriendList();
+
+    return () => {
+      socketGroupRef.current.disconnect();
+      // socketGroup.disconnect();
+    };
+  }, [socketGroupRef]);
 
   return (
     <div className={`h-screen bg-white duration-300 ${!open ? 'w-96' : "w-0"}`}>
