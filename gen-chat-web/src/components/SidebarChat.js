@@ -9,9 +9,11 @@ import findUserByPhoneNumber from '../services/users/findUserByPhoneNumber';
 import addRequestGet from '../services/users/addRequestGet';
 import addRequestSend from '../services/users/addRequestSend';
 
-import host from '../GlobalVariable';
+// import host from '../GlobalVariable';
 
-import socketIOClient from "socket.io-client";
+// import socketIOClient from "socket.io-client";
+
+import sockets from '../utils/socketGroup';
 
 export default function SidebarChat({user, handleCurrentFriend}) {
   const [showListFriendRequest, setShowListFriendRequest] = useState("");
@@ -24,7 +26,8 @@ export default function SidebarChat({user, handleCurrentFriend}) {
   const [currentUser, setCurrentUser] = useState({});
   const [roomName, setRoomName] = useState("New Room");
 
-  const socketGroupRef = useRef();
+  // const socketGroupRef = useRef();
+  const socketGroup = sockets.socketGroup;
 
   const handleCurrentFriend2 = friend => {
     console.log("Called handle current friend 2");
@@ -46,12 +49,13 @@ export default function SidebarChat({user, handleCurrentFriend}) {
   }
 
   useEffect(() => {
-    socketGroupRef.current = socketIOClient.connect(host.socket_host_Group);
+    // socketGroupRef.current = socketIOClient.connect(host.socket_host_Group);
 
     getFriendList();
 
     return () => {
-      socketGroupRef.current.disconnect();
+      // socketGroupRef.current.disconnect();
+      socketGroup.disconnect();
     };
   }, []);
 
@@ -62,7 +66,8 @@ export default function SidebarChat({user, handleCurrentFriend}) {
 
     try {
       // await createRoom(checkedUsers, new Date().valueOf());
-      socketGroupRef.current.emit("createRoom", {name: roomName, admin: user.phoneNumber, user: checkedUsers});
+      // socketGroupRef.current.emit("createRoom", {name: roomName, admin: user.phoneNumber, user: checkedUsers});
+      socketGroup.emit("createRoom", {name: roomName, admin: user.phoneNumber, user: checkedUsers});
       alert("Create room successfully!");
       document.getElementById("btnCloseModal").click();
     } catch (error) {
