@@ -1,5 +1,5 @@
 import { View, Text, Image, Pressable, TextInput, ScrollView } from 'react-native';
-// import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 // import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 import { useRoute } from "@react-navigation/native";
 import React, { useState } from 'react';
@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import GlobalStyle from '../GlobalStyle.js';
 import GlobalAsset from '../GlobalAsset.js';
 
-// import config from '../firebase/config.js';
+import config from '../firebase/config.js';
 
 export default function ResetPassword({ navigation }) {
   const [password, onChangePassword] = useState('');
@@ -17,7 +17,7 @@ export default function ResetPassword({ navigation }) {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
-  // const db = config.db;
+  const db = config.db;
   const styles = GlobalStyle();
 
   const route = useRoute()
@@ -27,33 +27,33 @@ export default function ResetPassword({ navigation }) {
 
   const toggleShowRepeatedPassword = () => setShowRepeatedPassword(!showRepeatedPassword);
 
-  // const updatePassword = async () => {
-  //   try {
-  //     const users = doc(db, 'users', phoneNumber);
-  //     console.log(users);
-  //     setDoc(users, { password: password }, { merge: true });
-  //     alert("Password Update successfully!");
-  //     navigation.navigate('Sign In');
-  //   } catch (error) {
-  //     console.error("Error updating password: " + error);
-  //   }
-  // }
+  const updatePassword = async () => {
+    try {
+      const users = doc(db, 'users', phoneNumber);
+      console.log(users);
+      setDoc(users, { password: password }, { merge: true });
+      alert("Password Update successfully!");
+      navigation.navigate('Sign In');
+    } catch (error) {
+      console.error("Error updating password: " + error);
+    }
+  }
 
-  // const verifyInput = () => {
-  //   let errors = {};
+  const verifyInput = () => {
+    let errors = {};
 
-  //   if (!password)
-  //     errors.error = 'Password is required.';
-  //   else if (password.length < 8)
-  //     errors.error = 'Password must be at least 8 characters.';
-  //   else if (password !== repeatedPassword)
-  //     errors.error = 'Password does not match Repeated Password.';
+    if (!password)
+      errors.error = 'Password is required.';
+    else if (password.length < 8)
+      errors.error = 'Password must be at least 8 characters.';
+    else if (password !== repeatedPassword)
+      errors.error = 'Password does not match Repeated Password.';
 
-  //   if (errors.error)
-  //     setErrors(errors);
-  //   else
-  //     updatePassword();
-  // }
+    if (errors.error)
+      setErrors(errors);
+    else
+      updatePassword();
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.flexGrow1}>
@@ -101,7 +101,7 @@ export default function ResetPassword({ navigation }) {
         <Text style={[styles.error, styles.marginSide]}>{errors.error}</Text> 
 
         <Pressable style={[styles.btnSubmitWrapper, styles.marginSide]}
-          // onPress={verifyInput}
+          onPress={verifyInput}
         >
           <Text style={styles.btnSubmit}>Update Password</Text>
         </Pressable>

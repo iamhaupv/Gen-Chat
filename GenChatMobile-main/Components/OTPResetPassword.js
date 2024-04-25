@@ -1,13 +1,13 @@
 import { View, Text, Image, Pressable, TextInput, ScrollView } from 'react-native';
-// import { signInWithPhoneNumber } from "firebase/auth";
-// import { collection, addDoc } from 'firebase/firestore'
+import { signInWithPhoneNumber } from "firebase/auth";
+import { collection, addDoc } from 'firebase/firestore'
 import { useRoute } from "@react-navigation/native";
 import React, { useState } from 'react';
 
 import GlobalStyle from '../GlobalStyle.js';
 import GlobalAsset from '../GlobalAsset.js';
 
-// import config from '../firebase/config.js';
+import config from '../firebase/config.js';
 
 export default function OTPResetPassword({ navigation }) {
   const [OTP, setOTP] = useState('');
@@ -20,42 +20,42 @@ export default function OTPResetPassword({ navigation }) {
   const styles = GlobalStyle();
 
   const otps = route.params?.otp;
-  // const auth = config.auth;
+  const auth = config.auth;
   const formatPh = otps.formatPh;
   const appVerifier = otps.appVerifier;
 
-  // const db = config.db;
+  const db = config.db;
 
-  // const signIn = () => {
-  //   let errors = {};
-  //   let alerts = {};
+  const signIn = () => {
+    let errors = {};
+    let alerts = {};
 
-  //   signInWithPhoneNumber(auth, formatPh, appVerifier)
-  //     .then((confirmationResult) => {
-  //       window.confirmationResult = confirmationResult;
-  //       alerts.alert = "OTP sended successfully!";
-  //       setAlerts(alerts);
-  //       // console.log("OTP sended successfully!");
-  //     })
-  //     .catch((error) => {
-  //       errors.error = "Error sending OTP: " + error;
-  //       setErrors(errors);
-  //       console.error("Error sending OTP: " + error);
-  //     });
-  // }
+    signInWithPhoneNumber(auth, formatPh, appVerifier)
+      .then((confirmationResult) => {
+        window.confirmationResult = confirmationResult;
+        alerts.alert = "OTP sended successfully!";
+        setAlerts(alerts);
+        // console.log("OTP sended successfully!");
+      })
+      .catch((error) => {
+        errors.error = "Error sending OTP: " + error;
+        setErrors(errors);
+        console.error("Error sending OTP: " + error);
+      });
+  }
 
-  // function onOTPVerify() {
-  //   window.confirmationResult
-  //     .confirm(OTP)
-  //     .then(async (res) => {
-  //       navigation.navigate('Reset Password', { phoneNumber: user.phoneNumber });
-  //     })
-  //     .catch((error) => {
-  //       errors.error = "Error verifying OTP: " + error;
-  //       setErrors(errors);
-  //       console.error("Error verifying OTP: " + error);
-  //     });
-  // }
+  function onOTPVerify() {
+    window.confirmationResult
+      .confirm(OTP)
+      .then(async (res) => {
+        navigation.navigate('Reset Password', { phoneNumber: user.phoneNumber });
+      })
+      .catch((error) => {
+        errors.error = "Error verifying OTP: " + error;
+        setErrors(errors);
+        console.error("Error verifying OTP: " + error);
+      });
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.flexGrow1}>
@@ -66,9 +66,9 @@ export default function OTPResetPassword({ navigation }) {
         
         <Text style={[styles.title, styles.marginSide, styles.fontColor]}>Reset Password</Text>
 
-        <Pressable style={[styles.marginSide]} 
-          // onPress={() => {signIn();}}
-        >
+        <Pressable style={[styles.marginSide]} onPress={
+          () => {signIn();}
+        }>
           <Text style={[styles.underline, styles.fontColor]}>Sending Code to {user.phoneNumber}</Text>
         </Pressable>
 
@@ -83,9 +83,9 @@ export default function OTPResetPassword({ navigation }) {
           />
         </View>
 
-        <Pressable style={[styles.btnSubmitWrapper, styles.marginSide]} 
-          // onPress={() => {onOTPVerify();}}
-        >
+        <Pressable style={[styles.btnSubmitWrapper, styles.marginSide]} onPress={
+          () => {onOTPVerify();}
+        }>
           <Text style={styles.btnSubmit}>Submit Code</Text>
         </Pressable>
 

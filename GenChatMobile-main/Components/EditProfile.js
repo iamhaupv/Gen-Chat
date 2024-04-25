@@ -1,17 +1,17 @@
 import { View, Text, Image, Pressable, ScrollView } from 'react-native';
 import { useRoute } from "@react-navigation/native";
-// import { signOut } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import React from 'react'
 
 import GlobalStyle from '../GlobalStyle.js';
 import GlobalAsset from '../GlobalAsset.js';
-// import config from '../firebase/config.js'
+import config from '../firebase/config.js'
 
 export default function EditProfle({ navigation }) {
   const route = useRoute();
   const user = route.params?.user;
 
-  // const auth = config.auth;
+  const auth = config.auth;
   const styles = GlobalStyle();
 
   let image = GlobalAsset.defaultLogoImage
