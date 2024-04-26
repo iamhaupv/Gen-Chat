@@ -1,0 +1,4 @@
+import { SliderState } from '@react-stately/slider';
+export declare const sliderIds: WeakMap<SliderState, string>;
+export declare function getSliderThumbId(state: SliderState, index: number): string;
+//# sourceMappingURL=utils.d.ts.map

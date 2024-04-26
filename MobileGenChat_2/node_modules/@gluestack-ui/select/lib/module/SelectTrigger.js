@@ -1,0 +1,49 @@
+function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+import React, { forwardRef } from 'react';
+import { SelectContext } from './SelectContext';
+import { mergeRefs } from '@gluestack-ui/utils';
+import { Keyboard } from 'react-native';
+export const SelectTrigger = StyledSelectTrigger => /*#__PURE__*/forwardRef(({
+  children,
+  ...props
+}, ref) => {
+  const {
+    isDisabled,
+    hoverRef,
+    setIsOpen,
+    onOpen,
+    isFocused,
+    isFocusVisible,
+    isHovered,
+    isInvalid,
+    isReadOnly
+  } = React.useContext(SelectContext);
+  return /*#__PURE__*/React.createElement(StyledSelectTrigger, _extends({
+    onPress: () => {
+      if (!isReadOnly) {
+        Keyboard.dismiss();
+        setIsOpen(true);
+        onOpen && onOpen();
+      }
+    },
+    states: {
+      focus: isFocused,
+      focusVisible: isFocusVisible,
+      hover: isHovered,
+      disabled: isDisabled,
+      invalid: isInvalid
+    },
+    dataSet: {
+      focus: isFocused ? 'true' : 'false',
+      focusVisible: isFocusVisible ? 'true' : 'false',
+      hover: isHovered ? 'true' : 'false',
+      disabled: isDisabled ? 'true' : 'false',
+      invalid: isInvalid ? 'true' : 'false'
+    },
+    disabled: isDisabled,
+    role: "button",
+    ref: mergeRefs([ref, hoverRef]),
+    tabIndex: -1
+  }, props), children);
+});
+//# sourceMappingURL=SelectTrigger.js.map

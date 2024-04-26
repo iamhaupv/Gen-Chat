@@ -1,0 +1,9 @@
+import { HoverProps } from '@react-aria/interactions';
+export declare const useHover: (_props?: HoverProps, _ref?: any) => {
+    hoverProps: {
+        onHoverIn: () => void;
+        onHoverOut: () => void;
+    };
+    isHovered: boolean;
+};
+//# sourceMappingURL=useHover.d.ts.map
