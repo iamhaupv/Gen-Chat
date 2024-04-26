@@ -1,13 +1,3 @@
-import {
-  Avatar,
-  AvatarBadge,
-  AvatarFallbackText,
-  AvatarImage, 
-  GluestackUIProvider, 
-  Box, 
-  Text 
-} from "@gluestack-ui/themed"
-
 import { createProvider } from "@gluestack-ui/provider"
 import { StyledProvider } from "@gluestack-style/react"
 import { config } from "@gluestack-ui/config"
@@ -31,12 +21,15 @@ export default function App() {
 
       <Provider config={config}>
         <Stack.Navigator>
+
           <Stack.Screen name="Home">
             {(props) => <Home {...props} />}
           </Stack.Screen>
+          
           <Stack.Screen name="Main">
             {(props) => <Main {...props} />}
           </Stack.Screen>
+          
         </Stack.Navigator>
       </Provider>
       
