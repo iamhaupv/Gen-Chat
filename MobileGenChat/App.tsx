@@ -20,7 +20,11 @@ export default function App() {
     <NavigationContainer>
 
       <Provider config={config}>
-        <Stack.Navigator>
+        <Stack.Navigator 
+          screenOptions={{
+            headerShown: false
+          }}
+        >
 
           <Stack.Screen name="Home">
             {(props) => <Home {...props} />}
