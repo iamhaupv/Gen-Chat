@@ -1,10 +1,10 @@
 import React from 'react'
 import { Text, View } from 'react-native'
 
-export default function Profile({navigation}) {
+export default function GenChatLogo({navigation}) {
   return (
     <View>
-        <Text>Profile</Text>
+        <Text>GenChatLogo</Text>
     </View>
   )
 }

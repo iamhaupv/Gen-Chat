@@ -1,10 +1,10 @@
 import React from 'react'
 import { Text, View } from 'react-native'
 
-export default function Profile({navigation}) {
+export default function Call({navigation}) {
   return (
     <View>
-        <Text>Profile</Text>
+        <Text>Call</Text>
     </View>
   )
 }
