@@ -10,7 +10,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
   
 import React from 'react'
 import { Pressable, View } from 'react-native'
+import Main from "../pages/Main";
 import SignIn from "../components/SignIn";
+import SignUp from "../components/SignUp";
+import ForgotPassword from "../components/ForgotPassword";
   
 export const Provider = createProvider({
   StyledProvider,
@@ -21,21 +24,6 @@ const Screen = createNativeStackNavigator();
 export default function Home({navigation}) {
   return (
     <Provider config={config}>
-      {/* <View>
-        <Text>lmao</Text>
-  
-        <Box bg="$primary500" p="$1">
-          <Text color="white">This is the Box</Text>
-        </Box>
-
-        <Pressable
-          title="Go to Details"
-          onPress={() => navigation.navigate('Main')}
-        >
-          <Text>Ve main</Text>
-        </Pressable>
-      </View> */}
-
       <Screen.Navigator
         screenOptions={
           ({ route }) => ({
@@ -75,6 +63,13 @@ export default function Home({navigation}) {
       >
         <Screen.Screen name="Sign In">
           {(props) => <SignIn {...props} />}
+        </Screen.Screen>
+
+        <Screen.Screen name="Sign Up">
+          {(props) => <SignUp {...props} />}
+        </Screen.Screen>
+        <Screen.Screen name="Forgot Password">
+          {(props) => <ForgotPassword {...props} />}
         </Screen.Screen>
 
         <Screen.Screen name="Main">
