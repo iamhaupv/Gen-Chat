@@ -39,6 +39,9 @@ const register = async ({
   phoneNumber,
   photoURL,
   address,
+  listFriend,
+  listRequestSend,
+  listRequestGet,
 }) => {
   console.log("---------------Go to register repo---------------")
   try {
@@ -57,9 +60,9 @@ const register = async ({
       phoneNumber,
       photoURL,
       address,
-      listFriend: [],
-      listRequestSend: [],
-      listRequestGet: [],
+      listFriend,
+      listRequestSend,
+      listRequestGet,
       messages: [],
     });
     bcrypt
@@ -388,11 +391,11 @@ const removeFriend = async (phoneNumber, phoneRemove) => {
 // get List Friend
 const getListFriend = async(phoneNumber) =>{
   const user = await User.findOne({ phoneNumber });
-  // if (!user) {
-  //   throw new Error();
-  // } else {
+  if (!user) {
+    throw new Error();
+  } else {
     return user.listFriend;
-  // }
+  }
 }
 // change password by phoneNumber
 const changePassword = async (phoneNumber, newPassword) => {

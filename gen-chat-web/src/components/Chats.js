@@ -20,37 +20,60 @@ export default function Chats({user, currentFriend}) {
 
     socketRef.current.emit('sendUserIdToServer', user);
 
-    // socketRef.current.on('getId', data => {
-    //   console.log("-----------------------------Called get id-----------------------------");
-    //   console.log(data);
-    //   setId(data)
-    //   // socketRef.current.emit(data, {"id": data});
-    // })
-
-    console.log("User phone number");
-    console.log(user.phoneNumber);
-
-    socketRef.current.on(user.phoneNumber, data => {
-      console.log(data);
-    })
-    socketRef.current.on("1", data => {
-      console.log(data);
-    })
-
-    socketRef.current.on('sendDataServer', dataGot => {
-      console.log("-----------------------------Called send data server-----------------------------");
-      setMess(oldMsgs => [...oldMsgs, dataGot.data])
+    socketRef.current.on(user.phoneNumber, datas => {
+      console.log("Message send from server");
+      console.log(datas);
+      setMess(datas);
     });
 
     return () => {
       socketRef.current.disconnect();
     };
-  }, []);
+  }, [currentFriend]);
 
   const renderMess = mess.map((m, index) => {
-    let chat = (m.sender == user.phoneNumber) ? 
-      <ChatUser message={m} key={index}/> : 
-      <ChatData message={m} key={index}/>
+    // console.log("-------------------------------");
+    // console.log("Type " + m.type);
+    // console.log("Sender " + m.sender);
+    // console.log("Receiver " + m.receiver);
+    // console.log("User phone number " + user.phoneNumber);
+    // console.log("Current friend number " + currentFriend.phoneNumber);
+
+    // console.log("Chat type");
+    // console.log(m.type);
+    // console.log("Chat status: " + m.status);
+
+    let chat;
+    if (m.status == "ready") {
+
+      if (m.chat_type == '1-1') {
+
+        if (
+          (m.sender == user.phoneNumber & m.receiver == currentFriend.phoneNumber) ||
+          (m.receiver == user.phoneNumber & m.sender == currentFriend.phoneNumber) 
+        ) {
+            console.log("Message 1-1 " + index + " type " + m.type);
+            chat = (m.sender == user.phoneNumber) ? 
+            <ChatUser message={m} key={index} socketRef={socketRef}/> : 
+            <ChatData message={m} key={index} socketRef={socketRef}/>
+        }
+
+      } else {
+
+        if (
+          (m.receiver == currentFriend.phoneNumber) ||
+          (m.receiver == user.phoneNumber & m.sender == currentFriend.phoneNumber) 
+        ) {
+            console.log("Message group " + index + " type " + m.type);
+            chat = (m.sender == user.phoneNumber) ? 
+            <ChatUser message={m} key={index} socketRef={socketRef}/> : 
+            <ChatData message={m} key={index} socketRef={socketRef}/>
+        }
+
+      }
+
+    }
+      
     return chat;
   });
 

@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState} from 'react';
 import Picker from '@emoji-mart/react'
 import data from '@emoji-mart/data'
 
@@ -40,10 +40,12 @@ export default function ChatInput({socketRef, user, currentFriend}) {
     if (message) {
       const msg = {
         sender: user.phoneNumber, 
+        sender_name: user.name, 
         receiver: currentFriend.phoneNumber, 
         date: new Date().toLocaleString(),
         content: message, 
-        type: "text"
+        type: "text", 
+        status: "ready"
       }
       socketRef.current.emit(user.phoneNumber, msg)
 
@@ -53,14 +55,18 @@ export default function ChatInput({socketRef, user, currentFriend}) {
   }
 
   const sendFileMessage = (file, content, link) => {
+      console.log("Called send file message");
+
       const msg = {
         sender: user.phoneNumber, 
+        sender_name: user.name, 
         receiver: currentFriend.phoneNumber, 
         date: new Date().toLocaleString(),
         filename: file.name, 
         type: file.type, 
         link: link, 
         content: content, 
+        status: "ready"
       }
       socketRef.current.emit(user.phoneNumber, msg)
 

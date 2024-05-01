@@ -1,5 +1,6 @@
 import axios from "axios";
-import {api_host, socket_host} from "../../GlobalVariable";
+
+import host from "../../GlobalVariable";
 const authorizationRoomLeader = async (roomId, phoneNumber) => {
   try {
     const userData = {
@@ -7,7 +8,7 @@ const authorizationRoomLeader = async (roomId, phoneNumber) => {
       phoneNumber: phoneNumber,
     };
     const response = await axios.post(
-      api_host + "/rooms/authorization-room-leader",
+      host.api_host + "/rooms/authorization-room-leader",
       userData
     );
     if (response.status === 200) {

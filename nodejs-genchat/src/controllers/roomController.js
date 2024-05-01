@@ -19,7 +19,10 @@ const createRoom = async (req, res) => {
 const findRoomByPhoneNumber = async (req, res) => {
   try {
     const { phoneNumber } = req.body;
+    console.log(req.body);
     const room = await roomRepository.findRoomByPhoneNumber(phoneNumber);
+    // const room = await roomRepository.findRoomByPhoneNumber({users:{$in:[phoneNumber]}})
+    console.log();
     res.status(200).json({
       message: "Successfully!",
       data: room,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import SidebarMenu from '../components/SidebarMenu'
 import SidebarChat from '../components/SidebarChat'
 import Chats from '../components/Chats'
@@ -10,7 +10,9 @@ export default function Main() {
 
   const [currentFriend, setCurrentFriend] = useState({})
 
-  const handleCurrentFriend = friend => setCurrentFriend(friend);
+  const handleCurrentFriend = friend => {
+    setCurrentFriend(friend);
+  }
   
   return (
     <div className='flex items-center w-full overflow-hidden'>
