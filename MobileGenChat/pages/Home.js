@@ -9,11 +9,11 @@ import { config } from "@gluestack-ui/config"
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
   
 import React from 'react'
-import { Pressable, View } from 'react-native'
 import Main from "../pages/Main";
 import SignIn from "../components/SignIn";
 import SignUp from "../components/SignUp";
 import ForgotPassword from "../components/ForgotPassword";
+import Chat from "../components/Chat";
   
 export const Provider = createProvider({
   StyledProvider,
@@ -61,19 +61,26 @@ export default function Home({navigation}) {
           })
         }
       >
-        <Screen.Screen name="Sign In">
+         <Screen.Screen name="Sign In">
           {(props) => <SignIn {...props} />}
         </Screen.Screen>
+        
+        <Screen.Screen name="Main">
+          {(props) => <Main {...props} />}
+        </Screen.Screen>
+
+       
 
         <Screen.Screen name="Sign Up">
           {(props) => <SignUp {...props} />}
         </Screen.Screen>
+
         <Screen.Screen name="Forgot Password">
           {(props) => <ForgotPassword {...props} />}
         </Screen.Screen>
 
-        <Screen.Screen name="Main">
-          {(props) => <Main {...props} />}
+        <Screen.Screen name="Chat">
+          {(props) => <Chat {...props} />}
         </Screen.Screen>
         
       </Screen.Navigator>

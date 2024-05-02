@@ -4,7 +4,6 @@ import {
 } from "@gluestack-ui/themed"
 
 import { 
-  Camera, 
   CircleUserRound,
   MessageCircleMore, 
   Phone, 
@@ -40,7 +39,7 @@ export default function Main({navigation}) {
             tabBarIcon: ({ focused, color, size }) => {
               let elem;
 
-              if (route.name === 'Chat') {
+              if (route.name === 'Chats') {
                 iconName = focused
                 ? elem = <MessageCircleMore strokeWidth={1.75} color="blue" />
                 : elem = <MessageCircleMore strokeWidth={1} color="blue" />
@@ -71,7 +70,7 @@ export default function Main({navigation}) {
           })
         }
       >
-        <Tab.Screen name="Chat">
+        <Tab.Screen name="Chats">
           {(props) => <Chats {...props} />}
         </Tab.Screen>
 
