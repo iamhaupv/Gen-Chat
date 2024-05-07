@@ -61,13 +61,15 @@ export default function Home({navigation}) {
           })
         }
       >
-         <Screen.Screen name="Sign In">
-          {(props) => <SignIn {...props} />}
-        </Screen.Screen>
-        
         <Screen.Screen name="Main">
           {(props) => <Main {...props} />}
         </Screen.Screen>
+
+        <Screen.Screen name="Sign In">
+          {(props) => <SignIn {...props} />}
+        </Screen.Screen>
+        
+        
 
        
 

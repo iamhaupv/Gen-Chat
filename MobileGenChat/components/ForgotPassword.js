@@ -1,3 +1,4 @@
+
 import { View, Text, Image, Pressable, TextInput, ScrollView } from 'react-native';
 import { collection, getDocs } from "firebase/firestore"; 
 import { useRoute } from "@react-navigation/native";

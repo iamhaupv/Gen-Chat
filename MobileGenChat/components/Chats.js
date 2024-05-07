@@ -1,12 +1,35 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { TouchableHighlight, View } from 'react-native'
-import { Input, InputSlot, InputField, InputIcon, SearchIcon, Box, FlatList, HStack, VStack, Text, Heading, Avatar, AvatarImage, Fab, FabIcon, AddIcon, FabLabel } from '@gluestack-ui/themed';
+import { Input, InputSlot, InputField, InputIcon, SearchIcon, Box, FlatList, HStack, VStack, Text, Heading, Avatar, AvatarImage, Fab, FabIcon, AddIcon, AvatarFallbackText, AvatarBadge } from '@gluestack-ui/themed';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import axios from 'axios';
+import getListFriend from '../services/getListFriend';
+import getInfor from '../services/getInfor';
 
 const ChatScreen = createNativeStackNavigator();
 
 export default function Chats({navigation}) {
+  const [friends, setFriends] = useState([]);
+
+  const getListFriends = async () => {
+    const listFriend = await getListFriend("0374858237");
+    const temp_friends = [];
+
+    for (let i = 0; i < listFriend.data.length; i++) {
+      const friend = await getInfor( listFriend.data[i] );
+      temp_friends.push(friend.data);
+    }
+
+    setFriends(temp_friends);
+  }
+
+  useEffect(() => {
+    getListFriends();
+    console.log("friends");
+    console.log(friends);
+  }, [])
 
   const data = [
     {
@@ -66,9 +89,11 @@ export default function Chats({navigation}) {
       
     <Box py="$">
       <FlatList
-        data={data}
-         renderItem={({ item }) => (
+        data={friends}
+        keyExtractor={item => item._id}
+         renderItem={({ index, item }) => (
           <TouchableHighlight
+            key={index}
             onPress={() => {
               // console.log("Home");
               navigation.navigate("Chat", {user: item})
@@ -87,7 +112,7 @@ export default function Chats({navigation}) {
             >
               <HStack space="md">
                 <Avatar size="md">
-                  <AvatarImage source={{ uri: item.avatarUrl }} alt='lmao'/>
+                  <AvatarFallbackText>{item.name}</AvatarFallbackText>
                 </Avatar>
                 <VStack style={{
                   flex: 1
@@ -97,13 +122,13 @@ export default function Chats({navigation}) {
                     fontWeight="$bold"
                     $dark-color="$warmGray100"
                   >
-                    {item.fullName}
+                    {item.name || null}
                   </Text>
                   <Text
                     color="$coolGray600"
                     $dark-color="$warmGray200"
                   >
-                    {item.recentText}
+                    {item.recentText || null}
                   </Text>
                 </VStack>
                 <Text
@@ -112,13 +137,12 @@ export default function Chats({navigation}) {
                   alignSelf="flex-start"
                   $dark-color="$warmGray100"
                 >
-                  {item.timeStamp}
+                  {item.timeStamp || null}
                 </Text>
               </HStack>
             </Box>
           </TouchableHighlight>
         )}
-        keyExtractor={(item) => item.id}
       />
     </Box>
 

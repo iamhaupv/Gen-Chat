@@ -6,7 +6,7 @@ const getInfor = async (phoneNumber) => {
       phoneNumber: phoneNumber,
     };
     const response = await axios.post(
-      host.api_host + "/users/getInfor",
+      host.api_host + "/users/get-infor",
       userData
     );
     if (response.status === 200) {

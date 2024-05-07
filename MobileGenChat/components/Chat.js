@@ -1,6 +1,6 @@
 import { InputField } from '@gluestack-ui/themed';
 import { InputIcon, InputSlot } from '@gluestack-ui/themed';
-import { Text, Avatar, AvatarImage, Input } from '@gluestack-ui/themed';
+import { Text, Avatar, AvatarImage, Input, AvatarFallbackText, AvatarBadge } from '@gluestack-ui/themed';
 import { ArrowLeft, Info, Phone, SearchIcon, Send } from 'lucide-react-native';
 import React from 'react'
 import { ScrollView } from 'react-native';
@@ -27,11 +27,10 @@ export default function Chat({route, navigation}) {
                 <ArrowLeft size={30} strokeWidth={2} color="blue" onPress={() => {navigation.goBack()}} style={{padding: 10}}/>
 
                 <Avatar size="md">
-                    <AvatarImage source={{ uri: user.avatarUrl }} alt='lmao'/>
+                  <AvatarFallbackText>{user.name}</AvatarFallbackText>
                 </Avatar>
-
                 
-                <Text flex={1} size="xl" bold={true}>{user.fullName}</Text>
+                <Text flex={1} size="xl" bold={true}>{user.name}</Text>
 
                 <Phone size={30} strokeWidth={2} color="blue" onPress={() => {navigation.goBack()}} style={{padding: 10}}/>
 
