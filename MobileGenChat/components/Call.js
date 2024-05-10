@@ -19,7 +19,7 @@ export default function Call({navigation}) {
     const temp_friends = [];
 
     for (let i = 0; i < listFriend.data.length; i++) {
-      const friend = await getInfor( listFriend.data[i] );
+      const friend = await getInfor( listFriend.data[i].friend_id );
       temp_friends.push(friend.data);
     }
 
