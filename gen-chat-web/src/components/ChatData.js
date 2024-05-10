@@ -64,7 +64,7 @@ export default function ChatData({message, socketRef}) {
     const friendFound = []
 
     for (let i = 0; i < friendList.length; i++) {
-      const friend = await findUserByPhoneNumber(friendList[i]);
+      const friend = await findUserByPhoneNumber(friendList[i].friend_id);
       friendFound.push(friend.data);
     }
 

@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const isEmail = require("validator/lib/isEmail");
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
+const { type } = require("os");
 const User = mongoose.model(
   "User",
   new mongoose.Schema({
@@ -40,10 +41,18 @@ const User = mongoose.model(
       type: String,
       required: false,
     },
-    listFriend: {
-      type: [String],
-      required: false,
-    },
+    listFriend: [
+      {
+        friend_id: {
+          type: String, 
+          required: true,
+        }, 
+        room_id: {
+          type: String, 
+          required: true,
+        }
+      }
+    ], 
     listRequestSend: {
       type: [String],
       required: false,

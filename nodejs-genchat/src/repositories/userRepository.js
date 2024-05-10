@@ -114,8 +114,8 @@ const findUserByPhoneNumber = async (phoneNumber) => {
     return existUser;
   } catch (error) {
     // Bắt và xử lý lỗi
-    console.error(error);
-    throw error; // Chuyển tiếp lỗi để nơi gọi hàm có thể xử lý
+    console.error("Find user by phone number failed: " + error);
+    throw error; // Chuyển tiếp lỗi để nơi gọi hàm có  thể xử lý
   }
 };
 // update cập nhật lại các trường trong user

@@ -93,7 +93,7 @@ export default function SidebarChat({user, handleCurrentFriend}) {
     const friendFound = []
 
     for (let i = 0; i < friendList.length; i++) {
-      const friend = await findUserByPhoneNumber(friendList[i]);
+      const friend = await findUserByPhoneNumber(friendList[i].friend_id);
       friendFound.push(friend.data);
     }
 
@@ -136,32 +136,32 @@ export default function SidebarChat({user, handleCurrentFriend}) {
     // console.log("Socket group host");
     // console.log(host.socket_host_Group + "/api");
 
-    function fetchGroups() {
-      fetch(host.socket_host_Group + "/api")
-        .then((res) => res.json())
-        .then((data) => setRooms(data))
-        .catch((err) => console.error(err));
-    }
-    fetchGroups();
+    // function fetchGroups() {
+    //   fetch(host.socket_host_Group + "/api")
+    //     .then((res) => res.json())
+    //     .then((data) => setRooms(data))
+    //     .catch((err) => console.error(err));
+    // }
+    // fetchGroups();
   }, []);
 
   useEffect(() => {
-    socketGroupRef.current = socketIOClient.connect(host.socket_host_Group);
+  //   socketGroupRef.current = socketIOClient.connect(host.socket_host_Group);
 
-    socketGroupRef.current.emit("sendUserIdToServer", user);
+  //   socketGroupRef.current.emit("sendUserIdToServer", user);
 
-    socketGroupRef.current.on("roomsList", (rooms) => {
-      setRooms(rooms);
-      console.log("All rooms");
-      console.log(rooms);
-    });
+  //   socketGroupRef.current.on("roomsList", (rooms) => {
+  //     setRooms(rooms);
+  //     console.log("All rooms");
+  //     console.log(rooms);
+  //   });
 
     getFriendList();
 
-    return () => {
-      socketGroupRef.current.disconnect();
-      // socketGroup.disconnect();
-    };
+  //   return () => {
+  //     socketGroupRef.current.disconnect();
+  //     // socketGroup.disconnect();
+  //   };
   }, [socketGroupRef]);
 
   return (
