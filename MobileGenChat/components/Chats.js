@@ -12,6 +12,26 @@ const ChatScreen = createNativeStackNavigator();
 
 export default function Chats({navigation}) {
   const [friends, setFriends] = useState([]);
+  const userRoot = {
+    "_id": "661f7edf293d7e25220dc316",
+    "name": "Nguyen Thanh Khoa",
+    "email": "khoa@gmail.com",
+    "password": "$2b$10$on5PzJt.8sfYe780SIiAU.iBcqY.SaG6Os459rJXrjYZZBwuBHJGa",
+    "phoneNumber": "0374858237",
+    "address": "",
+    "photoURL": "",
+    "listFriend": [
+      {"friend_id": "0932659945", "roomId": "LTN"},
+      {"friend_id": "0375684441", "roomId": "PVH"},
+      {"friend_id": "0375684442", "roomId": "NDL"},
+    ],
+    "listRequestSend": [],
+    "listRequestGet": [],
+    "rooms": [],
+    "messageReceiver": [],
+    "messageSender": [],
+    "__v": 0
+}
 
   const getListFriends = async () => {
     const listFriend = await getListFriend("0374858237");
@@ -96,7 +116,7 @@ export default function Chats({navigation}) {
             key={index}
             onPress={() => {
               // console.log("Home");
-              navigation.navigate("Chat", {user: item})
+              navigation.navigate("Chat", {userRoot: userRoot, receiver: item})
             }}
           >
             <Box
