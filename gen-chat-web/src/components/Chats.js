@@ -3,9 +3,8 @@ import ChatData from './ChatData'
 import ChatUser from './ChatUser'
 import ChatInput from './ChatInput'
 import Profile from './Profile';
-import host from '../GlobalVariable';
 
-import socketIOClient from "socket.io-client";
+import sockets from "../utils/socketGroup"
 
 export default function Chats({user, currentFriend}) {
   const [openRight, setOpenRight] = useState(true);
@@ -15,34 +14,57 @@ export default function Chats({user, currentFriend}) {
 
   const socketRef = useRef();
 
+  const socket = sockets.socket;
+  let idRoom = null;
+  const friend = user.listFriend.find(elem => elem.friend_id == currentFriend.phoneNumber);
+  
+  if (friend != undefined)
+    idRoom = friend.room_id;
+
+  // console.log("Id room");
+  // console.log(idRoom);
+  // console.log("Friend phone number");
+  // console.log(currentFriend.phoneNumber);
+
   useEffect(() => {
-    socketRef.current = socketIOClient.connect(host.socket_host);
+    if (idRoom) {
+      socket.emit('join', idRoom);
+      console.log(idRoom);
+    }
 
-    socketRef.current.emit('sendUserIdToServer', user);
+    // socketRef.current = socketIOClient.connect(host.socket_host);
 
-    socketRef.current.on(user.phoneNumber, datas => {
-      console.log("Message send from server");
-      console.log(datas);
-      setMess(datas);
+    // socketRef.current.emit('sendUserIdToServer', user);
+
+    // socketRef.current.on(user.phoneNumber, datas => {
+    //   console.log("Message send from server");
+    //   console.log(datas);
+    //   setMess(datas);
+    // });
+
+    // return () => {
+    //   socketRef.current.disconnect();
+    // };
+  }, [idRoom]);
+
+  useEffect(() => {
+    socket.on('chat-message-2', msg => {
+      console.log("Called chat message");
+      setMess(mess => [...mess, msg]);
+      console.log("all Mess");
+      console.log(mess);
+      console.log("Mess");
+      console.log(msg);
     });
 
     return () => {
-      socketRef.current.disconnect();
-    };
-  }, [currentFriend]);
+      socket.on('disconnect', () => {
+        console.log('Disconnected from server');
+      });
+    }
+  }, []);
 
   const renderMess = mess.map((m, index) => {
-    // console.log("-------------------------------");
-    // console.log("Type " + m.type);
-    // console.log("Sender " + m.sender);
-    // console.log("Receiver " + m.receiver);
-    // console.log("User phone number " + user.phoneNumber);
-    // console.log("Current friend number " + currentFriend.phoneNumber);
-
-    // console.log("Chat type");
-    // console.log(m.type);
-    // console.log("Chat status: " + m.status);
-
     let chat;
     if (m.status == "ready") {
 
@@ -172,7 +194,7 @@ export default function Chats({user, currentFriend}) {
               {renderMess.map((elem, i) => elem)}
             </div>
 
-            <ChatInput socketRef={socketRef} user={user} currentFriend={currentFriend} />
+            <ChatInput socketRef={socketRef} socket={socket} user={user} currentFriend={currentFriend} idRoom={idRoom} />
           </div>
       
             <Profile state={openRight} user={currentFriend} />

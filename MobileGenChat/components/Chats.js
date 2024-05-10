@@ -21,9 +21,7 @@ export default function Chats({navigation}) {
     "address": "",
     "photoURL": "",
     "listFriend": [
-      {"friend_id": "0932659945", "roomId": "LTN"},
-      {"friend_id": "0375684441", "roomId": "PVH"},
-      {"friend_id": "0375684442", "roomId": "NDL"},
+      {"friend_id": "0932659945", "room_id": "1"},
     ],
     "listRequestSend": [],
     "listRequestGet": [],

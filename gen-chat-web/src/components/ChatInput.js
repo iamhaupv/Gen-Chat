@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import Picker from '@emoji-mart/react'
-import data from '@emoji-mart/data'
+import data from '@emoji-mart/data';
 
-export default function ChatInput({socketRef, user, currentFriend}) {
+export default function ChatInput({socketRef, socket, user, currentFriend, idRoom}) {
   const [message, setMessage] = useState('');
   const [isPickerVisible, setPickerVisible] = useState(false);
 
@@ -74,6 +74,24 @@ export default function ChatInput({socketRef, user, currentFriend}) {
       setMessage("");
   }
 
+  const sendMessage = msg => {
+    let content = message;
+    let userID = user.phoneNumber;
+    let receiverID = currentFriend.phoneNumber;
+    let type = 'text';
+
+    console.log("Send Messaage");
+    console.log(userID + ': ' + receiverID + ': ' + content);
+    
+    socket.emit('chat-message', {
+      idRoom, 
+      userID,
+      receiverID,
+      content,
+      type,
+    });
+  };
+
   return (
     <div className='flex items-center p-5 gap-7 justify-around'>
       <div className={isPickerVisible ? 'absolute top-1/3 left-2/3' : 'hidden'}>
@@ -108,7 +126,8 @@ export default function ChatInput({socketRef, user, currentFriend}) {
 
       {/* Send button */}
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 -rotate-45" 
-        onClick={sendTextMessage}
+        // onClick={sendTextMessage}
+        onClick={sendMessage}
       >
         <path strokeLinecap="round" strokeLinejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
       </svg>

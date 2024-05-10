@@ -26,7 +26,9 @@ export default function Chat({route, navigation}) {
   const userRoot = route.params.userRoot;
   const receiver = route.params.receiver;
 
-  const idRoom = userRoot.listFriend.find(elem => elem.friend_id == receiver.phoneNumber).roomId;
+  const idRoom = userRoot.listFriend.find(elem => elem.friend_id == receiver.phoneNumber).room_id;
+  console.log("Friend");
+  console.log(userRoot.listFriend.find(elem => elem.friend_id == receiver.phoneNumber));
   console.log("Id room");
   console.log(idRoom);
 
@@ -36,10 +38,6 @@ export default function Chat({route, navigation}) {
       console.log(idRoom);
     }
   }, [idRoom]);
-
-//   socket.on('connect', () => {
-//     console.log('Connected to server');
-//   });
 
   const sendMessage = msg => {
     let content = message;
@@ -59,13 +57,9 @@ export default function Chat({route, navigation}) {
     });
   };
 
-
   useEffect(() => {
     socket.on('chat-message-2', msg => {
       setMessages(messages => [...messages, msg]);
-      // console.log("Send Messaage 3");
-      // console.log(msg);
-      // console.log(messages);
     });
 
     return () => {
