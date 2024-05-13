@@ -49,11 +49,14 @@ export default function Chat({route, navigation}) {
     console.log(userID + ': ' + receiverID + ': ' + content);
     
     socket.emit('chat-message', {
+      type: "text", 
       idRoom, 
-      userID,
-      receiverID,
-      content,
-      type,
+      sender: userID,
+      sender_name: userRoot.name,
+      receiver: receiverID,
+      content: content,
+      chat_type: type,
+      status: "ready"
     });
   };
 
@@ -127,7 +130,7 @@ export default function Chat({route, navigation}) {
         }}>
           {
             messages.map((msg, index) => {
-              if (msg.userID == userRoot.phoneNumber)
+              if (msg.sender == userRoot.phoneNumber)
                 return <ChatUser key={index} data={msg}/>;
               else
                 return <ChatData key={index} data={msg}/>;

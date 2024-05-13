@@ -1,6 +1,9 @@
 import host from "../GlobalVariables";
 import axios from "axios";
 const loginUser = async (phoneNumber, password) => {
+  console.log("Login user");
+  console.log(phoneNumber);
+  console.log(password);
     try {
       const userData = {
         phoneNumber: phoneNumber,
@@ -12,11 +15,11 @@ const loginUser = async (phoneNumber, password) => {
         
         return response.data;
       } else {
-        console.error("Login failed:", response.data);
-        throw new Error("Login failed");
+        console.error("Client Login failed:", response.data);
+        throw new Error("Client Login failed");
       }
     } catch (error) {
-      console.error("Login error:", error);
+      console.error("Client Login error:", error);
       throw new Error(error);
     }
   };

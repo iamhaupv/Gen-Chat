@@ -1,10 +1,11 @@
 import React, {useState, useRef, useEffect} from 'react';
+import { io } from "socket.io-client";
 import ChatData from './ChatData'
 import ChatUser from './ChatUser'
 import ChatInput from './ChatInput'
 import Profile from './Profile';
 
-import sockets from "../utils/socketGroup"
+import socket from "../utils/socketGroup"
 
 export default function Chats({user, currentFriend}) {
   const [openRight, setOpenRight] = useState(true);
@@ -13,9 +14,8 @@ export default function Chats({user, currentFriend}) {
   const [mess, setMess] = useState([]);
 
   const socketRef = useRef();
-
-  const socket = sockets.socket;
   let idRoom = null;
+
   const friend = user.listFriend.find(elem => elem.friend_id == currentFriend.phoneNumber);
   
   if (friend != undefined)
@@ -24,7 +24,7 @@ export default function Chats({user, currentFriend}) {
   useEffect(() => {
     if (idRoom) {
       socket.emit('join', idRoom);
-      console.log(idRoom);
+      // console.log(idRoom);
     }
 
     // socketRef.current = socketIOClient.connect(host.socket_host);
@@ -45,11 +45,12 @@ export default function Chats({user, currentFriend}) {
   useEffect(() => {
     socket.on('chat-message-2', msg => {
       console.log("Called chat message");
-      setMess(mess => [...mess, ]);
-      console.log("all Mess");
-      console.log(mess);
-      console.log("Mess");
-      console.log(msg);
+      setMess(mess => [...mess, msg]);
+      // console.log("---------------------------------------");
+      // console.log("---- All Mess");
+      // console.log(mess);
+      // console.log("---------------------------------------");
+      // console.log("Mess");
     });
 
     return () => {
@@ -93,6 +94,9 @@ export default function Chats({user, currentFriend}) {
       
     return chat;
   });
+
+  console.log("Render mess");
+  console.log(renderMess);
 
   return (
     <div className={`flex w-full`}>
@@ -186,7 +190,12 @@ export default function Chats({user, currentFriend}) {
             </nav>
 
             <div className='h-4/5 overflow-y-scroll bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 '>
-              {renderMess.map((elem, i) => elem)}
+              {renderMess.map((elem, i) => {
+                console.log("--------------------");
+                console.log(elem);
+                console.log("--------------------");
+                return elem
+              })}
             </div>
 
             <ChatInput socketRef={socketRef} socket={socket} user={user} currentFriend={currentFriend} idRoom={idRoom} />

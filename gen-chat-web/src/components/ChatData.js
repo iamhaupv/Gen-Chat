@@ -10,7 +10,7 @@ export default function ChatData({message, socketRef}) {
   const [friends, setFriends] = useState([]);
   const [searchPhoneNumber, setSearchPhoneNumber] = useState("");
 
-  console.log("Message " + message.content);
+  // console.log("Message " + message.content);
 
   const handleSearchPhoneNumber = e => {
     setSearchPhoneNumber(e.target.value);
@@ -29,7 +29,7 @@ export default function ChatData({message, socketRef}) {
       }
     }
     
-    console.log(searchedUser != null);
+    // console.log(searchedUser != null);
     setShowSearchResult(true);
   }
 
@@ -44,11 +44,11 @@ export default function ChatData({message, socketRef}) {
 
   const handleForwardMessage = () => {
     let checkedUsers = getCheckedBoxes("userInGroup");
-    console.log("Forwarded message");
-    console.log("Friend to forward");
-    console.log(checkedUsers);
+    // console.log("Forwarded message");
+    // console.log("Friend to forward");
+    // console.log(checkedUsers);
 
-    console.log("Message to forward " + message.content);
+    // console.log("Message to forward " + message.content);
 
     for (let i = 0; i < checkedUsers.length; i++) {
       message.receiver = checkedUsers[i]

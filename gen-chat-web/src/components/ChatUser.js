@@ -10,10 +10,10 @@ export default function ChatUser({message, socketRef}) {
   const [friends, setFriends] = useState([]);
   const [searchPhoneNumber, setSearchPhoneNumber] = useState("");
 
-  console.log("Message " + message.content);
+  // console.log("Message " + message.content);
 
   const handleDeleteMessage = () => {
-    console.log("Called handle delete message");
+    // console.log("Called handle delete message");
     socketRef.current.emit("deleteMessage", message.id)
   }
 
@@ -34,7 +34,7 @@ export default function ChatUser({message, socketRef}) {
       }
     }
     
-    console.log(searchedUser != null);
+    // console.log(searchedUser != null);
     setShowSearchResult(true);
   }
 
@@ -49,11 +49,11 @@ export default function ChatUser({message, socketRef}) {
 
   const handleForwardMessage = () => {
     let checkedUsers = getCheckedBoxes("userInGroup");
-    console.log("Forwarded message");
-    console.log("Friend to forward");
-    console.log(checkedUsers);
+    // console.log("Forwarded message");
+    // console.log("Friend to forward");
+    // console.log(checkedUsers);
 
-    console.log("Message to forward " + message.content);
+    // console.log("Message to forward " + message.content);
 
     for (let i = 0; i < checkedUsers.length; i++) {
       message.receiver = checkedUsers[i]
@@ -96,11 +96,11 @@ export default function ChatUser({message, socketRef}) {
 
   let comp;
 
-  console.log("Message type: " + message.type);
-  console.log(message);
+  // console.log("Message type: " + message.type);
+  // console.log(message);
 
   if (message.type == "text" ) {
-    console.log("Message Text");
+    // console.log("Message Text");
     comp = <div className="text-sm font-normal text-gray-900 dark:text-white">
       {message.content}
     </div>
@@ -110,10 +110,10 @@ export default function ChatUser({message, socketRef}) {
     message.type == "image/jpeg" || 
     message.type == "image/jpg"
   ) {
-    console.log("Message Image");
+    // console.log("Message Image");
     comp = <img src={message.content} width={200}></img>
   } else {
-    console.log("Message Link");
+    // console.log("Message Link");
     comp = <a download={message.filename} href={message.link} className='underline text-blue-400'>{message.filename}</a>
   }
 

@@ -84,11 +84,14 @@ export default function ChatInput({socketRef, socket, user, currentFriend, idRoo
     console.log(userID + ': ' + receiverID + ': ' + content);
     
     socket.emit('chat-message', {
+      type: "text", 
       idRoom, 
-      userID,
-      receiverID,
-      content,
-      type,
+      sender: userID,
+      sender_name: user.name,
+      receiver: receiverID,
+      content: content,
+      chat_type: type,
+      status: "ready"
     });
   };
 
