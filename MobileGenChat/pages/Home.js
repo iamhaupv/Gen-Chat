@@ -14,6 +14,7 @@ import SignIn from "../components/SignIn";
 import SignUp from "../components/SignUp";
 import ForgotPassword from "../components/ForgotPassword";
 import Chat from "../components/Chat";
+import GroupChat from "../components/GroupChat";
   
 export const Provider = createProvider({
   StyledProvider,
@@ -83,6 +84,10 @@ export default function Home({navigation}) {
 
         <Screen.Screen name="Chat">
           {(props) => <Chat {...props} />}
+        </Screen.Screen>
+
+        <Screen.Screen name="GroupChat">
+          {(props) => <GroupChat {...props} />}
         </Screen.Screen>
         
       </Screen.Navigator>

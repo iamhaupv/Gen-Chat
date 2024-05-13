@@ -53,8 +53,8 @@ export default function Chats({navigation}) {
 
     socket.on("rooms2", data => {
       setRooms(data);
-      console.log("Rooms");
-      console.log(rooms);
+      // console.log("Rooms 2");
+      // console.log(rooms);
     });
 
     return () => {
@@ -106,6 +106,9 @@ export default function Chats({navigation}) {
     },
   ]
 
+  console.log("Rooms 2");
+  console.log(rooms);
+
   return (
     <View style={{
       height: "100%"
@@ -122,9 +125,65 @@ export default function Chats({navigation}) {
       
     <Box py="$">
       <FlatList
+        data={rooms}
+        keyExtractor={item => item.id}
+        renderItem={({ index, item }) => (
+          <TouchableHighlight
+            key={index}
+            onPress={() => {
+              // console.log("Home");
+              navigation.navigate("GroupChat", {userRoot: userRoot, room: item})
+            }}
+          >
+            <Box
+              borderBottomWidth="$1"
+              borderColor="#dddddd"
+              $dark-borderColor="$coolGray800"
+              $base-pl="$3"
+              $base-pr="$3"
+              $sm-pl="$4"
+              $sm-pr="$4"
+              py="$2"
+              onPress
+            >
+              <HStack space="md">
+                <Avatar size="md">
+                  <AvatarFallbackText>{item.name}</AvatarFallbackText>
+                </Avatar>
+                <VStack style={{
+                  flex: 1
+                }}>
+                  <Text
+                    color="$coolGray800"
+                    fontWeight="$bold"
+                    $dark-color="$warmGray100"
+                  >
+                    {item.name || null}
+                  </Text>
+                  <Text
+                    color="$coolGray600"
+                    $dark-color="$warmGray200"
+                  >
+                    {item.recentText || null}
+                  </Text>
+                </VStack>
+                <Text
+                  fontSize="$xs"
+                  color="$coolGray800"
+                  alignSelf="flex-start"
+                  $dark-color="$warmGray100"
+                >
+                  {item.timeStamp || null}
+                </Text>
+              </HStack>
+            </Box>
+          </TouchableHighlight>
+        )}
+      />
+      <FlatList
         data={friends}
         keyExtractor={item => item._id}
-         renderItem={({ index, item }) => (
+        renderItem={({ index, item }) => (
           <TouchableHighlight
             key={index}
             onPress={() => {
