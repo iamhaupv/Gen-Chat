@@ -132,18 +132,62 @@ socketIo.on("connection", (socket) => {
       rooms.push(room);
     }
 
-    console.log("----------------------------");
-    console.log("-- Socket: Added room " + data);
+    console.log("Create chat 1-1");
     console.log(rooms);
-  })
+  });
+
+  socket.on("join-room", data => {
+    console.log("Rooms id");
+    console.log(data.id);
+    socket.join(data.id);
+
+    if ( rooms.find(elem => elem.id == data.id) == undefined ) {
+      rooms.push(data);
+    }
+    console.log("Create room");
+    console.log(rooms);
+  });
+
+  socket.on("init-room", userId => {
+    console.log("Rooms");
+    console.log(rooms);
+
+    let list_rooms = [];
+    list_rooms = rooms.filter(elem => {
+      if (elem.admin == userId) return true;
+
+      if (elem.user != undefined)
+        return elem.user.includes(userId)
+      else
+        return false;
+    });
+
+    if (list_rooms == undefined)
+      list_rooms = [];
+
+    console.log("List room");
+    console.log(list_rooms);
+
+    if (list_rooms.length != 0)
+      for (let i = 0; i < list_rooms.length; i++) {
+        console.log("List rooms id");
+        console.log(list_rooms[i].id);
+        socketIo.to(list_rooms[i].id).emit("rooms2", list_rooms);
+      }
+  });
 
   socket.on("init-chat-message", idRoom => {
+    console.log("Init chat message");
+    console.log("Rooms");
+    console.log(rooms);
+    console.log("Found Rooms");
+    console.log(rooms.find(elem => elem.id == idRoom));
     if ( rooms.find(elem => elem.id == idRoom) ) {
-      socketIo.to(idRoom).emit("chat-message-2", 
+      socketIo.to(idRoom).emit("rooms", 
         rooms.find(elem => elem.id == idRoom).messages
       );
     }
-  })
+  });
 
   socket.on("chat-message", async data => {
     console.log(rooms.find(elem => elem.id == data.idRoom));

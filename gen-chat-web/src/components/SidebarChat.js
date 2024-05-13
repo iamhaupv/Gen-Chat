@@ -11,11 +11,7 @@ import addRequestGet from '../services/users/addRequestGet';
 import addRequestSend from '../services/users/addRequestSend';
 import getRequestGet from '../services/users/getRequestGet';
 
-import host from '../GlobalVariable';
-
-import socketIOClient from "socket.io-client";
-
-// import sockets from '../utils/socketGroup';
+import socket from "../utils/socketGroup"
 
 export default function SidebarChat({user, handleCurrentFriend}) {
   const [showListFriendRequest, setShowListFriendRequest] = useState("");
@@ -63,10 +59,17 @@ export default function SidebarChat({user, handleCurrentFriend}) {
     console.log(checkedUsers);
 
     try {
-      // await createRoom(checkedUsers, new Date().valueOf());
-      socketGroupRef.current.emit("createRoom", {name: roomName, admin: user.phoneNumber, user: checkedUsers});
-      // socketGroup.emit("createRoom", {name: roomName, admin: user.phoneNumber, user: checkedUsers});
+      let idRoom = "room" + new Date().valueOf();
+      socket.emit("join-room", {
+        id: idRoom, 
+        phoneNumber: idRoom, 
+        name: roomName, 
+        admin: user.phoneNumber, 
+        user: checkedUsers, 
+        messages: []
+      });
       alert("Create room successfully!");
+      socket.emit("init-room", user.phoneNumber);
       document.getElementById("btnCloseModal").click();
     } catch (error) {
       console.log("Error create room: " + error);
@@ -132,37 +135,23 @@ export default function SidebarChat({user, handleCurrentFriend}) {
     setShowSearchResult(true);
   }
 
-  useLayoutEffect(() => {
-    // console.log("Socket group host");
-    // console.log(host.socket_host_Group + "/api");
-
-    // function fetchGroups() {
-    //   fetch(host.socket_host_Group + "/api")
-    //     .then((res) => res.json())
-    //     .then((data) => setRooms(data))
-    //     .catch((err) => console.error(err));
-    // }
-    // fetchGroups();
-  }, []);
+  useEffect(() => {
+    getFriendList();
+  }, [socketGroupRef]);
 
   useEffect(() => {
-  //   socketGroupRef.current = socketIOClient.connect(host.socket_host_Group);
+    socket.emit("init-room", user.phoneNumber);
 
-  //   socketGroupRef.current.emit("sendUserIdToServer", user);
+    socket.on("rooms2", data => {
+      setRooms(data);
+    });
 
-  //   socketGroupRef.current.on("roomsList", (rooms) => {
-  //     setRooms(rooms);
-  //     console.log("All rooms");
-  //     console.log(rooms);
-  //   });
-
-    getFriendList();
-
-  //   return () => {
-  //     socketGroupRef.current.disconnect();
-  //     // socketGroup.disconnect();
-  //   };
-  }, [socketGroupRef]);
+    return () => {
+      socket.on('disconnect', () => {
+        console.log('Disconnected from server');
+      });
+    }
+  }, []);
 
   return (
     <div className={`h-screen bg-white duration-300 ${!open ? 'w-96' : "w-0"}`}>

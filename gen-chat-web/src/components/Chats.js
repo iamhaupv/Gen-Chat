@@ -26,20 +26,6 @@ export default function Chats({user, currentFriend}) {
       socket.emit('join', idRoom);
       socket.emit("init-chat-message", idRoom);
     }
-
-    // socketRef.current = socketIOClient.connect(host.socket_host);
-
-    // socketRef.current.emit('sendUserIdToServer', user);
-
-    // socketRef.current.on(user.phoneNumber, datas => {
-    //   console.log("Message send from server");
-    //   console.log(datas);
-    //   setMess(datas);
-    // });
-
-    // return () => {
-    //   socketRef.current.disconnect();
-    // };
   }, [idRoom]);
 
   useEffect(() => {
@@ -47,6 +33,10 @@ export default function Chats({user, currentFriend}) {
       // setMess(mess => [...mess, msg]);
       setMess(msg);
     });
+
+    socket.on("rooms", data => {
+      setMess(data);
+    })
 
     return () => {
       socket.on('disconnect', () => {
@@ -89,9 +79,6 @@ export default function Chats({user, currentFriend}) {
       
     return chat;
   });
-
-  console.log("Render mess");
-  console.log(renderMess);
 
   return (
     <div className={`flex w-full`}>

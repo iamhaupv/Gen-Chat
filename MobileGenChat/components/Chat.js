@@ -65,6 +65,10 @@ export default function Chat({route, navigation}) {
       setMessages(msg);
     });
 
+    socket.on("rooms", msg => {
+      setMessages(msg);
+    })
+
     return () => {
       socket.on('disconnect', () => {
         console.log('Disconnected from server');

@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Chat from './Chat';
-import socketIOClient from "socket.io-client";
 
 export default function Profile(props) {
   const [users, setUsers] = useState([]);
   const isOpen = props.state;
   const user = props.user;
 
+  console.log("Profile user");
+  console.log(user);
+
+  
   let comp;
 
   const handleOpenUserList = () => {
