@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { TouchableHighlight, View } from 'react-native'
 import { Input, InputSlot, InputField, InputIcon, SearchIcon, Box, FlatList, HStack, VStack, Text, Heading, Avatar, AvatarImage, Fab, FabIcon, AddIcon, AvatarFallbackText, AvatarBadge } from '@gluestack-ui/themed';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import axios from 'axios';
 import getListFriend from '../services/getListFriend';
 import getInfor from '../services/getInfor';
+import {socket} from '../utils/socket';
 
 const ChatScreen = createNativeStackNavigator();
 
 export default function Chats({navigation}) {
   const [friends, setFriends] = useState([]);
+  const [rooms, setRooms] = useState([]);
   const userRoot = {
     "_id": "661f7edf293d7e25220dc316",
     "name": "Nguyen Thanh Khoa",
@@ -29,7 +30,7 @@ export default function Chats({navigation}) {
     "messageReceiver": [],
     "messageSender": [],
     "__v": 0
-}
+  }
 
   const getListFriends = async () => {
     const listFriend = await getListFriend("0374858237");
@@ -45,9 +46,23 @@ export default function Chats({navigation}) {
 
   useEffect(() => {
     getListFriends();
-    console.log("friends");
-    console.log(friends);
   }, [])
+
+  useEffect(() => {
+    socket.emit("init-room", userRoot.phoneNumber);
+
+    socket.on("rooms2", data => {
+      setRooms(data);
+      console.log("Rooms");
+      console.log(rooms);
+    });
+
+    return () => {
+      socket.on('disconnect', () => {
+        console.log('Disconnected from server');
+      });
+    }
+  }, []);
 
   const data = [
     {

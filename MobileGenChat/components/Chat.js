@@ -27,10 +27,6 @@ export default function Chat({route, navigation}) {
   const receiver = route.params.receiver;
 
   const idRoom = userRoot.listFriend.find(elem => elem.friend_id == receiver.phoneNumber).room_id;
-  console.log("Friend");
-  console.log(userRoot.listFriend.find(elem => elem.friend_id == receiver.phoneNumber));
-  console.log("Id room");
-  console.log(idRoom);
 
   useEffect(() => {
     if (idRoom) {
@@ -61,6 +57,8 @@ export default function Chat({route, navigation}) {
   };
 
   useEffect(() => {
+    // socket.emit("init-room", userRoot.phoneNumber);
+
     socket.on('chat-message-2', msg => {
       setMessages(msg);
     });

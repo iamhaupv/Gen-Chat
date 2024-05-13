@@ -132,23 +132,26 @@ socketIo.on("connection", (socket) => {
       rooms.push(room);
     }
 
-    console.log("Create chat 1-1");
-    console.log(rooms);
+    // console.log("Create chat 1-1");
+    // console.log(rooms);
   });
 
   socket.on("join-room", data => {
-    console.log("Rooms id");
-    console.log(data.id);
+    // console.log("Rooms id");
+    // console.log(data.id);
     socket.join(data.id);
 
     if ( rooms.find(elem => elem.id == data.id) == undefined ) {
       rooms.push(data);
     }
-    console.log("Create room");
-    console.log(rooms);
+    // console.log("Create room");
+    // console.log(rooms);
   });
 
   socket.on("init-room", userId => {
+    socket.join(userId);
+
+    console.log("------- Init rooms");
     console.log("Rooms");
     console.log(rooms);
 
@@ -168,21 +171,22 @@ socketIo.on("connection", (socket) => {
     console.log("List room");
     console.log(list_rooms);
 
-    if (list_rooms.length != 0)
+    if (list_rooms.length > 0)
       for (let i = 0; i < list_rooms.length; i++) {
         console.log("List rooms id");
         console.log(list_rooms[i].id);
+        socketIo.to(userId).emit("rooms2", list_rooms);
         socketIo.to(list_rooms[i].id).emit("rooms2", list_rooms);
       }
   });
 
   socket.on("init-chat-message", idRoom => {
-    console.log("Init chat message");
-    console.log("Rooms");
-    console.log(rooms);
-    console.log("Found Rooms");
-    console.log(rooms.find(elem => elem.id == idRoom));
     if ( rooms.find(elem => elem.id == idRoom) ) {
+      // console.log("Init chat message");
+      // console.log("Chat message Rooms");
+      // console.log(rooms);
+      // console.log("Chat message Found Rooms");
+      // console.log(rooms.find(elem => elem.id == idRoom));
       socketIo.to(idRoom).emit("rooms", 
         rooms.find(elem => elem.id == idRoom).messages
       );
