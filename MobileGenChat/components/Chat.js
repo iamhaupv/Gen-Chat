@@ -35,7 +35,7 @@ export default function Chat({route, navigation}) {
   useEffect(() => {
     if (idRoom) {
       socket.emit('join', idRoom);
-      console.log(idRoom);
+      socket.emit("init-chat-message", idRoom);
     }
   }, [idRoom]);
 
@@ -62,7 +62,7 @@ export default function Chat({route, navigation}) {
 
   useEffect(() => {
     socket.on('chat-message-2', msg => {
-      setMessages(messages => [...messages, msg]);
+      setMessages(msg);
     });
 
     return () => {

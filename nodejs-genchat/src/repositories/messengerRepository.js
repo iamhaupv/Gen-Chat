@@ -49,14 +49,14 @@ const createMessenger = async (sender, receiver, message) => {
       createdAt: Date.now(),
     });
 
-    // Thêm tin nhắn mới vào hồ sơ của người nhận
-    addToMessageReceiver(userReceiver, sender, newMessage._id);
+    // // Thêm tin nhắn mới vào hồ sơ của người nhận
+    // addToMessageReceiver(userReceiver, sender, newMessage._id);
     
-    // Thêm tin nhắn mới vào hồ sơ của người gửi
-    addToMessageSender(userSender, receiver, newMessage._id);
+    // // Thêm tin nhắn mới vào hồ sơ của người gửi
+    // addToMessageSender(userSender, receiver, newMessage._id);
 
-    // Lưu thay đổi vào cơ sở dữ liệu
-    await Promise.all([userReceiver.save(), userSender.save()]);
+    // // Lưu thay đổi vào cơ sở dữ liệu
+    // await Promise.all([userReceiver.save(), userSender.save()]);
 
     return newMessage;
   } catch (error) {

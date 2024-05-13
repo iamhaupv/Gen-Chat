@@ -146,7 +146,13 @@ export default function ChatData({message, socketRef}) {
       </dialog>
 
 
-      <img className="w-8 h-8 rounded-full" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="Jese image" />
+      {/* <img className="w-8 h-8 rounded-full" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="Jese image" /> */}
+      <div className="avatar placeholder">
+        <div className="bg-blue-800 text-neutral-content rounded-full w-8">
+          <span className="text-sm font-bold">{message.sender_name[0]}</span>
+        </div>
+      </div>
+
       <div className="flex flex-col gap-1">
           <div className="flex items-center space-x-2 rtl:space-x-reverse">
             <span className="text-sm font-semibold text-gray-900 dark:text-white">{message.name}</span>

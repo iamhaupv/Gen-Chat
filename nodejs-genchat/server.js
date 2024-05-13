@@ -57,12 +57,6 @@ const generateID = () => Math.random().toString(36).substring(2, 10);
 socketIo.on("connection", (socket) => {
 
   // Demo Socket
-  console.log("demo connection");
-  socket.on('chat-message',(data)=>{
-    console.log("demo-chat");
-    console.log(data);
-    socketIo.emit('chat-message', data)
-  })
 
   socket.on('sendUserIdToServer', user => {
     socketIo.emit(user.phoneNumber, messages);
@@ -126,18 +120,44 @@ socketIo.on("connection", (socket) => {
 
   console.log("New client connected" + socket.id);
 
+  socket.on('chat-message',data => {
+    socketIo.emit('chat-message', data)
+  })
+
   socket.on("join", data => {
     socket.join(data);
-    rooms.push({"id": data, })
+
+    if ( rooms.find(elem => elem.id == data) == undefined ) {
+      let room = {"id": data, "messages": []};
+      rooms.push(room);
+    }
+
     console.log("----------------------------");
     console.log("-- Socket: Added room " + data);
+    console.log(rooms);
+  })
+
+  socket.on("init-chat-message", idRoom => {
+    if ( rooms.find(elem => elem.id == idRoom) ) {
+      socketIo.to(idRoom).emit("chat-message-2", 
+        rooms.find(elem => elem.id == idRoom).messages
+      );
+    }
   })
 
   socket.on("chat-message", async data => {
-    socketIo.to(data.idRoom).emit("chat-message-2", data);
+    console.log(rooms.find(elem => elem.id == data.idRoom));
+    
+    if ( rooms.find(elem => elem.id == data.idRoom) ) {
+      rooms.find(elem => elem.id == data.idRoom).messages.push(data);
+    }
+
+    socketIo.to(data.idRoom).emit("chat-message-2", 
+      rooms.find(elem => elem.id == data.idRoom).messages
+    );
+    
     console.log("----------------------------");
     console.log("-- Socket: Sended data to client ");
-    console.log(data);
   });
 
   socket.on("disconnect", () => {

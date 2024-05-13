@@ -24,7 +24,7 @@ export default function Chats({user, currentFriend}) {
   useEffect(() => {
     if (idRoom) {
       socket.emit('join', idRoom);
-      // console.log(idRoom);
+      socket.emit("init-chat-message", idRoom);
     }
 
     // socketRef.current = socketIOClient.connect(host.socket_host);
@@ -44,13 +44,8 @@ export default function Chats({user, currentFriend}) {
 
   useEffect(() => {
     socket.on('chat-message-2', msg => {
-      console.log("Called chat message");
-      setMess(mess => [...mess, msg]);
-      // console.log("---------------------------------------");
-      // console.log("---- All Mess");
-      // console.log(mess);
-      // console.log("---------------------------------------");
-      // console.log("Mess");
+      // setMess(mess => [...mess, msg]);
+      setMess(msg);
     });
 
     return () => {
