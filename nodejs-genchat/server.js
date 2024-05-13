@@ -199,6 +199,14 @@ socketIo.on("connection", (socket) => {
       rooms.find(elem => elem.id == data.idRoom).messages.push(data);
     }
 
+    rooms.find(elem => {
+      console.log("Elem");
+      console.log(elem);
+      console.log("Data");
+      console.log(data);
+      // elem.id == data.idRoom
+    })
+
     socketIo.to(data.idRoom).emit("chat-message-2", 
       rooms.find(elem => elem.id == data.idRoom).messages
     );

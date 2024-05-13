@@ -20,6 +20,8 @@ export default function Chats({user, currentFriend}) {
   
   if (friend != undefined)
     idRoom = friend.room_id;
+  else
+    idRoom = currentFriend.phoneNumber;
 
   useEffect(() => {
     if (idRoom) {

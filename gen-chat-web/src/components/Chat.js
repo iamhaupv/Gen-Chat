@@ -1,6 +1,9 @@
 import React from 'react'
 
 export default function Chat({user, setCurrentFriend}) {
+  console.log("User chat");
+  console.log(user);
+
   return (
     <div className='cursor-pointer flex flex-row pt-2 pl-5 pr-5 pb-2 w-full justify-center'
       onClick={() => {
