@@ -176,17 +176,16 @@ socketIo.on("connection", (socket) => {
         console.log("List rooms id");
         console.log(list_rooms[i].id);
         socketIo.to(userId).emit("rooms2", list_rooms);
+
+        for (let j = 0; j < list_rooms[i].user.length; j++)
+          socketIo.to(list_rooms[i].user[j]).emit("rooms2", list_rooms);
+
         socketIo.to(list_rooms[i].id).emit("rooms2", list_rooms);
       }
   });
 
   socket.on("init-chat-message", idRoom => {
     if ( rooms.find(elem => elem.id == idRoom) ) {
-      // console.log("Init chat message");
-      // console.log("Chat message Rooms");
-      // console.log(rooms);
-      // console.log("Chat message Found Rooms");
-      // console.log(rooms.find(elem => elem.id == idRoom));
       socketIo.to(idRoom).emit("rooms", 
         rooms.find(elem => elem.id == idRoom).messages
       );
