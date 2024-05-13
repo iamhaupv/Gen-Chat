@@ -185,6 +185,13 @@ socketIo.on("connection", (socket) => {
   });
 
   socket.on("init-chat-message", idRoom => {
+    console.log("Init chat message");
+
+    console.log("Room id");
+    console.log(idRoom);
+    console.log("Found room");
+    console.log(rooms.find(elem => elem.id == idRoom));
+    
     if ( rooms.find(elem => elem.id == idRoom) ) {
       socketIo.to(idRoom).emit("rooms", 
         rooms.find(elem => elem.id == idRoom).messages
@@ -198,14 +205,6 @@ socketIo.on("connection", (socket) => {
     if ( rooms.find(elem => elem.id == data.idRoom) ) {
       rooms.find(elem => elem.id == data.idRoom).messages.push(data);
     }
-
-    rooms.find(elem => {
-      console.log("Elem");
-      console.log(elem);
-      console.log("Data");
-      console.log(data);
-      // elem.id == data.idRoom
-    })
 
     socketIo.to(data.idRoom).emit("chat-message-2", 
       rooms.find(elem => elem.id == data.idRoom).messages

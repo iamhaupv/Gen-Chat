@@ -8,7 +8,7 @@ import {
   AvatarFallbackText,
   AvatarBadge,
 } from '@gluestack-ui/themed';
-import {ArrowLeft, Info, Phone, SearchIcon, Send} from 'lucide-react-native';
+import {ArrowLeft, Info, PanelsRightBottom, Phone, SearchIcon, Send} from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
 import {ScrollView} from 'react-native';
 import {View} from 'react-native';
@@ -26,10 +26,17 @@ export default function GroupChat({route, navigation}) {
   const userRoot = route.params.userRoot;
   const room = route.params.room;
 
+  console.log("User root");
+  console.log(userRoot);
+  console.log("Room");
+  console.log(room);
+
   const idRoom = room.id;
 
   console.log("User root");
   console.log(userRoot);
+  console.log("Room id");
+  console.log(idRoom);
 
   useEffect(() => {
     if (idRoom) {
@@ -40,8 +47,8 @@ export default function GroupChat({route, navigation}) {
 
   const sendMessage = msg => {
     let content = message;
-    // let userID = userRoot.phoneNumber;
-    // let receiverID = receiver.phoneNumber;
+    let userID = userRoot.phoneNumber;
+    let receiverID = room.phoneNumber;
     let type = 'text';
 
     // console.log("Send Messaage");
@@ -50,9 +57,9 @@ export default function GroupChat({route, navigation}) {
     socket.emit('chat-message', {
       type: "text", 
       idRoom, 
-      // sender: userID,
+      sender: userID,
       sender_name: userRoot.name,
-      // receiver: receiverID,
+      receiver: receiverID,
       content: content,
       chat_type: type,
       status: "ready"
@@ -62,10 +69,13 @@ export default function GroupChat({route, navigation}) {
   useEffect(() => {
     socket.on('chat-message-2', msg => {
       setMessages(msg);
+      console.log("Chat message 2");
     });
 
     socket.on("rooms", msg => {
       setMessages(msg);
+      console.log("Rooms");
+      console.log(msg);
     })
 
     return () => {
@@ -131,14 +141,14 @@ export default function GroupChat({route, navigation}) {
           flex: 1,
           flexDirection: 'column',
         }}>
-          {/* {
+          {
             messages.map((msg, index) => {
               if (msg.sender == userRoot.phoneNumber)
                 return <ChatUser key={index} data={msg}/>;
               else
                 return <ChatData key={index} data={msg}/>;
             })
-          } */}
+          }
         {/* <ChatUser data={{content: 'Xin chao, khoa da den'}} />
         <ChatData data={{content: 'Toi muon mua khoa voi gia 2 cent'}} />
         <ChatUser data={{content: 'Toi muon mua khoa voi gia 2 cent'}} />

@@ -53,8 +53,8 @@ export default function Chats({navigation}) {
 
     socket.on("rooms2", data => {
       setRooms(data);
-      // console.log("Rooms 2");
-      // console.log(rooms);
+      console.log("Rooms 2");
+      console.log(rooms);
     });
 
     return () => {
