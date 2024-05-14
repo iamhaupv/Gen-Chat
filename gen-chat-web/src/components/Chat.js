@@ -1,12 +1,13 @@
 import React from 'react'
+import findUserByPhoneNumber from '../services/users/findUserByPhoneNumber';
 
-export default function Chat({user, setCurrentFriend}) {
-  console.log("User chat");
-  console.log(user);
-
+export default function Chat({userRoot, user, setCurrentFriend, handleUser}) {
   return (
     <div className='cursor-pointer flex flex-row pt-2 pl-5 pr-5 pb-2 w-full justify-center'
-      onClick={() => {
+      onClick={async () => {
+        const new_user = await findUserByPhoneNumber(userRoot.phoneNumber);
+        handleUser(new_user.data)
+
         if (setCurrentFriend != undefined)
           setCurrentFriend(user)
       }}

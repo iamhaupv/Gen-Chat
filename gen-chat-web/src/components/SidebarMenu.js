@@ -54,12 +54,49 @@ export default function SidebarMenu({user}) {
             ))
           }
 
-          <li className='mt-auto flex items-center gap-4'>
+          <li className='mt-auto flex items-center gap-4' onClick={()=>document.getElementById('my_modal_3').showModal()}>
             <img className='aspect-square h-10 w-10 rounded-full' src='https://lh3.googleusercontent.com/a/ACg8ocLlO1pfA9KPIKdD6CNveeOZ6F7MzO8OPni_FMqOHqjx=s96-c'></img>
             <div>
               <p className={`${!open && "hidden"} text-white font-medium text-xl`}>{user.name}</p>
             </div>
           </li>
+          <dialog id="my_modal_3" className="modal">
+                {/* <div className="modal-box">
+                  <form method="dialog">
+                    <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                  </form>
+                  <h3 className="font-bold text-lg">Hello!</h3>
+                  <p className="py-4">Press ESC key or click on ✕ button to close</p>
+                </div> */}
+                   <div className="card card-compact w-96 bg-base-100 shadow-xl">
+                      <figure><img src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes" /></figure>
+                      <div className="avatar -top-3 left-2">
+                        <div className="w-24 rounded-full border-2  border-white ">
+                          <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                        </div>
+                            <h2 className="card-title ">{user.name}</h2> 
+                            {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 27 " strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                            </svg> */}
+
+                         </div>
+                          <form method="dialog">
+                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                          </form>                      
+                    <div className="card-body">
+                        <h3 className="card-title">Thông tin cá nhân</h3>
+                        
+                        <p>Giới tính:</p>
+                        <p>Ngày sinh:</p>
+                        <p>Điện thoại: {user.phoneNumber}</p>
+                        
+                        
+                          <div className="card-actions justify-end">
+                            <button className="btn btn-primary">Cập nhật</button>
+                          </div>
+                    </div>
+                  </div>
+          </dialog>
         </ul>
       </div>
     </div>

@@ -10,7 +10,7 @@ const getRequestGet = async (phoneNumber) => {
       userData
     );
     if (response.status === 200) {
-      console.log("Get request send successfully!:", response.data);
+      // console.log("Get request send successfully!:", response.data);
 
       return response.data;
     } else {

@@ -5,10 +5,6 @@ export default function Profile(props) {
   const [users, setUsers] = useState([]);
   const isOpen = props.state;
   const user = props.user;
-
-  console.log("Profile user");
-  console.log(user);
-
   
   let comp;
 
@@ -89,7 +85,74 @@ export default function Profile(props) {
         </svg>
         <p>11 nhóm chung</p>
       </div>
+      <div className='flex p-3 gap-3' onClick={()=>document.getElementById('my_modal_4').showModal()} >
+        <circle className='h-6 w-6 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200
+         rounded-full'></circle>
+        <p>Thay đổi chủ đề</p>
+      </div>
     </div>
+    <dialog id="my_modal_4" className="modal">
+                {/* <div className="modal-box">
+                  <form method="dialog">
+                    <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                  </form>
+                  <h3 className="font-bold text-lg">Hello!</h3>
+                  <p className="py-4">Press ESC key or click on ✕ button to close</p>
+                </div> */}
+                   <div className="card card-compact w-96 bg-base-100 shadow-xl">
+                      
+                          <form method="dialog">
+                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                          </form>    
+                          <h3 className='card-title justify-center'>Chủ đề</h3>                  
+                    <div className="card-body">
+                      <div className='flex flex-row justify-between'>
+                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+                          <div className='h-20 w-20 bg-gradient-to-b from-yellow-100 via-blue-100 to-pink-200 rounded-full'/>
+                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+                          
+                      </div>
+                      <div className='flex flex-row justify-between'>
+                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+                          
+                      </div>
+                      <div className='flex flex-row justify-between'>
+                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+                          
+                      </div>
+                      <div className='flex flex-row justify-between'>
+                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+                          
+                      </div>
+                      <div className='flex flex-row justify-between'>
+                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+                          
+                      </div>
+                      <div className='flex flex-row justify-between'>
+                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+                          
+                      </div>
+    
+                         
+                    </div>
+                  </div>
+          </dialog>
 
   </div>
   } else {

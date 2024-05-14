@@ -1,4 +1,4 @@
-import {api_host, socket_host} from "../../GlobalVariable";
+import host from "../../GlobalVariable";
 import axios from "axios";
 const getRequestSend = async (phoneNumber) => {
   try {
@@ -6,11 +6,11 @@ const getRequestSend = async (phoneNumber) => {
       phoneNumber: phoneNumber,
     };
     const response = await axios.post(
-      api_host + "/users/get-request-send",
+      host.api_host + "/users/get-request-send",
       userData
     );
     if (response.status === 200) {
-      console.log("Get request send successfully!:", response.data);
+      // console.log("Get request send successfully!:", response.data);
 
       return response.data;
     } else {

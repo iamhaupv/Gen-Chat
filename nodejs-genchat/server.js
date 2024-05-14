@@ -202,7 +202,7 @@ socketIo.on("connection", (socket) => {
   socket.on("chat-message", async data => {
     console.log(rooms.find(elem => elem.id == data.idRoom));
     
-    if ( rooms.find(elem => elem.id == data.idRoom) ) {
+    if ( rooms.find(elem => elem.id == data.idRoom) != undefined ) {
       rooms.find(elem => elem.id == data.idRoom).messages.push(data);
     }
 
@@ -219,44 +219,6 @@ socketIo.on("connection", (socket) => {
   });
 });
 
-// Lang nghe CRUD tren group
-// socketIo_group.on("connection", (socket_group) => {
-//   socket_group.on('sendUserIdToServer', user => {
-//     console.log("Group: send user id to server");
-
-//     let sub_rooms = rooms.filter(room => {
-//       console.log(room);
-//       console.log(room.user);
-//       console.log(user.phoneNumber);
-//       console.log(room.user.includes(user.phoneNumber));
-//       return room.user.includes(user.phoneNumber) || room.admin == user.phoneNumber
-//     })
-    
-//     console.log("Sub Room list");
-//     console.log(sub_rooms);
-
-//     socket_group.emit("roomsList", sub_rooms);
-//   });
-
-//   socket_group.on("createRoom", async room => {
-//     room.phoneNumber = generateID();
-//     room.messages = [];
-//     console.log("Current room");
-//     console.log(room);
-
-//     rooms.unshift(room);
-
-//     socket_group.emit("roomsList", rooms);
-//   });
-
-//   // Handle khi có connect từ client tới
-//   console.log("Group: New client connected " + socket_group.id);
-
-//   socket_group.on("disconnect", () => {
-//     console.log("Group: Client disconnected");
-//   });
-// });
-
 app.get("/api", (req, res) => {
   res.json(rooms);
 });
@@ -265,8 +227,3 @@ server.listen(port, async () => {
   await connect();
   console.log(`Example app on for port ${port}`);
 });
-
-// server_group.listen(port_group, async () => {
-//   await connect();
-//   console.log(`Example app on for port group ${port_group}`);
-// });

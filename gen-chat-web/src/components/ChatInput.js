@@ -55,7 +55,7 @@ export default function ChatInput({socketRef, socket, user, currentFriend, idRoo
   }
 
   const sendFileMessage = (file, content, link) => {
-      console.log("Called send file message");
+      // console.log("Called send file message");
 
       const msg = {
         sender: user.phoneNumber, 
@@ -80,8 +80,8 @@ export default function ChatInput({socketRef, socket, user, currentFriend, idRoo
     let receiverID = currentFriend.phoneNumber;
     let type = 'text';
 
-    console.log("Send Messaage");
-    console.log(userID + ': ' + receiverID + ': ' + content);
+    // console.log("Send Messaage");
+    // console.log(userID + ': ' + receiverID + ': ' + content);
     
     socket.emit('chat-message', {
       type: "text", 

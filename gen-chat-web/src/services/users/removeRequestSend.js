@@ -1,5 +1,5 @@
 import axios from "axios";
-import {api_host, socket_host} from "../../GlobalVariable";
+import host from "../../GlobalVariable";
 const removeRequestSend = async (phoneNumberUserSend, phoneNumberUserGet) => {
   try {
     const userData = {
@@ -7,11 +7,11 @@ const removeRequestSend = async (phoneNumberUserSend, phoneNumberUserGet) => {
       phoneRemove: phoneNumberUserGet,
     };
     const response = await axios.post(
-      api_host + "/users/remove-request-send",
+      host.api_host + "/users/remove-request-send",
       userData
     );
     if (response.status === 200) {
-      console.log("Found successful:", response.data);
+      // console.log("Found successful:", response.data);
 
       return response.data;
     } else {

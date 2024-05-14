@@ -10,7 +10,7 @@ const getListFriend = async (phoneNumberUserSend) => {
       userData
     );
     if (response.status === 200) {
-      console.log("Found successful:", response.data.data);
+      // console.log("Found successful:", response.data.data);
 
       return response.data.data;
     } else {

@@ -9,10 +9,9 @@ const addRequestGet = async (phoneNumberUserSend, phoneNumberUserGet) => {
     const response = await axios.post(
       host.api_host + "/users/add-request-get",
       userData
-
     );
     if (response.status === 200) {
-      console.log("Found successful:", response.data);
+      // console.log("Found successful:", response.data);
 
       return response.data;
     } else {

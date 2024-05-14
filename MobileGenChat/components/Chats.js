@@ -7,33 +7,21 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import getListFriend from '../services/getListFriend';
 import getInfor from '../services/getInfor';
 import {socket} from '../utils/socket';
+import findUserByPhoneNumber from '../services/findUserByPhoneNumber';
 
 const ChatScreen = createNativeStackNavigator();
 
-export default function Chats({navigation}) {
+export default function Chats({user, navigation}) {
   const [friends, setFriends] = useState([]);
   const [rooms, setRooms] = useState([]);
-  const userRoot = {
-    "_id": "661f7edf293d7e25220dc316",
-    "name": "Nguyen Thanh Khoa",
-    "email": "khoa@gmail.com",
-    "password": "$2b$10$on5PzJt.8sfYe780SIiAU.iBcqY.SaG6Os459rJXrjYZZBwuBHJGa",
-    "phoneNumber": "0374858237",
-    "address": "",
-    "photoURL": "",
-    "listFriend": [
-      {"friend_id": "0932659945", "room_id": "1"},
-    ],
-    "listRequestSend": [],
-    "listRequestGet": [],
-    "rooms": [],
-    "messageReceiver": [],
-    "messageSender": [],
-    "__v": 0
-  }
+  // const user = await findUserByPhoneNumber("0374858237");
+  console.log("Route");
+  console.log(user);
+  // const userRoot = route.params.user;
+  const userRoot = user.data;
 
   const getListFriends = async () => {
-    const listFriend = await getListFriend("0374858237");
+    const listFriend = await getListFriend(userRoot.phoneNumber);
     const temp_friends = [];
 
     for (let i = 0; i < listFriend.data.length; i++) {

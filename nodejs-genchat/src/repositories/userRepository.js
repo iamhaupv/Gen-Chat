@@ -184,7 +184,7 @@ const deleteUser = async (phoneNumber) => {
   }
 };
 // khi accept thì phone trong listRequestGet sẽ được vào listFriend và xóa phone khỏi listRequestGet
-const acceptRequestGet = async (phoneNumber, phoneNumberUserGet) => {
+const acceptRequestGet = async (phoneNumber, phoneNumberUserGet, roomId) => {
   try {
     // Tìm kiếm người dùng
     const user = await User.findOne({ phoneNumber });
@@ -206,7 +206,10 @@ const acceptRequestGet = async (phoneNumber, phoneNumberUserGet) => {
       //   - listFriend: thêm phoneNumberUserGet vào danh sách bạn bè
       //   - $pull: loại bỏ phoneNumberUserGet khỏi listRequestGet
       {
-        $push: { listFriend: phoneNumberUserGet },
+        $push: { listFriend: {
+          friend_id: phoneNumberUserGet, 
+          room_id: roomId
+        } },
         $pull: { listRequestGet: phoneNumberUserGet },
       },
       // Tùy chọn: trả về bản ghi đã cập nhật
@@ -224,10 +227,10 @@ const acceptRequestGet = async (phoneNumber, phoneNumberUserGet) => {
   }
 };
 // khi accept thì phone trong listRequestSend sẽ được thêm vào listFriend và xóa phone khỏi listRequestSend
-const acceptRequestSend = async (phoneNumber, phoneNumberUserGet) => {
+const acceptRequestSend = async (phoneNumber, phoneNumberUserGet, roomId) => {
   try {
     // Tìm kiếm người dùng
-    const user = await User.findOne({ phoneNumber });
+    const user = await User.findOne({ phoneNumber: phoneNumber });
     if (!user) {
       throw new Error("Người dùng không tồn tại");
     }
@@ -245,7 +248,10 @@ const acceptRequestSend = async (phoneNumber, phoneNumberUserGet) => {
       //   - listFriend: thêm phoneNumberUserGet vào danh sách bạn bè
       //   - $pull: loại bỏ phoneNumberUserGet khỏi listRequestGet
       {
-        $push: { listFriend: phoneNumberUserGet },
+        $push: { listFriend: {
+          friend_id: phoneNumberUserGet, 
+          room_id: roomId
+        } },
         $pull: { listRequestSend: phoneNumberUserGet },
       },
       // Tùy chọn: trả về bản ghi đã cập nhật

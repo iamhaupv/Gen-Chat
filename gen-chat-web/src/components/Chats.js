@@ -16,8 +16,22 @@ export default function Chats({user, currentFriend}) {
   const socketRef = useRef();
   let idRoom = null;
 
-  const friend = user.listFriend.find(elem => elem.friend_id == currentFriend.phoneNumber);
-  
+  console.log("------------- Current friend in chats ---------------");
+  console.log(currentFriend);
+
+  const friend = user.listFriend.find(elem => {
+    console.log("------------- Elem ---------------");
+    console.log(elem);
+
+    return elem.friend_id == currentFriend.phoneNumber
+  });
+
+  console.log("------------- User in chats ---------------");
+  console.log(user);
+  console.log("------------- Friend in chats ---------------");
+  console.log(friend);
+
+
   if (friend != undefined)
     idRoom = friend.room_id;
   else
@@ -57,7 +71,7 @@ export default function Chats({user, currentFriend}) {
           (m.sender == user.phoneNumber & m.receiver == currentFriend.phoneNumber) ||
           (m.receiver == user.phoneNumber & m.sender == currentFriend.phoneNumber) 
         ) {
-            console.log("Message 1-1 " + index + " type " + m.type);
+            // console.log("Message 1-1 " + index + " type " + m.type);
             chat = (m.sender == user.phoneNumber) ? 
             <ChatUser message={m} key={index} socketRef={socketRef}/> : 
             <ChatData message={m} key={index} socketRef={socketRef}/>
@@ -69,7 +83,7 @@ export default function Chats({user, currentFriend}) {
           (m.receiver == currentFriend.phoneNumber) ||
           (m.receiver == user.phoneNumber & m.sender == currentFriend.phoneNumber) 
         ) {
-            console.log("Message group " + index + " type " + m.type);
+            // console.log("Message group " + index + " type " + m.type);
             chat = (m.sender == user.phoneNumber) ? 
             <ChatUser message={m} key={index} socketRef={socketRef}/> : 
             <ChatData message={m} key={index} socketRef={socketRef}/>
@@ -175,9 +189,9 @@ export default function Chats({user, currentFriend}) {
 
             <div className='h-4/5 overflow-y-scroll bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 '>
               {renderMess.map((elem, i) => {
-                console.log("--------------------");
-                console.log(elem);
-                console.log("--------------------");
+                // console.log("--------------------");
+                // console.log(elem);
+                // console.log("--------------------");
                 return elem
               })}
             </div>

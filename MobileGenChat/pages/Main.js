@@ -30,7 +30,9 @@ export const Provider = createProvider({
 
 const Tab = createBottomTabNavigator();
   
-export default function Main({navigation}) {
+export default function Main({route, navigation}) {
+  const user = route.params.user
+
   return (
     <Provider config={config}>
       <Tab.Navigator
@@ -71,7 +73,7 @@ export default function Main({navigation}) {
         }
       >
         <Tab.Screen name="Chats">
-          {(props) => <Chats {...props} />}
+          {(props) => <Chats user={user} {...props} />}
         </Tab.Screen>
 
         <Tab.Screen name="Call">

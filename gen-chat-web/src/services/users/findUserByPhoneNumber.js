@@ -11,7 +11,7 @@ const findUserByPhoneNumber = async (phoneNumber) => {
       userData
     );
     if (response.status === 200) {
-      console.log("Found successful:", response.data);
+      // console.log("Found successful:", response.data);
 
       return response.data;
     } else {

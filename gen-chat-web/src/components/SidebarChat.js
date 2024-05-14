@@ -6,28 +6,56 @@ import UserProfile from './UserProfile';
 import RoomChat from './RoomChat';
 
 import getListFriend from '../services/users/getListFriend';
+import getRequestGet from '../services/users/getRequestGet';
+import getRequestSend from '../services/users/getRequestSend';
 import findUserByPhoneNumber from '../services/users/findUserByPhoneNumber';
 import addRequestGet from '../services/users/addRequestGet';
 import addRequestSend from '../services/users/addRequestSend';
-import getRequestGet from '../services/users/getRequestGet';
 
 import socket from "../utils/socketGroup"
 
-export default function SidebarChat({user, handleCurrentFriend}) {
+export default function SidebarChat({user, handleCurrentFriend, handleUser}) {
   const [showListFriendRequest, setShowListFriendRequest] = useState("");
   const [searchPhoneNumber, setSearchPhoneNumber] = useState("");
   const [showSearchResult, setShowSearchResult] = useState(false);
   const [searchedUser, setSearchedUser] = useState(null);
   const [friends, setFriends] = useState([]);
   const [friendsRequestGet, setFriendsRequestGet] = useState([]);
+  const [friendsRequestSend, setFriendsRequestSend] = useState([]);
   const [open, setOpen] = useState(false);
   const [currentFriend, setCurrentFriend] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [roomName, setRoomName] = useState("New Room");
   const [rooms, setRooms] = useState([]);
 
+  // console.log("----- Sidebar chat -----");
+  // console.log(user);
+
+  const getFriendsRequestGet = async () => {
+    const friends_request_get = await getRequestGet(user.phoneNumber);
+    
+    let friends_request_get_list = [];
+    for (let i = 0; i < friends_request_get.data.length; i++) {
+      const friend = await findUserByPhoneNumber(friends_request_get.data[i]);
+      friends_request_get_list.push(friend.data);
+    }
+    
+    setFriendsRequestGet(friends_request_get_list);
+  }
+
+  const getFriendsRequestSend = async () => {
+    const friends_request_send = await getRequestSend(user.phoneNumber);
+    
+    let friends_request_send_list = [];
+    for (let i = 0; i < friends_request_send.data.length; i++) {
+      const friend = await findUserByPhoneNumber(friends_request_send.data[i]);
+      friends_request_send_list.push(friend.data);
+    }
+    
+    setFriendsRequestSend(friends_request_send_list);
+  }
+
   const socketGroupRef = useRef();
-  // const socketGroup = sockets.socketGroup;
 
   const handleCurrentFriend2 = friend => {
     // console.log("Called handle current friend 2");
@@ -55,8 +83,8 @@ export default function SidebarChat({user, handleCurrentFriend}) {
   
   const handleCreateGroup = async () => {
     let checkedUsers = getCheckedBoxes("userInGroup");
-    console.log("Checked user");
-    console.log(checkedUsers);
+    // console.log("Checked user");
+    // console.log(checkedUsers);
 
     try {
       let idRoom = "room" + new Date().valueOf();
@@ -113,9 +141,12 @@ export default function SidebarChat({user, handleCurrentFriend}) {
   }
 
   const handleAddFriend = async () => {
-    console.log("Called add friend");
+    // console.log("Called add friend");
     await addRequestSend(user.phoneNumber, currentUser.phoneNumber);
     await addRequestGet(user.phoneNumber, currentUser.phoneNumber);
+
+    alert("Added friend successfully!")
+    document.querySelector("#close_modal_1").click();
   }
 
   const searchUserByPhone = async () => {
@@ -124,26 +155,36 @@ export default function SidebarChat({user, handleCurrentFriend}) {
     if (searchPhoneNumber) {
       try {
         const userFound = await findUserByPhoneNumber(searchPhoneNumber);
-        setSearchedUser(userFound)
+        setSearchedUser(userFound.data);
+        // console.log("Searched user");
+        // console.log(userFound.data);
+        // console.log(searchedUser);
       } catch (error) {
         console.error("Error finding user: " + error);
         setSearchedUser(null);        
       }
     }
     
-    console.log(searchedUser != null);
     setShowSearchResult(true);
   }
 
   useEffect(() => {
+    getFriendsRequestSend();
+    getFriendsRequestGet();
+  }, [searchedUser]);
+  
+  useEffect(() => {
     getFriendList();
   }, [socketGroupRef]);
+
+  useEffect(() => {}, [friendsRequestGet]);
+  useEffect(() => {}, [friendsRequestSend]);
 
   useEffect(() => {
     socket.emit("init-room", user.phoneNumber);
 
     socket.on("rooms2", data => {
-      console.log("Rooms 2");
+      // console.log("Rooms 2");
       setRooms(data);
     });
 
@@ -154,36 +195,65 @@ export default function SidebarChat({user, handleCurrentFriend}) {
     }
   }, []);
 
+  const isSearchedUserFriendWithUser = () => {
+    if (searchedUser) {
+      for (let i = 0; i < friends.length; i++) {
+        // console.log("Friends");
+        // console.log(friends[i]);
+        if (friends[i].phoneNumber == searchedUser.phoneNumber) {
+          // console.log("True");
+          return true;
+        }
+      }
+
+      for (let i = 0; i < friendsRequestSend.length; i++) {
+        // console.log(friendsRequestSend[i]);
+        // console.log(friends[i]);
+        if (friendsRequestSend[i].phoneNumber == searchedUser.phoneNumber) {
+          // console.log("True");
+          return true;
+        }
+      }
+    }
+
+    // console.log("False");
+    return false;
+  }
+
+
   return (
     <div className={`h-screen bg-white duration-300 ${!open ? 'w-96' : "w-0"}`}>
+      <dialog id="my_modal_1" className="modal">
 
-    <dialog id="my_modal_1" className="modal" add="true" >
-      <div className="modal-box">
-
-
-      <form method="dialog">
-        {/* if there is a button in form, it will close the modal */}
-        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-      </form>
-
-        
-
-      <div className="flex flex-col items-center pb-10">
-          <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="User image"/>
-          <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">{currentUser.name}</h5>
-          <span className="text-sm text-gray-500 dark:text-gray-400">{currentUser.phoneNumber}</span>
-          <div className="flex mt-4 md:mt-6">
-              <p className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                onClick={handleAddFriend}
-              >Add friend</p>
-              {/* <a href="#" className="py-2 px-4 ms-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Message</a> */}
+        <div className="card card-compact w-96 bg-base-100 shadow-xl">
+          <figure><img src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes" /></figure>
+          <div className="avatar -top-3 left-2">
+            <div className="w-24 rounded-full border-2  border-white ">
+              <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+            </div>
+            <h2 className="card-title ">{searchedUser != null ? searchedUser.name : ""}</h2> 
           </div>
-      </div>
 
+          <form method="dialog">
+            <button id='close_modal_1' className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+          </form>
 
-
-      </div>
-    </dialog>
+          <div className="card-body">
+            <h3 className="card-title">Thông tin cá nhân</h3>
+              
+            <p>Phone number: {searchedUser != null ? searchedUser.phoneNumber : ""}</p>
+              
+            <div className="card-actions justify-end">
+              {
+                isSearchedUserFriendWithUser() ?
+                  <></>
+                    : 
+                  <button className="btn btn-primary" onClick={handleAddFriend}>Kết bạn</button>
+              }
+            </div>
+          </div>
+        </div>
+      </dialog>
 
     {/* Group Modal */}
     <dialog id="group_modal" className="modal" add="true" >
@@ -301,7 +371,7 @@ export default function SidebarChat({user, handleCurrentFriend}) {
         <div className='h-4/5 overflow-y-scroll'>
           {
             searchedUser != null ?
-              <UserProfile user={searchedUser.data} openModel={() => openUserModal(searchedUser.data)} /> : 
+              <UserProfile user={searchedUser} openModel={() => openUserModal(searchedUser)} /> : 
               <p className='ml-4'>Phone number does not exists</p>
           }
         </div>
@@ -321,12 +391,11 @@ export default function SidebarChat({user, handleCurrentFriend}) {
           <h1 className='pt-6 pl-5 pr-5 font-medium'>All Message</h1>
 
           <div className='h-4/5 overflow-y-scroll'>
-
             {
-              friends.map((elem, i) => <Chat key={i} user={elem} setCurrentFriend={() => handleCurrentFriend2(elem)} />)
+              friends.map((elem, i) => <Chat key={i} userRoot={user} user={elem} setCurrentFriend={() => handleCurrentFriend2(elem)} handleUser={handleUser}/>)
             }
             {
-              rooms.map((elem, i) => <RoomChat key={i} user={elem} setCurrentFriend={() => handleCurrentFriend2(elem)} />)
+              rooms.map((elem, i) => <RoomChat key={i} userRoot={user} user={elem} setCurrentFriend={() => handleCurrentFriend2(elem)} />)
             }
 
           </div>
@@ -346,7 +415,12 @@ export default function SidebarChat({user, handleCurrentFriend}) {
           <h1 className='pt-6 pl-5 pr-5 font-medium'>Friend Requests</h1>
 
           <div className='h-4/5 overflow-y-scroll'>
-            <FriendRequest user={null} />
+            {
+              friendsRequestGet.map((elem, i) => {
+                
+                return <FriendRequest key={i} userRoot={user} user={elem} handleUser={handleUser} />
+              })
+            }
           </div>
         </>
       )

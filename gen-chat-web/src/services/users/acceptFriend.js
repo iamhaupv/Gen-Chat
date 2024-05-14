@@ -1,5 +1,5 @@
 import axios from "axios";
-import {api_host, socket_host} from "../../GlobalVariable";
+import host from "../../GlobalVariable";
 
 const acceptFriend = async (phoneNumberUserSend, phoneNumberUserGet) => {
   try {
@@ -8,11 +8,11 @@ const acceptFriend = async (phoneNumberUserSend, phoneNumberUserGet) => {
       phoneNumberUserGet: phoneNumberUserGet,
     };
     const response = await axios.post(
-      api_host + "/users/accept-friend",
+      host.api_host + "/users/accept-friend",
       userData
     );
     if (response.status === 200) {
-      console.log("Accept Friend successful:", response.data);
+      // console.log("Accept Friend successful:", response.data);
 
       return response.data;
     } else {

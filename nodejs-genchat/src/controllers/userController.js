@@ -366,14 +366,21 @@ const acceptRequestSend = async (req, res) => {
 // khi chấp nhận kết bạn sẽ gọi lại 2 hàm acceptRequestSend và acceptRequestGet
 const acceptFriend = async (req, res) => {
   try {
+    console.log("ACcpect freind");
+    console.log(req.body);
     const { phoneNumberUserSend, phoneNumberUserGet } = req.body;
+    console.log("---- 1 ----");
+    
+    const room_id = "room" + new Date().valueOf();    
     await userRepository.acceptRequestSend(
       phoneNumberUserSend,
-      phoneNumberUserGet
+      phoneNumberUserGet, 
+      room_id
     );
     await userRepository.acceptRequestGet(
       phoneNumberUserGet,
-      phoneNumberUserSend
+      phoneNumberUserSend, 
+      room_id
     );
     res.status(200).json({
       message: "Add friend successfully!",
