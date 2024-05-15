@@ -1,6 +1,5 @@
-import { Box, Text, Avatar, AvatarFallbackText, VStack, ImageBackground } from '@gluestack-ui/themed';
+import { View, Box, Text, Avatar, AvatarFallbackText, VStack, ImageBackground, Button } from '@gluestack-ui/themed';
 import React from 'react'
-import { View } from 'react-native'
 
 export default function Profile({user, navigation}) {
   return (
@@ -20,9 +19,16 @@ export default function Profile({user, navigation}) {
             </Avatar>
 
           </ImageBackground>
-          <Text fontSize="$xl" fontWeight='bold' lineHeight={650} textAlign='center'>
-            {user.name}
-          </Text>
+
+          <View>
+            <Text fontSize="$xl" fontWeight='bold' lineHeight={650} textAlign='center'>
+              {user.name}
+            </Text>
+
+            <Button lineHeight={70} onPress={() => navigation.navigate("Main", {user: null})}>
+              <Text>Log out</Text>
+            </Button>
+          </View>
         </VStack>
       </Box>
     </View>

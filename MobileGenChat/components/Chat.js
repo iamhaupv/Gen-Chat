@@ -46,6 +46,7 @@ export default function Chat({route, navigation}) {
     
     socket.emit('chat-message', {
       type: "text", 
+      date: new Date().toLocaleString(), 
       idRoom, 
       sender: userID,
       sender_name: userRoot.name,
