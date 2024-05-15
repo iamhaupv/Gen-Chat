@@ -101,16 +101,24 @@ export default function Chats({user, navigation}) {
     <View style={{
       height: "100%"
     }}>
-      
-    <Input size='xl'>
+      <TouchableHighlight
+        onPress={() => {
+          console.log("---------------- Search ---------------------");
+          console.log(user);
+          navigation.navigate("Search", {user: user})
+        }}
+      >
+    {/* <Input size='xl'>
       <InputSlot pl='$3'>
         <InputIcon as={SearchIcon}/>
       </InputSlot>
       <InputField
         placeholder="Search..."
       />
-    </Input>
-      
+    </Input> */}
+      <Text>Lmao</Text>
+    </TouchableHighlight>
+
     <Box py="$">
       <FlatList
         data={rooms}
@@ -119,7 +127,7 @@ export default function Chats({user, navigation}) {
           <TouchableHighlight
             key={index}
             onPress={() => {
-              // console.log("Home");
+              console.log("Chat Group");
               navigation.navigate("GroupChat", {userRoot: userRoot, room: item})
             }}
           >
@@ -175,7 +183,7 @@ export default function Chats({user, navigation}) {
           <TouchableHighlight
             key={index}
             onPress={() => {
-              // console.log("Home");
+              console.log("Chat 1-1");
               navigation.navigate("Chat", {userRoot: userRoot, receiver: item})
             }}
           >

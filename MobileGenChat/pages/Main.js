@@ -23,6 +23,7 @@ import Chats from "../components/Chats";
 import Call from "../components/Call";
 import { Image } from "react-native";
 import GenChatLogo from "./GenChatLogo";
+import Search from "../components/Search";
   
 export const Provider = createProvider({
     StyledProvider,
