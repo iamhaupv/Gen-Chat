@@ -1,19 +1,22 @@
 import CheckBox from '@react-native-community/checkbox';
 import React, { useEffect, useState, useRef } from 'react'
-import { Text, TextInput, Button, View } from "react-native";
-import { Box, HStack } from '@gluestack-ui/themed';
+import { TextInput, Button, View, Alert } from "react-native";
+import { Text, Box, Avatar, Icon, HStack } from '@gluestack-ui/themed';
+import { UserPlus } from 'lucide-react-native';
 
 import getListFriend from '../services/getListFriend';
 import getInfor from '../services/getInfor';
 
 import {socket} from '../utils/socket';
+import { VStack } from '@gluestack-ui/themed';
+import { FlatList } from '@gluestack-ui/themed';
+import { TouchableHighlight } from 'react-native';
+import { AvatarFallbackText } from '@gluestack-ui/themed';
 
 export default GroupScreen = ({ user, navigation }) => {
-    // const [data, setData] = useState([]);
     const [nameGroup, setNameGroup] = useState("");
     const [friends, setFriends] = useState([]);
     const [checkboxes, setCheckboxes] = useState(friends.map(() => false));
-    const [checkedFriends, setCheckedFriends] = useState([]);
 
     const arrUserId = useRef([]).current;
 
@@ -38,36 +41,13 @@ export default GroupScreen = ({ user, navigation }) => {
       updatedCheckboxes[index] = !updatedCheckboxes[index];
       setCheckboxes(updatedCheckboxes);
 
-      if (updatedCheckboxes[index] == true) {
-        // setCheckedFriends(elem => [...elem, id]);
+      if (updatedCheckboxes[index] == true)
         arrUserId.push(id);
-      } else {
+      else
         arrUserId.splice(id, 1)
-      }
-      console.log(arrUserId);
     };
 
     const createGroup = async () => {
-      // Process Create Group
-      // try {
-      //   const response = await fetch("http://localhost:5821/createGroup", {
-      //       method: "POST", // or 'PUT'
-      //       headers: {
-      //           "Content-Type": "application/json",
-      //       },
-      //       body: JSON.stringify({
-      //           name: nameGroup,
-      //           members: arrUserId
-      //       })
-      //   });
-      // } catch (error) {
-      //   console.error("Error:", error);
-      // }
-
-      console.log("Information about group: ");
-      console.log("Name: " + arrUserId);
-      // console.log("Number Of Members: " + arrUserId.length);
-
       try {
         let idRoom = "room" + new Date().valueOf();
         socket.emit("join-room", {
@@ -78,26 +58,54 @@ export default GroupScreen = ({ user, navigation }) => {
           user: arrUserId, 
           messages: []
         });
-        // alert("Create room successfully!");
         socket.emit("init-room", user.phoneNumber);
+
+        Alert.alert('Alert Title', 'Create room Successfully!', [
+          { 
+            text: 'OK', 
+            onPress: () => console.log('OK Pressed')
+          },
+        ]);
       } catch (error) {
         console.log("Error create room: " + error);
       }
     }
 
-    const cancelCreateGroup = () => {
-      navigation.navigate({
-        name: 'home'
-      })
-    }
     return (
       <View>
         <Box width="100%">
-          <TextInput placeholder='Input your name group'
+          <Text py={10} textAlign='center' fontWeight="bold" fontSize="$xl">Create group</Text>
+          
+          <View p={10}>
+            <TextInput 
+              placeholder='Input group name...'
               value={nameGroup}
-              onChangeText={setNameGroup} />
-              {
-                friends.map((item, index) => (
+              onChangeText={setNameGroup}
+            />
+          </View>
+
+          <Box
+            borderBottomWidth="$1"
+            borderColor="#dddddd"
+            $dark-borderColor="$coolGray800"
+            $base-pl="$3"
+            $base-pr="$3"
+            $sm-pl="$4"
+            $sm-pr="$4"
+            py="$2"
+            onPress
+          >
+            <HStack space="lg" alignItems='center'>
+              <Avatar bgColor="$blue500">
+                <Icon as={UserPlus} size='30' color="white"/>
+              </Avatar>
+            
+              <Text fontWeight='bold'>Select friends to add to new group</Text>
+            </HStack>
+          </Box>
+
+            {/* {
+              friends.map((item, index) => (
                 <View key={index}>
                   <HStack space='md'>
                     <CheckBox
@@ -107,7 +115,53 @@ export default GroupScreen = ({ user, navigation }) => {
                     <Text >{item.name}</Text>
                   </HStack>
                 </View>
-              ))}
+              ))
+            } */}
+
+          <Box py="$">
+            <FlatList
+              data={friends}
+              keyExtractor={item => item._id}
+              renderItem={({ index, item }) => (
+                <TouchableHighlight key={index} >
+                  <Box
+                    borderBottomWidth="$1"
+                    borderColor="#dddddd"
+                    $dark-borderColor="$coolGray800"
+                    $base-pl="$3"
+                    $base-pr="$3"
+                    $sm-pl="$4"
+                    $sm-pr="$4"
+                    py="$2"
+                    onPress
+                  >
+                    <HStack space="lg" alignItems='center'>
+                      <Avatar size="md">
+                        <AvatarFallbackText>{item.name}</AvatarFallbackText>
+                      </Avatar>
+                      <VStack style={{
+                        flex: 1
+                      }}>
+                        <Text
+                          color="$coolGray800"
+                          fontWeight="$bold"
+                          $dark-color="$warmGray100"
+                        >
+                          {item.name || null}
+                        </Text>
+                      </VStack>
+
+                      <CheckBox
+                        value={checkboxes[index]}
+                        onValueChange={() => handleCheckboxChange(index, item.phoneNumber)}
+                      />
+                    </HStack>
+                  </Box>
+                </TouchableHighlight>
+              )}
+            />      
+          </Box>
+
           <Button title='Create group' onPress={createGroup} />
         </Box>
       </View>

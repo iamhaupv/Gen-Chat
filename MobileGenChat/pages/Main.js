@@ -75,9 +75,9 @@ export default function Main({route, navigation}) {
           {(props) => <GroupScreen user={user.data} {...props} />}
         </Tab.Screen>
 
-        <Tab.Screen name="Call">
+        {/* <Tab.Screen name="Call">
           {(props) => <Call {...props} />}
-        </Tab.Screen>
+        </Tab.Screen> */}
 
         <Tab.Screen name="GenChatLogo"  options={{ title: '' }}>
           {(props) => <GenChatLogo {...props} />}
