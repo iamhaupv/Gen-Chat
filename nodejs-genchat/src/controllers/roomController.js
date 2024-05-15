@@ -86,10 +86,10 @@ const joinRoomByRoomId = async (req, res) => {
   try {
     const { roomId, phoneNumber } = req.body;
     const room = await roomRepository.joinRoomByRoomId(roomId, phoneNumber);
-    const member = await roomRepository.authorizationRoomMembers(roomId, phoneNumber)
+
     res.status(200).json({
       message: "Join room successfully!",
-      data: room, member
+      data: room,
     });
   } catch (error) {
     console.log(error);
