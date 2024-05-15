@@ -2,9 +2,7 @@ import { Box, Text, Avatar, AvatarFallbackText, VStack, ImageBackground } from '
 import React from 'react'
 import { View } from 'react-native'
 
-export default function Profile({route, navigation}) {
-  const user = route.params?.user;
-  
+export default function Profile({user, navigation}) {
   return (
     <View>
       <Box width="100%">
@@ -18,11 +16,13 @@ export default function Profile({route, navigation}) {
             <Avatar size='xl' style={{
               top: 250
             }}>
-              <AvatarFallbackText>Lmao</AvatarFallbackText>
+              <AvatarFallbackText>{user.name}</AvatarFallbackText>
             </Avatar>
 
           </ImageBackground>
-          <Text fontSize="$xl" fontWeight='bold' lineHeight={650} textAlign='center'>Khoa Da Den</Text>
+          <Text fontSize="$xl" fontWeight='bold' lineHeight={650} textAlign='center'>
+            {user.name}
+          </Text>
         </VStack>
       </Box>
     </View>

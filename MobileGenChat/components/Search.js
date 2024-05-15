@@ -1,151 +1,172 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { TouchableHighlight,View } from 'react-native'
-import { Input, InputSlot, InputField, InputIcon, SearchIcon, Box, FlatList, HStack, VStack, Text, Heading, Avatar, AvatarImage, Fab, FabIcon, AddIcon, AvatarFallbackText, AvatarBadge,Modal,ModalBackdrop,ModalContent,ModalHeader,ModalBody,ModalFooter,ModalCloseButton,Icon,ClockIcon,ImageBackground,ButtonText,Button } from '@gluestack-ui/themed';
+import { Alert } from 'react-native'
+import { Input, InputSlot, InputField, InputIcon, SearchIcon, Box, FlatList, HStack, VStack, Text, Heading, Avatar, AvatarFallbackText, Modal,ModalBackdrop,ModalContent,ModalHeader,ModalBody,ModalFooter,ModalCloseButton,ButtonText,Button, View, Center } from '@gluestack-ui/themed';
 
+import getRequestSend from '../services/getRequestSend';
+import addRequestSend from '../services/addRequestSend';
+import addRequestGet from '../services/addRequestGet';
 import getListFriend from '../services/getListFriend';
-import getInfor from '../services/getInfor';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import findUserByPhoneNumber from '../services/findUserByPhoneNumber';
+
 export default function Search({route}) {
-    const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(false)
+  const [searchedPhoneNumber, setSearchedPhoneNumber] = useState(null);
+  const [searchedUser, setSearchedUser] = useState(null);
+  const [friends, setFriends] = useState([]);
+  const [friendsRequestGet, setFriendsRequestGet] = useState([]);
+  const [friendsRequestSend, setFriendsRequestSend] = useState([]);
 
-    const user = route.params.user;
-    console.log("Search user")
-    console.log(user)
+  const user = route.params.user;
+  console.log("Search user")
+  console.log(user)
 
-    const ref = React.useRef(null)
-    const [friends,setFriends] = useState(null)
+  const searchUser = async () => {
+    const user = await findUserByPhoneNumber(searchedPhoneNumber);
+    setSearchedUser(user.data);
+  }
 
-    useEffect(() => {
-        getListFriends();
-    }, [])
+  const addFriendRequest = async () => {
+    await addRequestSend(user.phoneNumber, searchedUser.phoneNumber);
+    await addRequestGet(user.phoneNumber, searchedUser.phoneNumber);
 
-    const getListFriends = async () => {
-        const listFriend = await getListFriend(user.phoneNumber);
-        const temp_friends = [];
+    createAddedFriendRequestAlert();
+  }
+
+  const getFriendList = async () => {
+    const friendList = await getListFriend(user.phoneNumber);
+
+    const friendFound = []
+
+    for (let i = 0; i < friendList.length; i++) {
+      const friend = await findUserByPhoneNumber(friendList[i].friend_id);
+      friendFound.push(friend.data);
+    }
+
+    setFriends(friendFound);
+  }
+
+  const getFriendsRequestSend = async () => {
+    const friends_request_send = await getRequestSend(user.phoneNumber);
     
-        for (let i = 0; i < listFriend.data.length; i++) {
-          const friend = await getInfor( listFriend.data[i].friend_id );
-          temp_friends.push(friend.data);
+    let friends_request_send_list = [];
+    for (let i = 0; i < friends_request_send.data.length; i++) {
+      const friend = await findUserByPhoneNumber(friends_request_send.data[i]);
+      friends_request_send_list.push(friend.data);
+    }
+    
+    setFriendsRequestSend(friends_request_send_list);
+  }
+
+  const isSearchedUserFriendWithUser = () => {
+    console.log("-------- friends -----------");
+    console.log(friends);
+    console.log("-------- friendsRequestSend -----------");
+    console.log(friendsRequestSend);
+    console.log("-------- User -----------");
+    console.log(user.phoneNumber);
+    console.log("-------- Searched user -----------");
+    console.log(searchedUser.phoneNumber);
+
+    if (searchedUser) {
+      if (searchedUser.phoneNumber == user.phoneNumber) return true;
+
+      for (let i = 0; i < friends.length; i++) {
+        if (friends[i].phoneNumber == searchedUser.phoneNumber) {
+          return true;
         }
-    
-        setFriends(temp_friends);
       }
+
+      for (let i = 0; i < friendsRequestSend.length; i++) {
+        if (friendsRequestSend[i].phoneNumber == searchedUser.phoneNumber) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  const createAddedFriendRequestAlert = () =>
+    Alert.alert('Alert Title', 'Add Friend Successfully!', [
+      // {
+      //   text: 'Cancel',
+      //   onPress: () => console.log('Cancel Pressed'),
+      //   style: 'cancel',
+      // },
+      { 
+        text: 'OK', 
+        onPress: () => console.log('OK Pressed')
+      },
+    ]);
+
+  useEffect(() => {}, [searchedUser])
+  useEffect(() => {}, [showModal])
+
+  useEffect(() => {
+    getFriendList();
+    getFriendsRequestSend();
+  }, []);
+  // useEffect(() => {}, [friendsRequestGet]);
+  // useEffect(() => {}, [friendsRequestSend]);
 
   return (
     <View style={{
-        height: "100%"
-      }}>
-    
+      height: "100%"
+    }}>
       <Input size='xl'>
-        <InputSlot pl='$3'>
+        <InputSlot pl='$3' onPress={searchUser}>
           <InputIcon as={SearchIcon}/>
         </InputSlot>
         <InputField
+          value={searchedPhoneNumber}
           placeholder="Search..."
+          onChangeText={setSearchedPhoneNumber}
         />
       </Input>
         
       <Box py="$">
-        <FlatList
-          data={friends}
-          keyExtractor={item => item.id}
-          renderItem={({ index, item }) => (
-            
-              <Box
-                borderBottomWidth="$1"
-                borderColor="#dddddd"
-                $dark-borderColor="$coolGray800"
-                $base-pl="$3"
-                $base-pr="$3"
-                $sm-pl="$4"
-                $sm-pr="$4"
-                py="$2"
-                onPress = {() => setShowModal(true)} ref={ref}
-              >
-                <HStack space="md">
-                  <Avatar size="md">
-                    <AvatarFallbackText>{item.name}</AvatarFallbackText>
-                  </Avatar>
-                  <VStack style={{
-                    flex: 1
-                  }}>
-                    <Text
-                      color="$coolGray800"
-                      fontWeight="$bold"
-                      $dark-color="$warmGray100"
-                    >
-                      {item.name || null}
-                    </Text>
-                    
-                  </VStack>
-                  
-                  
-                </HStack>
-              </Box>
-           
-          )}
-        />
-        </Box>
-        
-      <Modal
-        isOpen={showModal}
-        onClose={() => {
-          setShowModal(false)
-        }}
-        finalFocusRef={ref}
-      >
-        <ModalBackdrop />
-        <ModalContent>
-          <ModalHeader>
-            <Heading size="lg" style={{alignItems:"center"}}>Profile</Heading>
-            <ModalCloseButton>
-              {/* <Icon as={CloseIcon} /> */}
-            </ModalCloseButton>
-          </ModalHeader>
-          <ModalBody>
-          <VStack style={{
-          alignItems: "center"
-        }}>
-          <ImageBackground
-            source={{ uri: "https://legacy.reactjs.org/logo-og.png" }}
-            style={{ flex: 1, flexDirection: "column", justifyContent: "center", height: 250, width: "100%", alignItems: "center" }}
+        {
+          searchedUser != null ?
+            <Box
+            borderBottomWidth="$1"
+            borderColor="#dddddd"
+            $dark-borderColor="$coolGray800"
+            $base-pl="$3"
+            $base-pr="$3"
+            $sm-pl="$4"
+            $sm-pr="$4"
+            py="$2"
           >
-            <Avatar size='xl' style={{
-              top: 250
-            }}>
-              <AvatarFallbackText>Thanh Khoa</AvatarFallbackText>
-            </Avatar>
+            <HStack space="md">
+              <Avatar size="md">
+                <AvatarFallbackText>{searchedUser.name}</AvatarFallbackText>
+              </Avatar>
+              <VStack style={{
+                flex: 1
+              }}>
+                <Text
+                  color="$coolGray800"
+                  fontWeight="$bold"
+                  $dark-color="$warmGray100"            
+                >
+                  {searchedUser.name || null}
+                </Text>
+              </VStack>
 
-          </ImageBackground>
-          <Text fontSize="$xl" fontWeight='bold' lineHeight={650} textAlign='center'>Nguyen Thanh Khoa</Text>
-        </VStack>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              variant="outline"
-              size="sm"
-              action="secondary"
-              mr="$3"
-              onPress={() => {
-                setShowModal(false)
-              }}
-            >
-              <ButtonText>Cancel</ButtonText>
-            </Button>
-            <Button
-              size="sm"
-              action="positive"
-              borderWidth="$0"
-              onPress={() => {
-                setShowModal(false)
-              }}
-            >
-              <ButtonText>Accept</ButtonText>
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-
-      </View>
+              {
+                isSearchedUserFriendWithUser() ? 
+                  <></> :
+                  <Button onPress={addFriendRequest}>
+                    <Text color='white'>Add friend</Text>
+                  </Button>
+              }
+            </HStack>
+          </Box>
+          : <Text p={10}>No user found</Text>
+        }
+        
+      </Box>
+    </View>
   )
 }

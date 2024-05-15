@@ -9,7 +9,7 @@ const findUserByPhoneNumber = async (phoneNumber) => {
       phoneNumber: phoneNumber,
     };
     const response = await axios.post(
-      host.api_host + "/users/findUserByPhoneNumber",
+      host.api_host + "/users/find-user-by-phoneNumber",
       userData
     );
     if (response.status === 200) {

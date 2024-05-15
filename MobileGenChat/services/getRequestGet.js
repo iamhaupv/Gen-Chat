@@ -5,8 +5,10 @@ const getRequestGet = async (phoneNumber) => {
     const userData = {
       phoneNumber: phoneNumber,
     };
+
+    console.log("User data");
     const response = await axios.post(
-      host.api_host + "/users/getRequestGet",
+      host.api_host + "/users/get-request-get",
       userData
     );
     if (response.status === 200) {

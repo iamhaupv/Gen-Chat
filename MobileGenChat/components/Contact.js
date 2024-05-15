@@ -1,35 +1,77 @@
 import React, { useEffect, useState } from 'react'
-import { TouchableHighlight, View } from 'react-native'
-import { Input, InputSlot, InputField, InputIcon, SearchIcon, Box, FlatList, HStack, VStack, Text, Heading, Avatar, AvatarImage, Fab, FabIcon, AddIcon, AvatarFallbackText, AvatarBadge,Icon } from '@gluestack-ui/themed';
+import { TouchableHighlight, View, Alert } from 'react-native'
+import { Button, Input, InputSlot, InputField, InputIcon, SearchIcon, Box, FlatList, HStack, VStack, Text, Heading, Avatar, AvatarImage, Fab, FabIcon, AddIcon, AvatarFallbackText, AvatarBadge,Icon } from '@gluestack-ui/themed';
+import { X, UserPlus, Check } from 'lucide-react-native';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import axios from 'axios';
-import getListFriend from '../services/getListFriend';
+import getRequestGet from '../services/getRequestGet';
+import acceptFriend from '../services/acceptFriend';
+import removeRequestGet from '../services/removeRequestGet';
+import removeRequestSend from '../services/removeRequestSend';
 import getInfor from '../services/getInfor';
-import { Phone, UserPlus, Video } from 'lucide-react-native';
 
-const ChatScreen = createNativeStackNavigator();
+export default function Contact({user, navigation}) {
+  const [friendsRequestGet, setFriendsRequestGet] = useState([]);
 
-export default function Contact({navigation}) {
-  const [friends, setFriends] = useState([]);
+  const getListFriendsRequestGet = async () => {
+    const listFriendsRequestGet = await getRequestGet(user.phoneNumber);
+    const tempListFriendsRequestGet = [];
 
-  const getListFriends = async () => {
-    const listFriend = await getListFriend("0374858237");
-    const temp_friends = [];
+    for (let i = 0; i < listFriendsRequestGet.data.length; i++) {
+      const friend = await getInfor( listFriendsRequestGet.data[i] );
 
-    for (let i = 0; i < listFriend.data.length; i++) {
-      const friend = await getInfor( listFriend.data[i].friend_id );
-      temp_friends.push(friend.data);
+      tempListFriendsRequestGet.push(friend.data);
     }
 
-    setFriends(temp_friends);
+    setFriendsRequestGet(tempListFriendsRequestGet);
   }
 
+  const handleAccept = async (phoneNumber) => {
+    await acceptFriend(user.phoneNumber, phoneNumber);
+    await removeRequestGet(user.phoneNumber, phoneNumber);
+    await removeRequestSend(phoneNumber, user.phoneNumber);
+    console.log("------ new user after added friend ---------");
+    // const new_user = await findUserByPhoneNumber(user.phoneNumber);
+    // handleUser(new_user.data);
+    getListFriendsRequestGet();
+    createAddedFriendSuccessfullyAlert();
+  }
+
+  const handleReject = async (phoneNumber) => {
+    await removeRequestGet(user.phoneNumber, phoneNumber);
+    await removeRequestSend(phoneNumber, user.phoneNumber);
+    getListFriendsRequestGet();
+    createRejectedFriendSuccessfullyAlert();
+  }
+
+  const createAddedFriendSuccessfullyAlert = () =>
+    Alert.alert('Alert Title', 'Add Friend Successfully!', [
+      // {
+      //   text: 'Cancel',
+      //   onPress: () => console.log('Cancel Pressed'),
+      //   style: 'cancel',
+      // },
+      { 
+        text: 'OK', 
+        onPress: () => console.log('OK Pressed')
+      },
+    ]);
+  const createRejectedFriendSuccessfullyAlert = () =>
+    Alert.alert('Alert Title', 'Reject Friend Successfully!', [
+      // {
+      //   text: 'Cancel',
+      //   onPress: () => console.log('Cancel Pressed'),
+      //   style: 'cancel',
+      // },
+      { 
+        text: 'OK', 
+        onPress: () => console.log('OK Pressed')
+      },
+    ]);
+
   useEffect(() => {
-    getListFriends();
-    console.log("friends");
-    console.log(friends);
+    getListFriendsRequestGet();
   }, [])
 
   const data = [
@@ -111,17 +153,15 @@ export default function Contact({navigation}) {
       
     <Box py="$">
       <FlatList
-        data={friends}
+        data={friendsRequestGet}
         keyExtractor={item => item._id}
          renderItem={({ index, item }) => (
           <TouchableHighlight
             key={index}
-            onPress={() => {
-              // console.log("Home");
-              navigation.navigate("Chat", {user: item})
-            }}
+            // onPress={() => {
+            //   navigation.navigate("Chat", {user: item})
+            // }}
           >
-            
             <Box
               borderBottomWidth="$1"
               borderColor="#dddddd"
@@ -148,8 +188,22 @@ export default function Contact({navigation}) {
                     {item.name || null}
                   </Text>
                 </VStack>
-                <Icon as={Phone} size='30'/>
-                <Icon as={Video} size='30'/>
+{/* 
+                <Check size="30" />
+                <X size="30" /> */}
+                
+                <Button
+                  backgroundColor='$white'
+                  onPress={() => handleAccept(item.phoneNumber)}
+                >
+                  <Icon as={Check} size='30' color="green"/>
+                </Button>
+                <Button
+                  backgroundColor='$white'
+                  onPress={() => handleReject(item.phoneNumber)}
+                >
+                  <Icon as={X} size='30' color="red"/>
+                </Button>
               </HStack>
             </Box>
           </TouchableHighlight>

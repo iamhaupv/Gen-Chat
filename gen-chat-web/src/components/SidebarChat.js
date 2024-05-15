@@ -184,7 +184,6 @@ export default function SidebarChat({user, handleCurrentFriend, handleUser}) {
     socket.emit("init-room", user.phoneNumber);
 
     socket.on("rooms2", data => {
-      // console.log("Rooms 2");
       setRooms(data);
     });
 
@@ -198,28 +197,20 @@ export default function SidebarChat({user, handleCurrentFriend, handleUser}) {
   const isSearchedUserFriendWithUser = () => {
     if (searchedUser) {
       for (let i = 0; i < friends.length; i++) {
-        // console.log("Friends");
-        // console.log(friends[i]);
         if (friends[i].phoneNumber == searchedUser.phoneNumber) {
-          // console.log("True");
           return true;
         }
       }
 
       for (let i = 0; i < friendsRequestSend.length; i++) {
-        // console.log(friendsRequestSend[i]);
-        // console.log(friends[i]);
         if (friendsRequestSend[i].phoneNumber == searchedUser.phoneNumber) {
-          // console.log("True");
           return true;
         }
       }
     }
 
-    // console.log("False");
     return false;
   }
-
 
   return (
     <div className={`h-screen bg-white duration-300 ${!open ? 'w-96' : "w-0"}`}>

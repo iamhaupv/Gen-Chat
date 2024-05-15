@@ -86,11 +86,11 @@ export default function Main({route, navigation}) {
         </Tab.Screen>
 
         <Tab.Screen name="Contact">
-          {(props) => <Contact {...props} />}
+          {(props) => <Contact user={user.data} {...props} />}
         </Tab.Screen>
 
         <Tab.Screen name="Profile">
-          {(props) => <Profile {...props} />}
+          {(props) => <Profile user={user.data} {...props} />}
         </Tab.Screen>
         
       </Tab.Navigator>

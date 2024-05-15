@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { TouchableHighlight, View } from 'react-native'
-import { Input, InputSlot, InputField, InputIcon, SearchIcon, Box, FlatList, HStack, VStack, Text, Heading, Avatar, AvatarImage, Fab, FabIcon, AddIcon, AvatarFallbackText, AvatarBadge } from '@gluestack-ui/themed';
+import { TouchableHighlight,  } from 'react-native'
+import { Input, InputSlot, InputField, InputIcon, SearchIcon, Box, FlatList, HStack, VStack, Text, Heading, Avatar, AvatarImage, Fab, FabIcon, AddIcon, AvatarFallbackText, View } from '@gluestack-ui/themed';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -24,8 +24,15 @@ export default function Chats({user, navigation}) {
     const listFriend = await getListFriend(userRoot.phoneNumber);
     const temp_friends = [];
 
+    console.log("---------------- User root ---------------------");
+    console.log(userRoot);
+    console.log("---------------- List friend ---------------------");
+    console.log(listFriend);
+    
     for (let i = 0; i < listFriend.data.length; i++) {
+      console.log("---------------- 3 ---------------------");
       const friend = await getInfor( listFriend.data[i].friend_id );
+      console.log("---------------- 4 ---------------------");
       temp_friends.push(friend.data);
     }
 
@@ -103,20 +110,23 @@ export default function Chats({user, navigation}) {
     }}>
       <TouchableHighlight
         onPress={() => {
-          console.log("---------------- Search ---------------------");
-          console.log(user);
-          navigation.navigate("Search", {user: user})
+          navigation.navigate("Search", {user: user.data})
         }}
       >
-    {/* <Input size='xl'>
-      <InputSlot pl='$3'>
-        <InputIcon as={SearchIcon}/>
-      </InputSlot>
-      <InputField
-        placeholder="Search..."
-      />
-    </Input> */}
-      <Text>Lmao</Text>
+      {/* <Input size='xl'>
+        <InputSlot pl='$3'>
+          <InputIcon as={SearchIcon}/>
+        </InputSlot>
+        <InputField
+          placeholder="Search..."
+        />
+      </Input> */}
+      <View p={10}>
+        <HStack space='md'>
+          <InputIcon as={SearchIcon}/>
+          <Text>Search...</Text>
+        </HStack>
+      </View>
     </TouchableHighlight>
 
     <Box py="$">
