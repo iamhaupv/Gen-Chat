@@ -160,8 +160,12 @@ const authorizationRoomLeader = async (req, res) => {
 // authorization room members
 const authorizationRoomMembers = async (req, res) => {
   try {
-    const { roomId, phoneNumber } = req.body;
-    const room = roomRepository.authorizationRoomMembers(roomId, phoneNumber);
+    const { phoneAuth, roomId, phoneNumber } = req.body;
+    const room = await roomRepository.authorizationRoomMembers(
+      phoneAuth,
+      roomId,
+      phoneNumber
+    );
     res.status(200).json({
       message: "Authorization room members successfully!",
       data: room,
