@@ -270,122 +270,44 @@ const removeMemberOutGroup = async (phoneAuth, roomId, phoneNumber) => {
   }
 };
 
-// remove elder out group
-const removeElderOutGroup = async (roomId, phoneNumber) => {
+// remove leader out group
+const removeLeaderOutGroup = async (phoneAuth, roomId, phoneNumber) => {
   try {
+    // Tìm kiếm thông tin phòng
     const room = await Room.findOne({ roomId });
     if (!room) {
       throw new Error("Room is not exist!");
     }
-    const user = await User.findOne({ phoneNumber });
-    if (!user) {
-      throw new Error("User is not exist!");
+
+    // Kiểm tra xem người dùng phoneAuth có phải là owner của phòng hay không
+    if (room.roles.owner !== phoneAuth) {
+      throw new Error("You are not authorized to perform this action!");
     }
-    if (room.leader === phoneNumber) {
-      throw new Error("Cannot remove leader out group");
+
+    // Kiểm tra xem người dùng phoneNumber là leader của phòng hay không
+    if (room.roles.owner === phoneNumber) {
+      throw new Error("Cannot remove owner out group");
     }
-    if (room.users.includes(phoneNumber)) {
-      // Kiểm tra nếu số điện thoại cần xóa không phải là người lãnh đạo
-      if (room.roles.leader !== phoneNumber) {
-        room.users.pull(user.phoneNumber);
-        room.roles.members.pull(user.phoneNumber);
-        await room.save();
-        user.rooms.pull(room.roomId);
-        await user.save();
-      } else {
-        throw new Error("Cannot remove leader out group");
-      }
-    } else {
+
+    // Kiểm tra xem người dùng có trong danh sách users của phòng hay không
+    if (!room.users.includes(phoneNumber)) {
       throw new Error("This phone number is not a member of the group");
     }
+
+    // Loại bỏ người dùng ra khỏi danh sách leader và danh sách users của phòng
+    room.roles.leader = room.roles.leader.filter(leader => leader !== phoneNumber);
+    room.users = room.users.filter(user => user !== phoneNumber);
+
+    // Lưu lại thông tin phòng
+    await room.save();
+
+    return room;
   } catch (error) {
     console.log(error);
-    throw new Error(error);
+    throw error; // Ném lỗi ra bên ngoài hàm
   }
 };
-// remove leader
-// const removeLeaderOutGroup = async (roomId, phoneNumber) => {
-//   try {
-//     const room = await Room.findOne({ roomId });
-//     if (!room) {
-//       throw new Error("Room is not exist!");
-//     }
 
-//     // Kiểm tra nếu người rời là lãnh đạo
-//     if (room.roles.leader === phoneNumber) {
-//       // Nếu có người lãnh đạo phụ, chọn người lãnh đạo phụ đầu tiên làm lãnh đạo mới
-//       if (room.roles.elders.length > 0) {
-//         const newLeader = room.roles.elders[0];
-//         room.roles.leader = newLeader;
-//         room.roles.elders = room.roles.elders.filter(
-//           (elder) => elder !== newLeader
-//         ); // Loại bỏ người lãnh đạo mới khỏi danh sách lãnh đạo phụ
-//       } else if (room.roles.members.length > 0) {
-//         // Nếu không có người lãnh đạo phụ, chọn người tham gia đầu tiên làm lãnh đạo mới
-//         const newLeader = room.roles.members[0];
-//         room.roles.leader = newLeader;
-//         room.roles.members = room.roles.members.filter(
-//           (member) => member !== newLeader
-//         ); // Loại bỏ người lãnh đạo mới khỏi danh sách thành viên
-//       } else {
-//         // Nếu không có thành viên nào trong nhóm, xóa luôn vai trò lãnh đạo
-//         delete room.roles.leader;
-//       }
-
-//       // Xóa người lãnh đạo khỏi danh sách người tham gia của nhóm
-//       room.users = room.users.filter((user) => user !== phoneNumber);
-
-//       await room.save();
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     throw new Error(error);
-//   }
-// };
-const removeLeaderOutGroup = async (roomId, phoneNumber) => {
-  try {
-    const room = await Room.findOne({ roomId });
-    if (!room) {
-      throw new Error("Room is not exist!");
-    }
-
-    // Kiểm tra nếu người rời là lãnh đạo
-    if (room.roles.leader === phoneNumber) {
-      // Nếu có người lãnh đạo phụ, chọn người lãnh đạo phụ đầu tiên làm lãnh đạo mới
-      if (room.roles.elders.length > 0) {
-        const newLeader = room.roles.elders[0];
-        room.roles.leader = newLeader;
-        room.roles.elders = room.roles.elders.filter(
-          (elder) => elder !== newLeader
-        ); // Loại bỏ người lãnh đạo mới khỏi danh sách lãnh đạo phụ
-      } else if (room.roles.members.length > 0) {
-        // Nếu không có người lãnh đạo phụ, chọn người tham gia đầu tiên làm lãnh đạo mới
-        const newLeader = room.roles.members[0];
-        room.roles.leader = newLeader;
-        room.roles.members = room.roles.members.filter(
-          (member) => member !== newLeader
-        ); // Loại bỏ người lãnh đạo mới khỏi danh sách thành viên
-      } else {
-        // Nếu không có thành viên nào trong nhóm, xóa luôn vai trò lãnh đạo
-        delete room.roles.leader;
-      }
-
-      // Xóa người lãnh đạo khỏi danh sách người tham gia của nhóm
-      room.users = room.users.filter((user) => user !== phoneNumber);
-
-      // Nếu không còn thành viên nào trong nhóm, đặt vai trò của lãnh đạo về rỗng
-      if (room.users.length === 0) {
-        delete room.roles.leader;
-        deleteRoomByRoomId(roomId);
-      }
-
-      await room.save();
-    }
-  } catch (error) {
-    console.error(error);
-    throw new Error(error);
-  }
-};
 
 module.exports = {
   removeLeaderOutGroup,

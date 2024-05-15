@@ -197,26 +197,15 @@ const removeMemberOutGroup = async (req, res) => {
     });
   }
 };
-// remove elder out group
-const removeElderOutGroup = async (req, res) => {
-  try {
-    const {roomId, phoneNumber} = req.body
-    const remove = await roomRepository.removeElderOutGroup(roomId, phoneNumber);
-    res.status(200).json({
-      message: "Remove member out group successfully!",
-      data: remove,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      message: "Cannot remove member out group!",
-    });
-  }
-};
+// remove leader out group
 const removeLeaderOutGroup = async (req, res) => {
   try {
-    const {roomId, phoneNumber} = req.body
-    const remove = await roomRepository.removeLeaderOutGroup(roomId, phoneNumber);
+    const { phoneAuth, roomId, phoneNumber } = req.body;
+    const remove = await roomRepository.removeLeaderOutGroup(
+      phoneAuth,
+      roomId,
+      phoneNumber
+    );
     res.status(200).json({
       message: "Remove member out group successfully!",
       data: remove,
