@@ -86,10 +86,10 @@ const joinRoomByRoomId = async (req, res) => {
   try {
     const { roomId, phoneNumber } = req.body;
     const room = await roomRepository.joinRoomByRoomId(roomId, phoneNumber);
-    const member = await roomRepository.authorizationRoomMembers(roomId, phoneNumber)
+
     res.status(200).json({
       message: "Join room successfully!",
-      data: room, member
+      data: room,
     });
   } catch (error) {
     console.log(error);
@@ -118,49 +118,54 @@ const updateInforRoom = async (req, res) => {
     });
   }
 };
-// authorization room leader
-const authorizationRoomLeader = async (req, res) => {
+// authorization room owner
+const authorizationRoomOwner = async (req, res) => {
   try {
     const { roomId, phoneNumber } = req.body;
-    const room = await roomRepository.authorizationRoomLeader(
+    const room = await roomRepository.authorizationRoomOwner(
       roomId,
       phoneNumber
     );
     res.status(200).json({
-      message: "Authorization room leader successfully!",
+      message: "Authorization room owner successfully!",
       data: room,
     });
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      message: "Cannot authorization room leader!",
+      message: "Cannot authorization room owner!",
     });
   }
 };
-// authorization room elders
-const authorizationRoomElders = async (req, res) => {
+// authorization room leader
+const authorizationRoomLeader = async (req, res) => {
   try {
-    const { roomId, phoneNumber } = req.body;
-    const room = await roomRepository.authorizationRoomElders(
+    const { phoneAuth, roomId, phoneNumber } = req.body;
+    const room = await roomRepository.authorizationRoomLeader(
+      phoneAuth,
       roomId,
       phoneNumber
     );
     res.status(200).json({
-      message: "Authorization room elders successfully!",
+      message: "Authorization room leaders successfully!",
       data: room,
     });
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      message: "Cannot authorization room elders!",
+      message: "Cannot authorization room leaders!",
     });
   }
 };
 // authorization room members
 const authorizationRoomMembers = async (req, res) => {
   try {
-    const { roomId, phoneNumber } = req.body;
-    const room = roomRepository.authorizationRoomMembers(roomId, phoneNumber);
+    const { phoneAuth, roomId, phoneNumber } = req.body;
+    const room = await roomRepository.authorizationRoomMembers(
+      phoneAuth,
+      roomId,
+      phoneNumber
+    );
     res.status(200).json({
       message: "Authorization room members successfully!",
       data: room,
@@ -175,8 +180,12 @@ const authorizationRoomMembers = async (req, res) => {
 // remove member out group
 const removeMemberOutGroup = async (req, res) => {
   try {
-    const {roomId, phoneNumber} = req.body
-    const remove = await roomRepository.removeMemberOutGroup(roomId, phoneNumber);
+    const { phoneAuth, roomId, phoneNumber } = req.body;
+    const remove = await roomRepository.removeMemberOutGroup(
+      phoneAuth,
+      roomId,
+      phoneNumber
+    );
     res.status(200).json({
       message: "Remove member out group successfully!",
       data: remove,
@@ -188,26 +197,33 @@ const removeMemberOutGroup = async (req, res) => {
     });
   }
 };
-// remove elder out group
-const removeElderOutGroup = async (req, res) => {
-  try {
-    const {roomId, phoneNumber} = req.body
-    const remove = await roomRepository.removeElderOutGroup(roomId, phoneNumber);
-    res.status(200).json({
-      message: "Remove member out group successfully!",
-      data: remove,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      message: "Cannot remove member out group!",
-    });
-  }
-};
+// remove leader out group
 const removeLeaderOutGroup = async (req, res) => {
   try {
-    const {roomId, phoneNumber} = req.body
-    const remove = await roomRepository.removeLeaderOutGroup(roomId, phoneNumber);
+    const { phoneAuth, roomId, phoneNumber } = req.body;
+    const remove = await roomRepository.removeLeaderOutGroup(
+      phoneAuth,
+      roomId,
+      phoneNumber
+    );
+    res.status(200).json({
+      message: "Remove member out group successfully!",
+      data: remove,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Cannot remove member out group!",
+    });
+  }
+};
+const removeOwnerOutGroup = async (req, res) => {
+  try {
+    const { roomId, phoneNumber } = req.body;
+    const remove = await roomRepository.removeOwnerOutGroup(
+      roomId,
+      phoneNumber
+    );
     res.status(200).json({
       message: "Remove member out group successfully!",
       data: remove,
@@ -221,11 +237,11 @@ const removeLeaderOutGroup = async (req, res) => {
 };
 module.exports = {
   removeLeaderOutGroup,
-  removeElderOutGroup,
+  removeOwnerOutGroup,
   removeMemberOutGroup,
   authorizationRoomMembers,
-  authorizationRoomElders,
   authorizationRoomLeader,
+  authorizationRoomOwner,
   updateInforRoom,
   joinRoomByRoomId,
   deleteRoomByRoomId,
