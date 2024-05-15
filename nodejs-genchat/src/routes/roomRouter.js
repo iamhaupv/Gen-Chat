@@ -17,8 +17,8 @@ router.post("/join-room-by-roomId", roomController.joinRoomByRoomId)
 router.post("/update-room-infor", roomController.updateInforRoom)
 // authorization room owner 
 router.post("/authorization-room-owner", roomController.authorizationRoomOwner);
-// authorization room elders
-router.post("/authorization-room-elders", roomController.authorizationRoomElders);
+// authorization room leader
+router.post("/authorization-room-leader", roomController.authorizationRoomLeader);
 // authorization room members 
 router.post("/authorization-room-members", roomController.authorizationRoomMembers);
 // remove member out group
