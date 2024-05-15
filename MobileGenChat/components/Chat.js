@@ -41,8 +41,8 @@ export default function Chat({route, navigation}) {
     let receiverID = receiver.phoneNumber;
     let type = 'text';
 
-    console.log("Send Messaage");
-    console.log(userID + ': ' + receiverID + ': ' + content);
+    // console.log("Send Messaage");
+    // console.log(userID + ': ' + receiverID + ': ' + content);
     
     socket.emit('chat-message', {
       type: "text", 

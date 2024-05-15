@@ -1,8 +1,3 @@
-import {
-  Box, 
-  Text 
-} from "@gluestack-ui/themed"
-  
 import { createProvider } from "@gluestack-ui/provider"
 import { StyledProvider } from "@gluestack-style/react"
 import { config } from "@gluestack-ui/config"

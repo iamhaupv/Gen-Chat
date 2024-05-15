@@ -18,8 +18,6 @@ export default function Search({route}) {
   const [friendsRequestSend, setFriendsRequestSend] = useState([]);
 
   const user = route.params.user;
-  console.log("Search user")
-  console.log(user)
 
   const searchUser = async () => {
     const user = await findUserByPhoneNumber(searchedPhoneNumber);
@@ -59,15 +57,6 @@ export default function Search({route}) {
   }
 
   const isSearchedUserFriendWithUser = () => {
-    console.log("-------- friends -----------");
-    console.log(friends);
-    console.log("-------- friendsRequestSend -----------");
-    console.log(friendsRequestSend);
-    console.log("-------- User -----------");
-    console.log(user.phoneNumber);
-    console.log("-------- Searched user -----------");
-    console.log(searchedUser.phoneNumber);
-
     if (searchedUser) {
       if (searchedUser.phoneNumber == user.phoneNumber) return true;
 

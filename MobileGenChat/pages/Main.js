@@ -1,8 +1,3 @@
-import {
-  Box, 
-  Text, 
-} from "@gluestack-ui/themed"
-
 import { 
   CircleUserRound,
   MessageCircleMore, 
@@ -16,14 +11,13 @@ import { config } from "@gluestack-ui/config"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
   
 import React from 'react'
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import Profile from "../components/Profile";
 import Contact from "../components/Contact";
 import Chats from "../components/Chats";
 import Call from "../components/Call";
 import { Image } from "react-native";
 import GenChatLogo from "./GenChatLogo";
-import Search from "../components/Search";
+import GroupScreen from "../components/groupScreen";
   
 export const Provider = createProvider({
     StyledProvider,
@@ -75,6 +69,10 @@ export default function Main({route, navigation}) {
       >
         <Tab.Screen name="Chats">
           {(props) => <Chats user={user} {...props} />}
+        </Tab.Screen>
+
+        <Tab.Screen name="GroupScreen">
+          {(props) => <GroupScreen user={user.data} {...props} />}
         </Tab.Screen>
 
         <Tab.Screen name="Call">

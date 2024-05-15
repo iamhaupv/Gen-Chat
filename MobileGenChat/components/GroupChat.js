@@ -26,17 +26,7 @@ export default function GroupChat({route, navigation}) {
   const userRoot = route.params.userRoot;
   const room = route.params.room;
 
-  console.log("User root");
-  console.log(userRoot);
-  console.log("Room");
-  console.log(room);
-
   const idRoom = room.id;
-
-  console.log("User root");
-  console.log(userRoot);
-  console.log("Room id");
-  console.log(idRoom);
 
   useEffect(() => {
     if (idRoom) {
@@ -69,13 +59,10 @@ export default function GroupChat({route, navigation}) {
   useEffect(() => {
     socket.on('chat-message-2', msg => {
       setMessages(msg);
-      console.log("Chat message 2");
     });
 
     socket.on("rooms", msg => {
       setMessages(msg);
-      console.log("Rooms");
-      console.log(msg);
     })
 
     return () => {

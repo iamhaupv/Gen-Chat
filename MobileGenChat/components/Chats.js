@@ -14,25 +14,15 @@ const ChatScreen = createNativeStackNavigator();
 export default function Chats({user, navigation}) {
   const [friends, setFriends] = useState([]);
   const [rooms, setRooms] = useState([]);
-  // const user = await findUserByPhoneNumber("0374858237");
-  console.log("Route");
-  console.log(user);
-  // const userRoot = route.params.user;
+
   const userRoot = user.data;
 
   const getListFriends = async () => {
     const listFriend = await getListFriend(userRoot.phoneNumber);
     const temp_friends = [];
-
-    console.log("---------------- User root ---------------------");
-    console.log(userRoot);
-    console.log("---------------- List friend ---------------------");
-    console.log(listFriend);
     
     for (let i = 0; i < listFriend.data.length; i++) {
-      console.log("---------------- 3 ---------------------");
       const friend = await getInfor( listFriend.data[i].friend_id );
-      console.log("---------------- 4 ---------------------");
       temp_friends.push(friend.data);
     }
 
@@ -48,8 +38,6 @@ export default function Chats({user, navigation}) {
 
     socket.on("rooms2", data => {
       setRooms(data);
-      console.log("Rooms 2");
-      console.log(rooms);
     });
 
     return () => {
@@ -101,9 +89,6 @@ export default function Chats({user, navigation}) {
     },
   ]
 
-  console.log("Rooms 2");
-  console.log(rooms);
-
   return (
     <View style={{
       height: "100%"
@@ -137,7 +122,6 @@ export default function Chats({user, navigation}) {
           <TouchableHighlight
             key={index}
             onPress={() => {
-              console.log("Chat Group");
               navigation.navigate("GroupChat", {userRoot: userRoot, room: item})
             }}
           >
@@ -193,7 +177,6 @@ export default function Chats({user, navigation}) {
           <TouchableHighlight
             key={index}
             onPress={() => {
-              console.log("Chat 1-1");
               navigation.navigate("Chat", {userRoot: userRoot, receiver: item})
             }}
           >

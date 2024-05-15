@@ -40,12 +40,10 @@ export default function SignIn({ navigation }) {
     
       var provider = new auth.GoogleAuthProvider();
       
-      console.log("Pressed Sign in");
       provider.addScope('profile');
       provider.addScope('email');
       
     const userCred = await firebase.auth().signInWithPopup(provider).then(function(result){
-      console.log(userCred);
       var token = result.credential.accessToken;
       var user = result.user;
     });

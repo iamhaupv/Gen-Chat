@@ -28,7 +28,6 @@ export default function SignUp({ navigation }) {
 
   const auth = config.auth;
 
-  console.log(config);
   const styles = GlobalStyle();
 
   const toggleShowPassword = () => setShowPassword(!showPassword);
@@ -38,9 +37,7 @@ export default function SignUp({ navigation }) {
 
 
     function onCaptchVerify() {
-      console.log("111");
       if (!window.recaptchaVerifier) {
-      console.log("222");
       window.recaptchaVerifier = new RecaptchaVerifier(
         config,
           "recaptcha-container",

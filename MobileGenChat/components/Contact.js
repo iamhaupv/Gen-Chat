@@ -31,7 +31,7 @@ export default function Contact({user, navigation}) {
     await acceptFriend(user.phoneNumber, phoneNumber);
     await removeRequestGet(user.phoneNumber, phoneNumber);
     await removeRequestSend(phoneNumber, user.phoneNumber);
-    console.log("------ new user after added friend ---------");
+
     // const new_user = await findUserByPhoneNumber(user.phoneNumber);
     // handleUser(new_user.data);
     getListFriendsRequestGet();
