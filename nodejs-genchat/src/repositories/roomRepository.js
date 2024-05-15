@@ -115,21 +115,25 @@ const joinRoomByRoomId = async (roomId, phoneNumber) => {
   }
 };
 // authorization room
-const authorizationRoomLeader = async (roomId, phoneNumber) => {
+const authorizationRoomOwner = async (roomId, phoneNumber) => {
   try {
     const room = await Room.findOne({ roomId });
     if (!room) {
-      throw new Error("Room is not exits!");
+      throw new Error("Room is not exists!");
     }
     const user = await User.findOne({ phoneNumber });
     if (!user) {
       throw new Error("User is not exist!");
     }
-    room.roles.leader = user.phoneNumber; // Cập nhật trường leader
-    await room.save();
+    // Xóa người dùng khỏi danh sách leader và member
+    room.roles.leader = room.roles.leader.filter(leader => leader !== user.phoneNumber);
+    room.roles.members = room.roles.members.filter(member => member !== user.phoneNumber);
+    // Cập nhật trường owner
+    room.roles.owner = user.phoneNumber;
+    return await room.save();
   } catch (error) {
     console.log(error);
-    throw new Error(error);
+    throw error; // Throw lỗi ra bên ngoài hàm
   }
 };
 // update infor room
@@ -344,7 +348,7 @@ module.exports = {
   removeMemberOutGroup,
   authorizationRoomMembers,
   authorizationRoomElders,
-  authorizationRoomLeader,
+  authorizationRoomOwner,
   updateInforRoom,
   joinRoomByRoomId,
   deleteRoomByRoomId,
