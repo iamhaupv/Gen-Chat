@@ -217,9 +217,27 @@ const removeLeaderOutGroup = async (req, res) => {
     });
   }
 };
+const removeOwnerOutGroup = async (req, res) => {
+  try {
+    const { roomId, phoneNumber } = req.body;
+    const remove = await roomRepository.removeOwnerOutGroup(
+      roomId,
+      phoneNumber
+    );
+    res.status(200).json({
+      message: "Remove member out group successfully!",
+      data: remove,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Cannot remove member out group!",
+    });
+  }
+};
 module.exports = {
   removeLeaderOutGroup,
-  removeElderOutGroup,
+  removeOwnerOutGroup,
   removeMemberOutGroup,
   authorizationRoomMembers,
   authorizationRoomLeader,

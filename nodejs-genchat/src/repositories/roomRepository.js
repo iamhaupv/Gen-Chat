@@ -307,11 +307,52 @@ const removeLeaderOutGroup = async (phoneAuth, roomId, phoneNumber) => {
     throw error; // Ném lỗi ra bên ngoài hàm
   }
 };
+// remove owner out group 
+const removeOwnerOutGroup = async (roomId, phoneNumber) => {
+  try {
+    const room = await Room.findOne({ roomId });
+    if (!room) {
+      throw new Error("Room is not exist!");
+    }
+
+    // Kiểm tra nếu người rời là owner
+    if (room.roles.owner === phoneNumber) {
+      // Nếu có người lãnh đạo phụ, chọn người lãnh đạo phụ đầu tiên làm lãnh đạo mới
+      if (room.roles.leader.length > 0) {
+        const newLeader = room.roles.leader[0];
+        room.roles.owner = newLeader;
+        room.roles.leader = room.roles.leader.filter((leader) => leader !== newLeader);
+      } else if (room.roles.members.length > 0) {
+        // Nếu không có người lãnh đạo phụ, chọn người tham gia đầu tiên làm lãnh đạo mới
+        const newLeader = room.roles.members[0];
+        room.roles.owner = newLeader;
+        room.roles.members = room.roles.members.filter((member) => member !== newLeader);
+      } else {
+        // Nếu không có thành viên nào trong nhóm, xóa vai trò owner
+        delete room.roles.owner;
+      }
+
+      // Xóa người rời khỏi danh sách người tham gia của nhóm
+      room.users = room.users.filter((user) => user !== phoneNumber);
+
+      // Nếu không còn thành viên nào trong nhóm, đặt vai trò của lãnh đạo về rỗng
+      if (room.users.length === 0) {
+        delete room.roles.owner;
+        deleteRoomByRoomId(roomId);
+      }
+
+      return await room.save();
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error(error);
+  }
+};
 
 
 module.exports = {
   removeLeaderOutGroup,
-  removeElderOutGroup,
+  removeOwnerOutGroup,
   removeMemberOutGroup,
   authorizationRoomMembers,
   authorizationRoomLeader,
