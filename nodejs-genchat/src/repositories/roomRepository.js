@@ -13,14 +13,14 @@ const createRoom = async (name, users, updateAt) => {
         throw new Error(`User with phone number ${user} does not exist.`);
       }
     }
-    const leader = users[0]; // Lãnh đạo là người đầu tiên trong mảng
+    const owner = users[0]; // Lãnh đạo là người đầu tiên trong mảng
     const members = users.slice(1); // Các thành viên là các người còn lại trong mảng
-    await Room.create({
+    return await Room.create({
       users,
       roomId,
       name,
       roles: {
-        leader,
+        owner,
         members,
       },
       createAt: Date.now(),
