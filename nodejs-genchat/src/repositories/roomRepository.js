@@ -103,8 +103,12 @@ const joinRoomByRoomId = async (roomId, phoneNumber) => {
     }
     room.users.push(phoneNumber);
     user.rooms.push(roomId);
+    
+    // Thêm người dùng vào danh sách thành viên của phòng
+    room.roles.members.push(phoneNumber);
     await room.save();
     await user.save();
+    return room
   } catch (error) {
     console.log(error);
     throw new Error(error);
