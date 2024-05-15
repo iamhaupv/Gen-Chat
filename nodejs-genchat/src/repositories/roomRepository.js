@@ -234,41 +234,42 @@ const authorizationRoomMembers = async (phoneAuth, roomId, phoneNumber) => {
   }
 };
 // remove member out group
-const removeMemberOutGroup = async (roomId, phoneNumber) => {
+const removeMemberOutGroup = async (phoneAuth, roomId, phoneNumber) => {
   try {
+    // Tìm kiếm thông tin phòng
     const room = await Room.findOne({ roomId });
     if (!room) {
       throw new Error("Room is not exist!");
     }
+
+    // Kiểm tra xem người dùng phoneAuth có phải là owner hoặc leader của phòng hay không
+    if (room.roles.owner !== phoneAuth && !room.roles.leader.includes(phoneAuth)) {
+      throw new Error("You are not authorized to perform this action!");
+    }
+
+    // Tìm kiếm thông tin người dùng
     const user = await User.findOne({ phoneNumber });
     if (!user) {
       throw new Error("User is not exist!");
     }
-    if (room.roles.leader === phoneNumber) {
-      throw new Error("Cannot remove leader out group");
-    }
-    if (room.roles.elders.includes(phoneNumber)) {
-      throw new Error("Cannot remove leader out group");
-    }
-    if (room.users.includes(phoneNumber)) {
-      // Kiểm tra nếu số điện thoại cần xóa không phải là elder và leader
-      if (room.roles.leader !== phoneNumber) {
-        room.users.pull(user.phoneNumber);
-        room.roles.members.pull(user.phoneNumber);
-        await room.save();
-        user.rooms.pull(room.roomId);
-        await user.save();
-      } else {
-        throw new Error("Cannot remove leader out group");
-      }
-    } else {
-      throw new Error("This phone number is not a member of the group");
-    }
+
+    // Loại bỏ người dùng ra khỏi danh sách users và members của phòng
+    room.users.pull(user.phoneNumber);
+    room.roles.members.pull(user.phoneNumber);
+    // Lưu lại thông tin phòng
+    await room.save();
+    // Loại bỏ phòng ra khỏi danh sách rooms của người dùng
+    user.rooms.pull(room.roomId);
+    // Lưu lại thông tin người dùng
+    await user.save();
+
+    return room;
   } catch (error) {
     console.log(error);
-    throw new Error(error);
+    throw error; // Ném lỗi ra bên ngoài hàm
   }
 };
+
 // remove elder out group
 const removeElderOutGroup = async (roomId, phoneNumber) => {
   try {
