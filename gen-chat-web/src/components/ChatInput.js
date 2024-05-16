@@ -75,26 +75,25 @@ export default function ChatInput({socketRef, socket, user, currentFriend, idRoo
   }
 
   const sendMessage = msg => {
-    let content = message;
-    let userID = user.phoneNumber;
-    let receiverID = currentFriend.phoneNumber;
-    let type = 'text';
+    if (message) {
+      let content = message;
+      let userID = user.phoneNumber;
+      let receiverID = currentFriend.phoneNumber;
+      let type = 'text';
 
-    // console.log("Send Messaage");
-    // console.log(userID + ': ' + receiverID + ': ' + content);
-    
-    socket.emit('chat-message', {
-      type: "text", 
-      idMessage: "mess" + new Date().valueOf(), 
-      date: new Date().toLocaleString(),  
-      idRoom, 
-      sender: userID,
-      sender_name: user.name,
-      receiver: receiverID,
-      content: content,
-      chat_type: type,
-      status: "ready"
-    });
+      socket.emit('chat-message', {
+        type: "text", 
+        idMessage: "mess" + new Date().valueOf(), 
+        date: new Date().toLocaleString(),  
+        idRoom, 
+        sender: userID,
+        sender_name: user.name,
+        receiver: receiverID,
+        content: content,
+        chat_type: type,
+        status: "ready"
+      });
+    }
   };
 
   return (

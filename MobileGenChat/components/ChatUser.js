@@ -8,9 +8,6 @@ import {socket} from '../utils/socket';
 export default function ChatUser({data}) {
   const [userName, setUserName] = useState(null);
   const [isOpen, setIsOpen] = useState(false)
-
-  console.log("Mess data");
-  console.log(data);
   
   const getUser = async () => {
     const user = await getInfor( data.sender );
@@ -32,8 +29,6 @@ export default function ChatUser({data}) {
     setIsOpen(!isOpen);
   }
   const handleRemove = () => {
-    console.log("Message to remove: " + data.content + " " + data.idMessage);
-
     socket.emit('remove-message', {
       idMessageToRemove: data.idMessage, 
       idRoom: data.idRoom, 
@@ -64,7 +59,8 @@ export default function ChatUser({data}) {
         alignSelf: 'flex-end'
       }}>
         <Text style={{
-          padding: 10
+          padding: 10, 
+          alignSelf: "flex-end"
         }}>{userName}</Text>
   
         <HStack alignItems='center' justifyContent='flex-end'>
