@@ -85,6 +85,7 @@ export default function ChatInput({socketRef, socket, user, currentFriend, idRoo
     
     socket.emit('chat-message', {
       type: "text", 
+      idMessage: "mess" + new Date().valueOf(), 
       date: new Date().toLocaleString(),  
       idRoom, 
       sender: userID,

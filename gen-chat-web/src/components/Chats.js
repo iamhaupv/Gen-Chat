@@ -63,7 +63,7 @@ export default function Chats({user, currentFriend}) {
 
   const renderMess = mess.map((m, index) => {
     let chat;
-    if (m.status == "ready") {
+    // if (m.status == "ready") {
 
       if (m.chat_type == '1-1') {
 
@@ -91,7 +91,7 @@ export default function Chats({user, currentFriend}) {
 
       }
 
-    }
+    // }
       
     return chat;
   });

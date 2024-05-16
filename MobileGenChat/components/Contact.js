@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { TouchableHighlight, View, Alert } from 'react-native'
-import { Button, Input, InputSlot, InputField, InputIcon, SearchIcon, Box, FlatList, HStack, VStack, Text, Heading, Avatar, AvatarImage, Fab, FabIcon, AddIcon, AvatarFallbackText, AvatarBadge,Icon } from '@gluestack-ui/themed';
+import { TouchableHighlight, Alert } from 'react-native'
+import { View, Button, Box, FlatList, HStack, VStack, Text, Heading, Avatar, AvatarImage, Fab, FabIcon, AddIcon, AvatarFallbackText, AvatarBadge,Icon } from '@gluestack-ui/themed';
 import { X, UserPlus, Check } from 'lucide-react-native';
 
 import getRequestGet from '../services/getRequestGet';
@@ -66,101 +66,74 @@ export default function Contact({user, navigation}) {
   }, [])
 
   return (
-    <View style={{
-      height: "100%"
-    }}>
-      
-    {/* <Input size='xl'>
-      <InputSlot pl='$3'>
-        <InputIcon as={SearchIcon}/>
-      </InputSlot>
-      <InputField
-        placeholder="Search..."
-      />
-    </Input> */}
-
-    <Box
-      borderBottomWidth="$1"
-      borderColor="#dddddd"
-      $dark-borderColor="$coolGray800"
-      $base-pl="$3"
-      $base-pr="$3"
-      $sm-pl="$4"
-      $sm-pr="$4"
-      py="$2"
-      onPress
-    >
-      <HStack space="lg" alignItems='center'>
-        <Avatar bgColor="$blue500">
-        {/* User is imported from 'lucide-react-native' */}
-          <Icon as={UserPlus} size='30' color="white"/>
-        </Avatar>
-       
-        <Text fontWeight='bold'>Friend Request</Text>
-      </HStack>
-    </Box>
-      
-    <Box py="$">
-      <FlatList
-        data={friendsRequestGet}
-        keyExtractor={item => item._id}
-         renderItem={({ index, item }) => (
-          <TouchableHighlight
-            key={index}
-            // onPress={() => {
-            //   navigation.navigate("Chat", {user: item})
-            // }}
-          >
-            <Box
-              borderBottomWidth="$1"
-              borderColor="#dddddd"
-              $dark-borderColor="$coolGray800"
-              $base-pl="$3"
-              $base-pr="$3"
-              $sm-pl="$4"
-              $sm-pr="$4"
-              py="$2"
-              onPress
-            >
-              <HStack space="lg" alignItems='center'>
-                <Avatar size="md">
-                  <AvatarFallbackText>{item.name}</AvatarFallbackText>
-                </Avatar>
-                <VStack style={{
-                  flex: 1
-                }}>
-                  <Text
-                    color="$coolGray800"
-                    fontWeight="$bold"
-                    $dark-color="$warmGray100"
+    <View height="100%" p={10}>
+      <Text fontWeight="bold" fontSize="$xl">Friend Request</Text>
+      <Box
+        borderBottomWidth="$1"
+        borderColor="#dddddd"
+        $dark-borderColor="$coolGray800"
+        $sm-pl="$4"
+        $sm-pr="$4"
+        py="$2"
+        onPress
+      >
+        <HStack space="lg" alignItems='center'>
+          <Avatar bgColor="$blue500">
+          {/* User is imported from 'lucide-react-native' */}
+            <Icon as={UserPlus} size='30' color="white"/>
+          </Avatar>
+        
+          <Text fontWeight='bold'>Friend Request</Text>
+        </HStack>
+      </Box>
+        
+      <Box py="$">
+        <FlatList
+          data={friendsRequestGet}
+          keyExtractor={item => item._id}
+          renderItem={({ index, item }) => (
+            <TouchableHighlight key={index}>
+              <Box
+                borderBottomWidth="$1"
+                borderColor="#dddddd"
+                $dark-borderColor="$coolGray800"
+                $sm-pl="$4"
+                $sm-pr="$4"
+              >
+                <HStack space="lg" alignItems='center'>
+                  <Avatar size="md">
+                    <AvatarFallbackText>{item.name}</AvatarFallbackText>
+                  </Avatar>
+                  <VStack style={{
+                    flex: 1
+                  }}>
+                    <Text
+                      color="$coolGray800"
+                      fontWeight="$bold"
+                      $dark-color="$warmGray100"
+                    >
+                      {item.name || null}
+                    </Text>
+                  </VStack>
+                  
+                  <Button
+                    backgroundColor='$white'
+                    onPress={() => handleAccept(item.phoneNumber)}
                   >
-                    {item.name || null}
-                  </Text>
-                </VStack>
-{/* 
-                <Check size="30" />
-                <X size="30" /> */}
-                
-                <Button
-                  backgroundColor='$white'
-                  onPress={() => handleAccept(item.phoneNumber)}
-                >
-                  <Icon as={Check} size='30' color="green"/>
-                </Button>
-                <Button
-                  backgroundColor='$white'
-                  onPress={() => handleReject(item.phoneNumber)}
-                >
-                  <Icon as={X} size='30' color="red"/>
-                </Button>
-              </HStack>
-            </Box>
-          </TouchableHighlight>
-        )}
-      />
-      
-    </Box>
-
+                    <Icon as={Check} size='30' color="green"/>
+                  </Button>
+                  <Button
+                    backgroundColor='$white'
+                    onPress={() => handleReject(item.phoneNumber)}
+                  >
+                    <Icon as={X} size='30' color="red"/>
+                  </Button>
+                </HStack>
+              </Box>
+            </TouchableHighlight>
+          )}
+        />
+      </Box>
     </View>
   )
 }

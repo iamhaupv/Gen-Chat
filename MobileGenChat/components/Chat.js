@@ -1,17 +1,15 @@
-import {InputField} from '@gluestack-ui/themed';
-import {InputIcon, InputSlot} from '@gluestack-ui/themed';
 import {
+  View, 
+  InputField, 
+  InputSlot, 
   Text,
   Avatar,
-  AvatarImage,
   Input,
   AvatarFallbackText,
-  AvatarBadge,
 } from '@gluestack-ui/themed';
-import {ArrowLeft, Info, Phone, SearchIcon, Send} from 'lucide-react-native';
+import {ArrowLeft, Info, Phone, Send} from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
 import {ScrollView} from 'react-native';
-import {View} from 'react-native';
 import ChatUser from './ChatUser';
 import ChatData from './ChatData';
 import {socket} from '../utils/socket';
@@ -19,6 +17,9 @@ import {socket} from '../utils/socket';
 export default function Chat({route, navigation}) {  
   // This variable use for socket
   const [messages, setMessages] = useState([]);
+
+  const [showActionsheet, setShowActionsheet] = React.useState(false)
+  const handleClose = () => setShowActionsheet(!showActionsheet)
 
   // This variable use for input
   const [message, setMessage] = useState('');
@@ -46,6 +47,7 @@ export default function Chat({route, navigation}) {
     
     socket.emit('chat-message', {
       type: "text", 
+      idMessage: "mess" + new Date().valueOf(), 
       date: new Date().toLocaleString(), 
       idRoom, 
       sender: userID,
@@ -76,17 +78,8 @@ export default function Chat({route, navigation}) {
   }, []);
 
   return (
-    <View
-      style={{
-        height: '100%',
-      }}>
-      <View
-        style={{
-          padding: 10,
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: 10,
-        }}>
+    <View p={10} height="100%">
+      <View flexDirection='row' alignItems='center' gap={10}>
         <ArrowLeft
           size={30}
           strokeWidth={2}
@@ -94,7 +87,6 @@ export default function Chat({route, navigation}) {
           onPress={() => {
             navigation.goBack();
           }}
-          style={{padding: 10}}
         />
 
         <Avatar size="md">
@@ -130,30 +122,19 @@ export default function Chat({route, navigation}) {
         style={{
           flex: 1,
           flexDirection: 'column',
-        }}>
-          {
-            messages.map((msg, index) => {
-              if (msg.sender == userRoot.phoneNumber)
-                return <ChatUser key={index} data={msg}/>;
-              else
-                return <ChatData key={index} data={msg}/>;
-            })
-          }
-        {/* <ChatUser data={{content: 'Xin chao, khoa da den'}} />
-        <ChatData data={{content: 'Toi muon mua khoa voi gia 2 cent'}} />
-        <ChatUser data={{content: 'Toi muon mua khoa voi gia 2 cent'}} />
-        <ChatData data={{content: 'Toi muon mua khoa voi gia 2 cent'}} />
-   
-      */}
+        }}
+      >
+        {
+          messages.map((msg, index) => {
+            if (msg.sender == userRoot.phoneNumber)
+              return <ChatUser key={index} data={msg}/>;
+            else
+              return <ChatData key={index} data={msg}/>;
+          })
+        }
       </ScrollView>
 
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          padding: 10,
-          gap: 10,
-        }}>
+      <View flexDirection='row' alignItems='center' gap={10}>
         <Input size="xl" flex={1}>
           <InputSlot pl="$3"></InputSlot>
           <InputField 

@@ -22,10 +22,8 @@ import auth from "../firebase/config.js";
 //
 import loginUser from "../services/loginUser.js";
 export default function SignIn({ navigation }) {
-  // console.log(auth);
-  const [phoneNumber, onChangePhoneNumber] = useState("");
-  const [password, onChangePassword] = useState("");
-
+  const [phoneNumber, onChangePhoneNumber] = useState("0932659945");
+  const [password, onChangePassword] = useState("0932659945");
  
   // Ham nay chay lien tuc de kiem tra xem nguoi dung co dang nhap ko
   // auth.onAuthStateChanged((user) => {

@@ -52,12 +52,9 @@ let messages = [];
 
 let rooms = []
 
-const generateID = () => Math.random().toString(36).substring(2, 10);
-
 socketIo.on("connection", (socket) => {
 
   // Demo Socket
-
   socket.on('sendUserIdToServer', user => {
     socketIo.emit(user.phoneNumber, messages);
 
@@ -131,9 +128,6 @@ socketIo.on("connection", (socket) => {
       let room = {"id": data, "messages": []};
       rooms.push(room);
     }
-
-    // console.log("Create chat 1-1");
-    // console.log(rooms);
   });
 
   socket.on("join-room", data => {
@@ -212,6 +206,43 @@ socketIo.on("connection", (socket) => {
     
     console.log("----------------------------");
     console.log("-- Socket: Sended data to client ");
+  });
+
+  socket.on("forward-message", async data => {
+    let found_room = rooms.find(room => room.id == data.idRoom);
+
+    let found_message = found_room.messages.find(mess => mess.idMessage = data.idMessageToForward);
+  
+    console.log("------- Found Message to forward---------");
+    console.log(found_message);
+  });
+
+  socket.on("remove-message", async data => {
+    let found_room = rooms.find(room => room.id == data.idRoom);
+
+    let found_message = found_room.messages.find(mess => mess.idMessage == data.idMessageToRemove);
+    found_message.status = "removed";
+  
+    console.log("------- Found Message to remove---------");
+    console.log(found_message);
+
+    socketIo.to(data.idRoom).emit("chat-message-2", 
+      found_room.messages
+    );
+  });
+
+  socket.on("delete-message", async data => {
+    let found_room = rooms.find(room => room.id == data.idRoom);
+
+    let found_message = found_room.messages.find(mess => mess.idMessage == data.idMessageToDelete);
+    found_message.status = "deleted";
+  
+    console.log("------- Found Message to delete---------");
+    console.log(found_message);
+
+    socketIo.to(data.idRoom).emit("chat-message-2", 
+      found_room.messages
+    );
   });
 
   socket.on("disconnect", () => {

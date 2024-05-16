@@ -96,24 +96,23 @@ export default function ChatUser({message, socketRef}) {
 
   let comp;
 
-  // console.log("Message type: " + message.type);
-  // console.log(message);
-
   if (message.type == "text" ) {
-    // console.log("Message Text");
-    comp = <div className="text-sm font-normal text-gray-900 dark:text-white">
-      {message.content}
-    </div>
+    if (message.status == "ready")
+      comp = <div className="text-sm font-normal text-gray-900 dark:text-white">
+        {message.content}
+      </div>
+    else if (message.status == "removed")
+      comp = <div className="text-sm font-normal text-gray-900 dark:text-white">
+        This message had been removed
+      </div>
   }
   else if (
     message.type == "image/png" || 
     message.type == "image/jpeg" || 
     message.type == "image/jpg"
   ) {
-    // console.log("Message Image");
     comp = <img src={message.content} width={200}></img>
   } else {
-    // console.log("Message Link");
     comp = <a download={message.filename} href={message.link} className='underline text-blue-400'>{message.filename}</a>
   }
 

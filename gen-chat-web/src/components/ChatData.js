@@ -88,6 +88,28 @@ export default function ChatData({message, socketRef}) {
     // Return the array if it is non-empty, or null
     return checkboxesChecked.length > 0 ? checkboxesChecked : null;
   }
+
+  let comp;
+
+  if (message.type == "text" ) {
+    if (message.status == "ready" || message.status == "deleted")
+      comp = <div className="text-sm font-normal text-gray-900 dark:text-white">
+        {message.content}
+      </div>
+    else if (message.status == "removed")
+      comp = <div className="text-sm font-normal text-gray-900 dark:text-white">
+        This message had been removed
+      </div>
+  }
+  else if (
+    message.type == "image/png" || 
+    message.type == "image/jpeg" || 
+    message.type == "image/jpg"
+  ) {
+    comp = <img src={message.content} width={200}></img>
+  } else {
+    comp = <a download={message.filename} href={message.link} className='underline text-blue-400'>{message.filename}</a>
+  }
   
   return (
     <div className="flex items-start gap-2.5">
@@ -164,7 +186,7 @@ export default function ChatData({message, socketRef}) {
           <div className='flex'>
             <div className="flex flex-col leading-1.5 p-4 border-gray-200 bg-white rounded-e-xl rounded-es-xl dark:bg-gray-700">
               <p className="text-sm font-normal text-gray-900 dark:text-white">
-                {
+                {/* {
                   message.type == "text" ? 
                     message.content : 
                       message.type == "image/png" || 
@@ -178,7 +200,8 @@ export default function ChatData({message, socketRef}) {
                         // </video>
                         // :
                         <a download={message.filename} href={message.link} className='underline text-blue-400'>{message.filename}</a>
-                }
+                } */}
+                {comp}
               </p>
             </div>
 

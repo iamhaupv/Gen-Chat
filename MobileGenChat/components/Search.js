@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Alert } from 'react-native'
-import { Input, InputSlot, InputField, InputIcon, SearchIcon, Box, FlatList, HStack, VStack, Text, Heading, Avatar, AvatarFallbackText, Modal,ModalBackdrop,ModalContent,ModalHeader,ModalBody,ModalFooter,ModalCloseButton,ButtonText,Button, View, Center } from '@gluestack-ui/themed';
+import { Input, InputSlot, InputField, InputIcon, SearchIcon, Box, FlatList, HStack, VStack, Text, Heading, Avatar, AvatarFallbackText, Button, View } from '@gluestack-ui/themed';
+import { ArrowLeft } from 'lucide-react-native';
 
 import getRequestSend from '../services/getRequestSend';
 import addRequestSend from '../services/addRequestSend';
@@ -9,7 +10,7 @@ import getListFriend from '../services/getListFriend';
 
 import findUserByPhoneNumber from '../services/findUserByPhoneNumber';
 
-export default function Search({route}) {
+export default function Search({route, navigation}) {
   const [showModal, setShowModal] = useState(false)
   const [searchedPhoneNumber, setSearchedPhoneNumber] = useState(null);
   const [searchedUser, setSearchedUser] = useState(null);
@@ -100,10 +101,24 @@ export default function Search({route}) {
   // useEffect(() => {}, [friendsRequestSend]);
 
   return (
-    <View style={{
-      height: "100%"
-    }}>
-      <Input size='xl'>
+    <View width="100%" p={10} gap={10}>
+      <View flexDirection='row' gap={10}>
+        <InputIcon
+          as={ArrowLeft}
+          size={30}
+          strokeWidth={2}
+          color="blue"
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
+
+        <Text flex={1} size="xl" bold={true}>
+          Search Friend
+        </Text>
+      </View>
+
+      <Input size='100%'>
         <InputSlot pl='$3' onPress={searchUser}>
           <InputIcon as={SearchIcon}/>
         </InputSlot>

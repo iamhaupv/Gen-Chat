@@ -1,17 +1,13 @@
 import CheckBox from '@react-native-community/checkbox';
 import React, { useEffect, useState, useRef } from 'react'
-import { TextInput, Button, View, Alert } from "react-native";
-import { Text, Box, Avatar, Icon, HStack } from '@gluestack-ui/themed';
+import { TouchableHighlight, TextInput, Alert } from "react-native";
+import { AvatarFallbackText, FlatList, VStack, Button, View, Text, Box, Avatar, Icon, HStack, ButtonText } from '@gluestack-ui/themed';
 import { UserPlus } from 'lucide-react-native';
 
 import getListFriend from '../services/getListFriend';
 import getInfor from '../services/getInfor';
 
 import {socket} from '../utils/socket';
-import { VStack } from '@gluestack-ui/themed';
-import { FlatList } from '@gluestack-ui/themed';
-import { TouchableHighlight } from 'react-native';
-import { AvatarFallbackText } from '@gluestack-ui/themed';
 
 export default GroupScreen = ({ user, navigation }) => {
     const [nameGroup, setNameGroup] = useState("");
@@ -72,11 +68,11 @@ export default GroupScreen = ({ user, navigation }) => {
     }
 
     return (
-      <View>
+      <View p={10}>
         <Box width="100%">
-          <Text py={10} textAlign='center' fontWeight="bold" fontSize="$xl">Create group</Text>
+          <Text fontWeight="bold" fontSize="$xl">Create group</Text>
           
-          <View p={10}>
+          <View>
             <TextInput 
               placeholder='Input group name...'
               value={nameGroup}
@@ -88,8 +84,6 @@ export default GroupScreen = ({ user, navigation }) => {
             borderBottomWidth="$1"
             borderColor="#dddddd"
             $dark-borderColor="$coolGray800"
-            $base-pl="$3"
-            $base-pr="$3"
             $sm-pl="$4"
             $sm-pr="$4"
             py="$2"
@@ -104,21 +98,7 @@ export default GroupScreen = ({ user, navigation }) => {
             </HStack>
           </Box>
 
-            {/* {
-              friends.map((item, index) => (
-                <View key={index}>
-                  <HStack space='md'>
-                    <CheckBox
-                      value={checkboxes[index]}
-                      onValueChange={() => handleCheckboxChange(index, item.phoneNumber)}
-                    />
-                    <Text >{item.name}</Text>
-                  </HStack>
-                </View>
-              ))
-            } */}
-
-          <Box py="$">
+          <Box>
             <FlatList
               data={friends}
               keyExtractor={item => item._id}
@@ -128,8 +108,6 @@ export default GroupScreen = ({ user, navigation }) => {
                     borderBottomWidth="$1"
                     borderColor="#dddddd"
                     $dark-borderColor="$coolGray800"
-                    $base-pl="$3"
-                    $base-pr="$3"
                     $sm-pl="$4"
                     $sm-pr="$4"
                     py="$2"
@@ -162,7 +140,9 @@ export default GroupScreen = ({ user, navigation }) => {
             />      
           </Box>
 
-          <Button title='Create group' onPress={createGroup} />
+          <Button onPress={createGroup}>
+            <ButtonText>Create group</ButtonText>
+          </Button>
         </Box>
       </View>
     )
