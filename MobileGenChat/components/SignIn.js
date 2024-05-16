@@ -51,7 +51,7 @@ export default function SignIn({ navigation }) {
     try {
       const user = await loginUser(phoneNumber, password);
       // Đăng ký thành công, chuyển hướng đến màn hình đăng nhập
-      navigation.navigate("Main", {user});
+      navigation.navigate("Main", {user: user, phoneNumber: user.phoneNumber});
     } catch (error) {
       console.error("Registration error:", error);
     }

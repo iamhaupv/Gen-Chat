@@ -11,7 +11,7 @@ import findUserByPhoneNumber from '../services/findUserByPhoneNumber';
 
 const ChatScreen = createNativeStackNavigator();
 
-export default function Chats({user, navigation}) {
+export default function Chats({route, user, navigation}) {
   const [friends, setFriends] = useState([]);
   const [rooms, setRooms] = useState([]);
 
@@ -27,6 +27,9 @@ export default function Chats({user, navigation}) {
     }
 
     setFriends(temp_friends);
+
+    console.log("--------------- Friends");
+    console.log(temp_friends);
   }
 
   useEffect(() => {

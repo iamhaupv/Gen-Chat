@@ -11,7 +11,7 @@ import { StyledProvider } from "@gluestack-style/react"
 import { config } from "@gluestack-ui/config"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
   
-import React from 'react'
+import React, { useEffect } from 'react'
 import Profile from "../components/Profile";
 import Contact from "../components/Contact";
 import Chats from "../components/Chats";
@@ -19,15 +19,19 @@ import Call from "../components/Call";
 import { Image } from "react-native";
 import GenChatLogo from "./GenChatLogo";
 import GroupScreen from "../components/groupScreen";
+import getInfor from '../services/getInfor';
   
 export const Provider = createProvider({
-    StyledProvider,
+  StyledProvider,
 })
 
 const Tab = createBottomTabNavigator();
   
 export default function Main({route, navigation}) {
-  const user = route.params.user
+  let user = route.params.user;
+
+  useEffect(() => {}, [route]);
+  useEffect(() => {}, [navigation]);
 
   return (
     <Provider config={config}>

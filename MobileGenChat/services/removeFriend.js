@@ -1,11 +1,13 @@
 import host from "../GlobalVariables";
 import axios from "axios";
-const addRequestGet = async (phoneNumberUserSend, phoneNumberUserGet) => {
+const removeFriend = async (phoneNumberUserSend, phoneNumberUserGet) => {
   try {
     const userData = {
-      phoneNumberUserSend: phoneNumberUserSend,
-      phoneNumberUserGet: phoneNumberUserGet,
+      phoneNumber: phoneNumberUserSend,
+      phoneRemove: phoneNumberUserGet,
     };
+    console.log("User data");
+    console.log(userData);
     const response = await axios.post(
       host.api_host + "/users/remove-friend",
       userData
@@ -23,4 +25,4 @@ const addRequestGet = async (phoneNumberUserSend, phoneNumberUserGet) => {
     throw new Error(error);
   }
 };
-export default addRequestGet;
+export default removeFriend;

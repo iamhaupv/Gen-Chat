@@ -112,7 +112,7 @@ export default function Chat({route, navigation}) {
           strokeWidth={2}
           color="blue"
           onPress={() => {
-            navigation.goBack();
+            navigation.navigate("FriendProfile", {userRoot: userRoot, receiver: receiver})
           }}
           style={{padding: 10}}
         />
