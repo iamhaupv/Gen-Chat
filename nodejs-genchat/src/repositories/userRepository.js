@@ -10,9 +10,6 @@ const login = async ({ phoneNumber, password }) => {
   } catch (error) {
     console.log("Error " + error);
   }
-  console.log("---------Go to log in repo");
-  console.log("Exist User");
-  console.log(phoneNumber);
   if (existUser) {
     let isMatch = await bcrypt.compare(password, existUser.password);
     if (!!isMatch) {
@@ -20,7 +17,8 @@ const login = async ({ phoneNumber, password }) => {
         {
           data: existUser,
         },
-        process.env.JWT_SECRET,
+        // process.env.JWT_SECRET,
+        "Pham Van Hau",
         {
           expiresIn: "10 days",
         }
@@ -48,7 +46,6 @@ const register = async ({
   listRequestSend,
   listRequestGet,
 }) => {
-  console.log("---------------Go to register repo---------------");
   try {
     const existUser = await User.findOne({ phoneNumber }).exec(); // tìm kiếm dựa trên số diện thoại hoặc email
     if (!!existUser) {
@@ -391,7 +388,9 @@ const removeFriend = async (phoneNumber, phoneRemove) => {
     if (!user) {
       throw new Error("User is not exist!");
     }
-    const phone = user.listFriend.find(friend => friend.friend_id == phoneRemove);
+    const phone = user.listFriend.find(
+      (friend) => friend.friend_id == phoneRemove
+    );
     if (!phone) {
       throw new Error("Phone is not exist!");
     }
