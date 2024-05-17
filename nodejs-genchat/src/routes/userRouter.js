@@ -16,7 +16,11 @@ router.post("/get-infor", userController.getInfor);
 // update userInfor
 router.patch("/update", userController.updateUserInfo);
 // uploadImage
-router.post("/upload-avatar", upload.single("image"), userController.uploadAvatar);
+router.post(
+  "/upload-avatar",
+  upload.single("image"),
+  userController.uploadAvatar
+);
 // delete
 router.delete("/delete-user", userController.deleteUser);
 // findUserByPhoneNumber
@@ -45,4 +49,6 @@ router.post("/remove-friend", userController.removeFriend);
 router.post("/get-list-friend", userController.getListFriend);
 // changePassword
 router.post("/change-password", userController.changePassword);
+// get all users
+router.post("/get-all-users", userController.getAllUser);
 module.exports = router;
