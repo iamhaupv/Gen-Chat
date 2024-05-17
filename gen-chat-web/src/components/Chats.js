@@ -5,6 +5,7 @@ import ChatInput from './ChatInput'
 import Profile from './Profile';
 
 import socket from "../utils/socketGroup"
+import InitialIcon from './InitialIcon';
 
 export default function Chats({user, currentFriend}) {
   const [openRight, setOpenRight] = useState(true);
@@ -106,7 +107,8 @@ export default function Chats({user, currentFriend}) {
               <div className='flex items-center'>
                 <div className="avatar online">
                   <div className="w-10 rounded-full">
-                    <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                    {/* <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" /> */}
+                    <InitialIcon size={10} initials={currentFriend.name.match(/(\b\S)?/g).join("").match(/(^\S|\S$)?/g).join("").toUpperCase()} />
                   </div>
                 </div>
                 <p className='font-medium text-xl ml-5'>{currentFriend.name}</p>

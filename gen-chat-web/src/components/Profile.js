@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Chat from './Chat';
+import InitialIcon from './InitialIcon';
 
 export default function Profile(props) {
   const [users, setUsers] = useState([]);
@@ -18,8 +19,8 @@ export default function Profile(props) {
     <h1 className='text-center font-medium text-xl mt-5 border-b-2 pb-2'>Information</h1>
 
     <div className="avatar items-center justify-center pt-8">
-      <div className="w-20 rounded-full">
-        <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+      <div className="w-16 rounded-full">
+      <InitialIcon size={16} initials={user.name.match(/(\b\S)?/g).join("").match(/(^\S|\S$)?/g).join("").toUpperCase()} />
       </div>
     </div>
 

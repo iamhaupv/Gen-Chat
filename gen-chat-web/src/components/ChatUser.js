@@ -5,6 +5,7 @@ import findUserByPhoneNumber from '../services/users/findUserByPhoneNumber';
 import Chat from './Chat';
 
 import socket from "../utils/socketGroup"
+import InitialIcon from './InitialIcon';
 
 export default function ChatUser({message, socketRef}) {
   const [searchedUser, setSearchedUser] = useState(null);
@@ -183,9 +184,7 @@ export default function ChatUser({message, socketRef}) {
         
         {/* <img className="w-8 h-8 rounded-full" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="Jese image" /> */}
         <div className="avatar placeholder">
-          <div className="bg-blue-800 text-neutral-content rounded-full w-8">
-            <span className="text-sm font-bold">{message.sender_name[0]}</span>
-          </div>
+          <InitialIcon size={10} initials={message.sender_name.match(/(\b\S)?/g).join("").match(/(^\S|\S$)?/g).join("").toUpperCase()} />
         </div>
           
           <div className="flex flex-col gap-1">
