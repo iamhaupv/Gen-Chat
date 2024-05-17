@@ -2,16 +2,53 @@ import React, { useEffect, useRef, useState } from 'react'
 import Chat from './Chat';
 import InitialIcon from './InitialIcon';
 
+import getInfor from "../services/users/getInfor";
+import socket from "../utils/socketGroup"
+
 export default function Profile(props) {
   const [users, setUsers] = useState([]);
   const isOpen = props.state;
   const user = props.user;
+  const userRoot = props.userRoot;
+
+  const handleCurrentFriend2 = friend => {
+    props.handleCurrentFriend(friend);
+  }
+
+  console.log("---------- User ------------");
+  console.log(user);
   
   let comp;
 
-  const handleOpenUserList = () => {
-    console.log("Open user list");
+  const handleOpenUserList = async () => {
+    const friends = [];
+
+    const admin = await getInfor(user.admin);
+
+    friends.push(admin.data);
+
+    for (let i = 0; i < user.user.length; i++) {
+      const friend = await getInfor(user.user[i]);
+
+      friends.push(friend.data);
+    }
+
+    setUsers(friends)
     document.getElementById('group_info_modal').showModal()
+  }
+
+  const handleRemoveFriend = async user => {
+    // console.log("---------- Removed ------------");
+    // console.log(user);
+  }
+
+  const handleOutGroup = async user => {
+
+  }
+
+  const handleRemoveRoom = async () => {
+    handleCurrentFriend2({});
+    await socket.emit("destroy-room", user);
   }
 
   if (!isNaN(user.phoneNumber.charAt(0))) {
@@ -93,67 +130,66 @@ export default function Profile(props) {
       </div>
     </div>
     <dialog id="my_modal_4" className="modal">
-                {/* <div className="modal-box">
-                  <form method="dialog">
-                    <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                  </form>
-                  <h3 className="font-bold text-lg">Hello!</h3>
-                  <p className="py-4">Press ESC key or click on ✕ button to close</p>
-                </div> */}
-                   <div className="card card-compact w-96 bg-base-100 shadow-xl">
-                      
-                          <form method="dialog">
-                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                          </form>    
-                          <h3 className='card-title justify-center'>Chủ đề</h3>                  
-                    <div className="card-body">
-                      <div className='flex flex-row justify-between'>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-yellow-100 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          
-                      </div>
-                      <div className='flex flex-row justify-between'>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          
-                      </div>
-                      <div className='flex flex-row justify-between'>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          
-                      </div>
-                      <div className='flex flex-row justify-between'>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          
-                      </div>
-                      <div className='flex flex-row justify-between'>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          
-                      </div>
-                      <div className='flex flex-row justify-between'>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          
-                      </div>
-    
-                         
-                    </div>
-                  </div>
-          </dialog>
+      {/* <div className="modal-box">
+        <form method="dialog">
+          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+        </form>
+        <h3 className="font-bold text-lg">Hello!</h3>
+        <p className="py-4">Press ESC key or click on ✕ button to close</p>
+      </div> */}
+      <div className="card card-compact w-96 bg-base-100 shadow-xl">
+            <form method="dialog">
+              <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+            </form>    
+            <h3 className='card-title justify-center'>Chủ đề</h3>                  
+      <div className="card-body">
+        <div className='flex flex-row justify-between'>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-yellow-100 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            
+        </div>
+        <div className='flex flex-row justify-between'>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            
+        </div>
+        <div className='flex flex-row justify-between'>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            
+        </div>
+        <div className='flex flex-row justify-between'>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            
+        </div>
+        <div className='flex flex-row justify-between'>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            
+        </div>
+        <div className='flex flex-row justify-between'>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            
+        </div>
+
+            
+      </div>
+    </div>
+    </dialog>
 
   </div>
   } else {
@@ -175,12 +211,43 @@ export default function Profile(props) {
         {/* All friend title */}
         <div className='border-b-2 border-gray-200'>
           {
-            users.map((elem, i) => 
-              <div key={i} className='flex items-center'>
-                <input type='checkbox' name='userInGroup' value={elem.phoneNumber}></input>
-                <Chat user={elem} setCurrentFriend={null} />
-              </div>
-            )
+            users.map((elem, i) => {
+              if (userRoot.phoneNumber == user.admin) {
+                if (elem.phoneNumber == user.admin)
+                  return <div key={i} className='flex items-center'>
+                    <Chat key={i} user={elem} setCurrentFriend={null} />
+
+                    <button className='bg-red-500 rounded-full p-2' onClick={() => handleOutGroup(elem)}>
+                      <p className='text-white'>Out</p>
+                    </button>
+                  </div>
+                else
+                  return <div key={i} className='flex items-center'>
+                    <Chat key={i} user={elem} setCurrentFriend={null} />
+
+                    <button className='bg-red-500 rounded-full p-2' onClick={() => handleRemoveFriend(elem)}>
+                      <p className='text-white'>Remove</p>
+                    </button>
+                  </div>
+              }
+              else {
+                return <div key={i} className='flex items-center'>
+                  <Chat key={i} user={elem} setCurrentFriend={null} />
+                </div>
+              }
+            })
+          }
+        </div>
+
+        <div className='flex justify-center'>
+          {
+            users.map((elem, i) => {
+              if (userRoot.phoneNumber == user.admin) {
+                if (elem.phoneNumber == user.admin) {
+                  return <button className='bg-red-600 text-white p-2 font-bold rounded-full' onClick={() => handleRemoveRoom()}>Remove room</button>
+                }
+              }
+            })
           }
         </div>
       </div>

@@ -29,9 +29,6 @@ export default function SidebarChat({user, handleCurrentFriend, handleUser}) {
   const [roomName, setRoomName] = useState("New Room");
   const [rooms, setRooms] = useState([]);
 
-  // console.log("----- Sidebar chat -----");
-  // console.log(user);
-
   const getFriendsRequestGet = async () => {
     const friends_request_get = await getRequestGet(user.phoneNumber);
     
@@ -59,7 +56,6 @@ export default function SidebarChat({user, handleCurrentFriend, handleUser}) {
   const socketGroupRef = useRef();
 
   const handleCurrentFriend2 = friend => {
-    // console.log("Called handle current friend 2");
     setCurrentFriend(friend);
     handleCurrentFriend(friend);
   }
@@ -84,8 +80,6 @@ export default function SidebarChat({user, handleCurrentFriend, handleUser}) {
   
   const handleCreateGroup = async () => {
     let checkedUsers = getCheckedBoxes("userInGroup");
-    // console.log("Checked user");
-    // console.log(checkedUsers);
 
     try {
       let idRoom = "room" + new Date().valueOf();
@@ -180,6 +174,10 @@ export default function SidebarChat({user, handleCurrentFriend, handleUser}) {
 
   useEffect(() => {}, [friendsRequestGet]);
   useEffect(() => {}, [friendsRequestSend]);
+
+  const loadRoom = data => {
+    setRooms(data);
+  }
 
   useEffect(() => {
     socket.emit("init-room", user.phoneNumber);
@@ -296,7 +294,7 @@ export default function SidebarChat({user, handleCurrentFriend, handleUser}) {
             friends.map((elem, i) => 
               <div key={i} className='flex items-center'>
                 <input type='checkbox' name='userInGroup' value={elem.phoneNumber}></input>
-                <Chat user={elem} setCurrentFriend={() => handleCurrentFriend2(elem)} />
+                <Chat user={elem} setCurrentFriend={() => handleCurrentFriend2(elem)} loadRoom={loadRoom}/>
               </div>
             )
           }

@@ -131,23 +131,15 @@ socketIo.on("connection", (socket) => {
   });
 
   socket.on("join-room", data => {
-    // console.log("Rooms id");
-    // console.log(data.id);
     socket.join(data.id);
 
     if ( rooms.find(elem => elem.id == data.id) == undefined ) {
       rooms.push(data);
     }
-    // console.log("Create room");
-    // console.log(rooms);
   });
 
   socket.on("init-room", userId => {
     socket.join(userId);
-
-    console.log("------- Init rooms");
-    console.log("Rooms");
-    console.log(rooms);
 
     let list_rooms = [];
     list_rooms = rooms.filter(elem => {
@@ -162,13 +154,8 @@ socketIo.on("connection", (socket) => {
     if (list_rooms == undefined)
       list_rooms = [];
 
-    console.log("List room");
-    console.log(list_rooms);
-
     if (list_rooms.length > 0)
       for (let i = 0; i < list_rooms.length; i++) {
-        console.log("List rooms id");
-        console.log(list_rooms[i].id);
         socketIo.to(userId).emit("rooms2", list_rooms);
 
         for (let j = 0; j < list_rooms[i].user.length; j++)
@@ -176,6 +163,17 @@ socketIo.on("connection", (socket) => {
 
         socketIo.to(list_rooms[i].id).emit("rooms2", list_rooms);
       }
+  });
+
+  socket.on("destroy-room", data => {
+    let removedIndex = rooms.findIndex(x => x.id === data.id);
+    rooms.splice(removedIndex, 1);
+
+    console.log("----------- Destroyed room");
+    console.log(data);
+
+    socket.leave(data.id);
+    // socketIo.emit("init-room", data.admin);
   });
 
   socket.on("init-chat-message", idRoom => {

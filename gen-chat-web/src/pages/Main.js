@@ -7,7 +7,7 @@ import { useLocation } from "react-router-dom";
 export default function Main() {
   const {state} = useLocation();
   
-  const [currentFriend, setCurrentFriend] = useState({})
+  const [currentFriend, setCurrentFriend] = useState({});
   const [user, setUser] = useState(state.user.data)
 
   const handleCurrentFriend = friend => {
@@ -15,8 +15,6 @@ export default function Main() {
   }
 
   const handleUser = new_user => {
-    console.log("--------------- new user ----------------");
-    console.log(new_user);
     setUser(new_user);
   }
   
@@ -24,7 +22,7 @@ export default function Main() {
     <div className='flex items-center w-full overflow-hidden'>
       <SidebarMenu user={user} />
       <SidebarChat user={user} handleCurrentFriend={handleCurrentFriend} handleUser={handleUser}/>
-      <Chats user={user} currentFriend={currentFriend} />
+      <Chats user={user} handleCurrentFriend={handleCurrentFriend} currentFriend={currentFriend} />
     </div>
   )
 }

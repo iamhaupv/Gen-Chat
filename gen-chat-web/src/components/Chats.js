@@ -7,7 +7,9 @@ import Profile from './Profile';
 import socket from "../utils/socketGroup"
 import InitialIcon from './InitialIcon';
 
-export default function Chats({user, currentFriend}) {
+import background from '../assets/background.png';
+
+export default function Chats({user, currentFriend, handleCurrentFriend}) {
   const [openRight, setOpenRight] = useState(true);
   const [open, setOpen] = useState(true);
 
@@ -59,7 +61,6 @@ export default function Chats({user, currentFriend}) {
           (m.sender == user.phoneNumber & m.receiver == currentFriend.phoneNumber) ||
           (m.receiver == user.phoneNumber & m.sender == currentFriend.phoneNumber) 
         ) {
-            // console.log("Message 1-1 " + index + " type " + m.type);
             chat = (m.sender == user.phoneNumber) ? 
             <ChatUser message={m} key={index} socketRef={socketRef}/> : 
             <ChatData message={m} key={index} socketRef={socketRef}/>
@@ -71,7 +72,6 @@ export default function Chats({user, currentFriend}) {
           (m.receiver == currentFriend.phoneNumber) ||
           (m.receiver == user.phoneNumber & m.sender == currentFriend.phoneNumber) 
         ) {
-            // console.log("Message group " + index + " type " + m.type);
             chat = (m.sender == user.phoneNumber) ? 
             <ChatUser message={m} key={index} socketRef={socketRef}/> : 
             <ChatData message={m} key={index} socketRef={socketRef}/>
@@ -92,50 +92,14 @@ export default function Chats({user, currentFriend}) {
           <>
             <div className={`h-screen ${open ? "w-full" : "w-full"}`}>
             <nav className='flex items-center justify-between p-2 pl-5 pr-5'>
-              {/* // Old */}
-              
-              {/* <div className='flex items-center gap-4 grow'>
-                <img className='aspect-square h-10 w-10 rounded-full' src='https://lh3.googleusercontent.com/a/ACg8ocLlO1pfA9KPIKdD6CNveeOZ6F7MzO8OPni_FMqOHqjx=s96-c'></img>
-                <div>
-                  <p className='font-medium text-xl'>Nguyen Thanh Khoa</p>
-                  <p className='font-normal'>Online</p>
-                </div>
-              </div> */}
-
-              {/* New */}
-
               <div className='flex items-center'>
                 <div className="avatar online">
                   <div className="w-10 rounded-full">
-                    {/* <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" /> */}
                     <InitialIcon size={10} initials={currentFriend.name.match(/(\b\S)?/g).join("").match(/(^\S|\S$)?/g).join("").toUpperCase()} />
                   </div>
                 </div>
                 <p className='font-medium text-xl ml-5'>{currentFriend.name}</p>
               </div>
-
-              {/* <div className="flex -space-x-2 overflow-hidden">
-                <img
-                  className="inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                  src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
-                <img
-                  className="inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                  src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
-                <img
-                  className="inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                  src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
-                  alt=""
-                />
-                <img
-                  className="inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
-              </div> */}
 
               <div className='flex items-center justify-between gap-4 '>
                 <div className=''></div>
@@ -153,55 +117,26 @@ export default function Chats({user, currentFriend}) {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                   </svg>
 
-                  {/* <div className="drawer drawer-end w-6 z-10">
-                    <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
-                    <div className="drawer-content">
-                      <label htmlFor="my-drawer-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        </svg>
-                      </label>
-                    </div> 
-                    <div className="drawer-side">
-                      <label htmlFor="my-drawer-4" className="drawer-overlay"></label>
-                      
-                      <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
-                        <li><a>Sidebar Item 1</a></li>
-                        <li><a>Sidebar Item 2</a></li>
-                      </ul>
-                    </div>
-                  </div> */}
-
               </div>
             </nav>
 
             <div className='h-4/5 overflow-y-scroll bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 '>
-              {renderMess.map((elem, i) => {
-                // console.log("--------------------");
-                // console.log(elem);
-                // console.log("--------------------");
-                return elem
-              })}
+              {
+                renderMess.map((elem, i) => {
+                  return elem
+                })
+              }
             </div>
 
             <ChatInput socketRef={socketRef} socket={socket} user={user} currentFriend={currentFriend} idRoom={idRoom} />
           </div>
-      
-            <Profile state={openRight} user={currentFriend} />
+            <Profile state={openRight} user={currentFriend} userRoot={user} handleCurrentFriend={handleCurrentFriend}/>
           </>
 
         ) : (
-          <></>
+          <img src={background} className='h-screen w-full'></img>
         )
       }
-
-      {/* <div className={`h-screen ${open ? "w-1/4" : "w-0"}`}>
-        <div className=' bg-purple h-screen p-5 relative duration-300' >
-
-        </div>
-      </div> */}
-
     </div>
   )
 }

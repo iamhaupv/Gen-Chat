@@ -184,7 +184,7 @@ export default function ChatData({message, socketRef}) {
 
           <div className='flex'>
             <div className="flex flex-col leading-1.5 p-4 border-gray-200 bg-white rounded-e-xl rounded-es-xl dark:bg-gray-700">
-              <p className="text-sm font-normal text-gray-900 dark:text-white">
+              <div className="text-sm font-normal text-gray-900 dark:text-white">
                 {/* {
                   message.type == "text" ? 
                     message.content : 
@@ -201,7 +201,7 @@ export default function ChatData({message, socketRef}) {
                         <a download={message.filename} href={message.link} className='underline text-blue-400'>{message.filename}</a>
                 } */}
                 {comp}
-              </p>
+              </div>
             </div>
 
             {/* <details className="dropdown bg-transparent border-0">
