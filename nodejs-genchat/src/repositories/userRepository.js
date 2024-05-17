@@ -4,12 +4,11 @@ const jwt = require("jsonwebtoken");
 const mailer = require("../utils/mailer");
 // login (đăng nhập)
 const login = async ({ phoneNumber, password }) => {
-  let existUser
+  let existUser;
   try {
     existUser = await User.findOne({ phoneNumber }).exec();
-    
   } catch (error) {
-    console.log("Error " + error);    
+    console.log("Error " + error);
   }
   console.log("---------Go to log in repo");
   console.log("Exist User");
@@ -49,7 +48,7 @@ const register = async ({
   listRequestSend,
   listRequestGet,
 }) => {
-  console.log("---------------Go to register repo---------------")
+  console.log("---------------Go to register repo---------------");
   try {
     const existUser = await User.findOne({ phoneNumber }).exec(); // tìm kiếm dựa trên số diện thoại hoặc email
     if (!!existUser) {
@@ -206,10 +205,12 @@ const acceptRequestGet = async (phoneNumber, phoneNumberUserGet, roomId) => {
       //   - listFriend: thêm phoneNumberUserGet vào danh sách bạn bè
       //   - $pull: loại bỏ phoneNumberUserGet khỏi listRequestGet
       {
-        $push: { listFriend: {
-          friend_id: phoneNumberUserGet, 
-          room_id: roomId
-        } },
+        $push: {
+          listFriend: {
+            friend_id: phoneNumberUserGet,
+            room_id: roomId,
+          },
+        },
         $pull: { listRequestGet: phoneNumberUserGet },
       },
       // Tùy chọn: trả về bản ghi đã cập nhật
@@ -248,10 +249,12 @@ const acceptRequestSend = async (phoneNumber, phoneNumberUserGet, roomId) => {
       //   - listFriend: thêm phoneNumberUserGet vào danh sách bạn bè
       //   - $pull: loại bỏ phoneNumberUserGet khỏi listRequestGet
       {
-        $push: { listFriend: {
-          friend_id: phoneNumberUserGet, 
-          room_id: roomId
-        } },
+        $push: {
+          listFriend: {
+            friend_id: phoneNumberUserGet,
+            room_id: roomId,
+          },
+        },
         $pull: { listRequestSend: phoneNumberUserGet },
       },
       // Tùy chọn: trả về bản ghi đã cập nhật
@@ -401,31 +404,40 @@ const removeFriend = async (phoneNumber, phoneRemove) => {
   }
 };
 // get List Friend
-const getListFriend = async(phoneNumber) =>{
+const getListFriend = async (phoneNumber) => {
   const user = await User.findOne({ phoneNumber });
   if (!user) {
     throw new Error();
   } else {
     return user.listFriend;
   }
-}
+};
 // change password by phoneNumber
 const changePassword = async (phoneNumber, newPassword) => {
   try {
-    const user = await User.findOne({phoneNumber})
-    if(!user){
-      throw new Error("User is not exist!")
+    const user = await User.findOne({ phoneNumber });
+    if (!user) {
+      throw new Error("User is not exist!");
     }
     const hashPassword = await bcrypt.hash(
       newPassword,
       parseInt(process.env.SALT_ROUNDS)
     );
-    await user.updateOne({password: hashPassword})
+    await user.updateOne({ password: hashPassword });
   } catch (error) {
-    console.log(error)
-    throw new Error(error)
+    console.log(error);
+    throw new Error(error);
   }
-}
+};
+// get all users
+const getAllUser = async () => {
+  try {
+    const users = await User.find().exec(); // Fetch all users
+    return users;
+  } catch (error) {
+    console.log(error);
+  }
+};
 module.exports = {
   changePassword,
   getListFriend,
@@ -444,4 +456,5 @@ module.exports = {
   login,
   register,
   getInfor,
+  getAllUser,
 };

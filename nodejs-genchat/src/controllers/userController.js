@@ -370,16 +370,16 @@ const acceptFriend = async (req, res) => {
     console.log(req.body);
     const { phoneNumberUserSend, phoneNumberUserGet } = req.body;
     console.log("---- 1 ----");
-    
-    const room_id = "room" + new Date().valueOf();    
+
+    const room_id = "room" + new Date().valueOf();
     await userRepository.acceptRequestSend(
       phoneNumberUserSend,
-      phoneNumberUserGet, 
+      phoneNumberUserGet,
       room_id
     );
     await userRepository.acceptRequestGet(
       phoneNumberUserGet,
-      phoneNumberUserSend, 
+      phoneNumberUserSend,
       room_id
     );
     res.status(200).json({
@@ -524,7 +524,7 @@ const getListFriend = async (req, res) => {
 const changePassword = async (req, res) => {
   try {
     const { phoneNumber, newPassword } = req.body;
-    console.log(phoneNumber, newPassword)
+    console.log(phoneNumber, newPassword);
     await userRepository.changePassword(phoneNumber, newPassword);
     res.status(200).json({
       message: "Change password successfully!",
@@ -536,7 +536,21 @@ const changePassword = async (req, res) => {
     });
   }
 };
-//
+// get all users
+const getAllUser = async (req, res) => {
+  try {
+    const collection = await userRepository.getAllUser();
+    res.status(200).json({
+      message: "Successfully",
+      data: collection,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Collection is empty",
+    });
+  }
+};
 module.exports = {
   changePassword,
   getListFriend,
@@ -560,4 +574,5 @@ module.exports = {
   reset,
   login,
   register,
+  getAllUser,
 };

@@ -1,14 +1,13 @@
 import host from "../../GlobalVariable";
 import axios from "axios";
 const loginUser = async (phoneNumber, password) => {
-  console.log("Go to login user service");
-  // console.log(api_host.api_host);
   try {
     const userData = {
       phoneNumber: phoneNumber,
       password: password,
     };
-    const response = await axios.post(host.api_host + "/users/login", userData);
+    // const response = await axios.post(host.api_host + "/users/login", userData);
+    const response = await axios.post("http://3.0.51.200:3000/users/login", userData);
     if (response.status === 200) {
       console.log("Login successful:", response.data);
       

@@ -5,8 +5,12 @@ const getInfor = async (phoneNumber) => {
     const userData = {
       phoneNumber: phoneNumber,
     };
+    // const response = await axios.post(
+    //   api_host + "/users/get-infor",
+    //   userData
+    // );
     const response = await axios.post(
-      api_host + "/users/get-infor",
+      "http://3.0.51.200:3000/users/get-infor",
       userData
     );
     if (response.status === 200) {
