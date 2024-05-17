@@ -9,8 +9,6 @@ export default function Main() {
   
   const [currentFriend, setCurrentFriend] = useState({})
   const [user, setUser] = useState(state.user.data)
-  
-  // setUser(  ); // Read values passed on state
 
   const handleCurrentFriend = friend => {
     setCurrentFriend(friend);

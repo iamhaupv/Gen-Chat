@@ -1,5 +1,4 @@
 import React, {useState, useRef, useEffect} from 'react';
-import { io } from "socket.io-client";
 import ChatData from './ChatData'
 import ChatUser from './ChatUser'
 import ChatInput from './ChatInput'
@@ -16,21 +15,9 @@ export default function Chats({user, currentFriend}) {
   const socketRef = useRef();
   let idRoom = null;
 
-  console.log("------------- Current friend in chats ---------------");
-  console.log(currentFriend);
-
   const friend = user.listFriend.find(elem => {
-    console.log("------------- Elem ---------------");
-    console.log(elem);
-
     return elem.friend_id == currentFriend.phoneNumber
   });
-
-  console.log("------------- User in chats ---------------");
-  console.log(user);
-  console.log("------------- Friend in chats ---------------");
-  console.log(friend);
-
 
   if (friend != undefined)
     idRoom = friend.room_id;

@@ -1,13 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { TouchableHighlight,  } from 'react-native'
-import { Input, InputSlot, InputField, InputIcon, SearchIcon, Box, FlatList, HStack, VStack, Text, Heading, Avatar, AvatarImage, Fab, FabIcon, AddIcon, AvatarFallbackText, View } from '@gluestack-ui/themed';
+import { InputIcon, SearchIcon, Box, FlatList, HStack, VStack, Text, Avatar, Fab, FabIcon, AddIcon, AvatarFallbackText, View } from '@gluestack-ui/themed';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import getListFriend from '../services/getListFriend';
 import getInfor from '../services/getInfor';
 import {socket} from '../utils/socket';
-import findUserByPhoneNumber from '../services/findUserByPhoneNumber';
 
 const ChatScreen = createNativeStackNavigator();
 
@@ -18,6 +17,7 @@ export default function Chats({route, user, navigation}) {
   const userRoot = user.data;
 
   const getListFriends = async () => {
+    
     const listFriend = await getListFriend(userRoot.phoneNumber);
 
     const temp_friends = [];

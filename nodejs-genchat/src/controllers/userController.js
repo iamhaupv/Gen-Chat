@@ -19,15 +19,12 @@ const login = async (req, res) => {
     });
   }
   const { phoneNumber, password } = req.body;
-  console.log("---------------------------");
-  console.log(phoneNumber);
-  console.log(password);
-  console.log("---------------------------");
   try {
     let existUser = await userRepository.login({
       phoneNumber,
       password,
     });
+
     res.status(200).json({
       message: "Login successfully!",
       data: existUser,
