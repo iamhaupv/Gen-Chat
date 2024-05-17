@@ -1,8 +1,3 @@
-import {
-  Box, 
-  Text 
-} from "@gluestack-ui/themed"
-  
 import { createProvider } from "@gluestack-ui/provider"
 import { StyledProvider } from "@gluestack-style/react"
 import { config } from "@gluestack-ui/config"
@@ -15,6 +10,8 @@ import SignUp from "../components/SignUp";
 import ForgotPassword from "../components/ForgotPassword";
 import Chat from "../components/Chat";
 import GroupChat from "../components/GroupChat";
+import Search from "../components/Search";
+import FriendProfile from "../components/FriendProfile";
   
 export const Provider = createProvider({
   StyledProvider,
@@ -84,6 +81,14 @@ export default function Home({navigation}) {
 
         <Screen.Screen name="GroupChat">
           {(props) => <GroupChat {...props} />}
+        </Screen.Screen>
+
+        <Screen.Screen name="Search">
+          {(props) => <Search {...props} />}
+        </Screen.Screen>
+
+        <Screen.Screen name="FriendProfile">
+          {(props) => <FriendProfile {...props} />}
         </Screen.Screen>
         
       </Screen.Navigator>

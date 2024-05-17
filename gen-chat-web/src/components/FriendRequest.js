@@ -5,6 +5,7 @@ import removeRequestGet from '../services/users/removeRequestGet';
 import removeRequestSend from '../services/users/removeRequestSend';
 import findUserByPhoneNumber from '../services/users/findUserByPhoneNumber';
 export default function FriendRequest({userRoot, user, handleUser}) {
+  
   const handleAccept = async () => {
     await acceptFriend(userRoot.phoneNumber, user.phoneNumber);
     await removeRequestGet(userRoot.phoneNumber, user.phoneNumber);

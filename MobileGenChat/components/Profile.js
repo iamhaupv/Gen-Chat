@@ -1,10 +1,7 @@
-import { Box, Text, Avatar, AvatarFallbackText, VStack, ImageBackground } from '@gluestack-ui/themed';
+import { View, Box, Text, Avatar, AvatarFallbackText, VStack, ImageBackground, Button } from '@gluestack-ui/themed';
 import React from 'react'
-import { View } from 'react-native'
 
-export default function Profile({route, navigation}) {
-  const user = route.params?.user;
-  
+export default function Profile({user, navigation}) {
   return (
     <View>
       <Box width="100%">
@@ -18,11 +15,20 @@ export default function Profile({route, navigation}) {
             <Avatar size='xl' style={{
               top: 250
             }}>
-              <AvatarFallbackText>Lmao</AvatarFallbackText>
+              <AvatarFallbackText>{user.name}</AvatarFallbackText>
             </Avatar>
 
           </ImageBackground>
-          <Text fontSize="$xl" fontWeight='bold' lineHeight={650} textAlign='center'>Khoa Da Den</Text>
+
+          <View>
+            <Text fontSize="$xl" fontWeight='bold' lineHeight={650} textAlign='center'>
+              {user.name}
+            </Text>
+
+            <Button lineHeight={70} onPress={() => navigation.navigate("Main", {user: null})}>
+              <Text>Log out</Text>
+            </Button>
+          </View>
         </VStack>
       </Box>
     </View>

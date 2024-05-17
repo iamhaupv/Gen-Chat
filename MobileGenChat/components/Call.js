@@ -28,8 +28,6 @@ export default function Call({navigation}) {
 
   useEffect(() => {
     getListFriends();
-    console.log("friends");
-    console.log(friends);
   }, [])
 
   const data = [
@@ -89,7 +87,6 @@ export default function Call({navigation}) {
           <TouchableHighlight
             key={index}
             onPress={() => {
-              // console.log("Home");
               navigation.navigate("Chat", {user: item})
             }}
           >

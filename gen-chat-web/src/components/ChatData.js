@@ -88,6 +88,28 @@ export default function ChatData({message, socketRef}) {
     // Return the array if it is non-empty, or null
     return checkboxesChecked.length > 0 ? checkboxesChecked : null;
   }
+
+  let comp;
+
+  if (message.type == "text" ) {
+    if (message.status == "ready" || message.status == "deleted")
+      comp = <div className="text-sm font-normal text-gray-900 dark:text-white">
+        {message.content}
+      </div>
+    else if (message.status == "removed")
+      comp = <div className="text-sm font-normal text-gray-900 dark:text-white">
+        This message had been removed
+      </div>
+  }
+  else if (
+    message.type == "image/png" || 
+    message.type == "image/jpeg" || 
+    message.type == "image/jpg"
+  ) {
+    comp = <img src={message.content} width={200}></img>
+  } else {
+    comp = <a download={message.filename} href={message.link} className='underline text-blue-400'>{message.filename}</a>
+  }
   
   return (
     <div className="flex items-start gap-2.5">
@@ -164,7 +186,7 @@ export default function ChatData({message, socketRef}) {
           <div className='flex'>
             <div className="flex flex-col leading-1.5 p-4 border-gray-200 bg-white rounded-e-xl rounded-es-xl dark:bg-gray-700">
               <p className="text-sm font-normal text-gray-900 dark:text-white">
-                {
+                {/* {
                   message.type == "text" ? 
                     message.content : 
                       message.type == "image/png" || 
@@ -178,11 +200,12 @@ export default function ChatData({message, socketRef}) {
                         // </video>
                         // :
                         <a download={message.filename} href={message.link} className='underline text-blue-400'>{message.filename}</a>
-                }
+                } */}
+                {comp}
               </p>
             </div>
 
-            <details className="dropdown bg-transparent border-0">
+            {/* <details className="dropdown bg-transparent border-0">
               <summary className="m-1 btn bg-transparent border-0">
                 <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15">
                   <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/>
@@ -192,7 +215,7 @@ export default function ChatData({message, socketRef}) {
                 <li><a>Reply</a></li>
                 <li><a onClick={handleReplyMessage}>Forward</a></li>
               </ul>
-            </details>
+            </details> */}
           </div>
           
           {/* <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Delivered</span> */}

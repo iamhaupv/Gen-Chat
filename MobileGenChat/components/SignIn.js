@@ -22,10 +22,8 @@ import auth from "../firebase/config.js";
 //
 import loginUser from "../services/loginUser.js";
 export default function SignIn({ navigation }) {
-  // console.log(auth);
-  const [phoneNumber, onChangePhoneNumber] = useState("");
-  const [password, onChangePassword] = useState("");
-
+  const [phoneNumber, onChangePhoneNumber] = useState("0932659945");
+  const [password, onChangePassword] = useState("0932659945");
  
   // Ham nay chay lien tuc de kiem tra xem nguoi dung co dang nhap ko
   // auth.onAuthStateChanged((user) => {
@@ -40,12 +38,10 @@ export default function SignIn({ navigation }) {
     
       var provider = new auth.GoogleAuthProvider();
       
-      console.log("Pressed Sign in");
       provider.addScope('profile');
       provider.addScope('email');
       
     const userCred = await firebase.auth().signInWithPopup(provider).then(function(result){
-      console.log(userCred);
       var token = result.credential.accessToken;
       var user = result.user;
     });
@@ -55,7 +51,7 @@ export default function SignIn({ navigation }) {
     try {
       const user = await loginUser(phoneNumber, password);
       // Đăng ký thành công, chuyển hướng đến màn hình đăng nhập
-      navigation.navigate("Main", {user});
+      navigation.navigate("Main", {user: user, phoneNumber: user.phoneNumber});
     } catch (error) {
       console.error("Registration error:", error);
     }

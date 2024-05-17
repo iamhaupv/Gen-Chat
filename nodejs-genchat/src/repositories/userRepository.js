@@ -386,17 +386,18 @@ const removeRequestGet = async (phoneNumber, phoneNumberRemove) => {
 // delete friend xóa phone trong listFriend của cả 2 bên
 const removeFriend = async (phoneNumber, phoneRemove) => {
   try {
+    console.log(phoneNumber + " " + phoneRemove);
     const user = await User.findOne({ phoneNumber });
     if (!user) {
       throw new Error("User is not exist!");
     }
-    const phone = user.listFriend.includes(phoneRemove);
+    const phone = user.listFriend.find(friend => friend.friend_id == phoneRemove);
     if (!phone) {
       throw new Error("Phone is not exist!");
     }
     await User.findOneAndUpdate(
       { phoneNumber },
-      { $pull: { listFriend: phoneRemove } }
+      { $pull: { listFriend: phone } }
     );
   } catch (error) {
     console.log(error);

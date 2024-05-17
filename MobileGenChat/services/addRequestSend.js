@@ -7,7 +7,7 @@ const addRequestSend = async (phoneNumberUserSend, phoneNumberUserGet) => {
       phoneNumberUserGet: phoneNumberUserGet,
     };
     const response = await axios.post(
-      host.api_host + "/users/addRequestSend",
+      host.api_host + "/users/add-request-send",
       userData
     );
     if (response.status === 200) {

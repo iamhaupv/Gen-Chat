@@ -1,13 +1,9 @@
-import {
-  Box, 
-  Text, 
-} from "@gluestack-ui/themed"
-
 import { 
   CircleUserRound,
   MessageCircleMore, 
   Phone, 
-  SquareUserRound
+  SquareUserRound,
+  UsersRound
 } from 'lucide-react-native'; 
 
 import { createProvider } from "@gluestack-ui/provider"
@@ -15,23 +11,27 @@ import { StyledProvider } from "@gluestack-style/react"
 import { config } from "@gluestack-ui/config"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
   
-import React from 'react'
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import React, { useEffect } from 'react'
 import Profile from "../components/Profile";
 import Contact from "../components/Contact";
 import Chats from "../components/Chats";
 import Call from "../components/Call";
 import { Image } from "react-native";
 import GenChatLogo from "./GenChatLogo";
+import GroupScreen from "../components/groupScreen";
+import getInfor from '../services/getInfor';
   
 export const Provider = createProvider({
-    StyledProvider,
+  StyledProvider,
 })
 
 const Tab = createBottomTabNavigator();
   
 export default function Main({route, navigation}) {
-  const user = route.params.user
+  let user = route.params.user;
+
+  useEffect(() => {}, [route]);
+  useEffect(() => {}, [navigation]);
 
   return (
     <Provider config={config}>
@@ -45,15 +45,15 @@ export default function Main({route, navigation}) {
                 iconName = focused
                 ? elem = <MessageCircleMore strokeWidth={1.75} color="blue" />
                 : elem = <MessageCircleMore strokeWidth={1} color="blue" />
-              } else if (route.name === 'Call') {
+              } else if (route.name === 'Create Group') {
                 iconName = focused 
-                ? elem = <Phone strokeWidth={1.75} color="blue" />
-                : elem = <Phone strokeWidth={1} color="blue" />
+                ? elem = <UsersRound strokeWidth={1.75} color="blue" />
+                : elem = <UsersRound strokeWidth={1} color="blue" />
               } else if (route.name === 'GenChatLogo') {
                 iconName = focused 
                 ? elem = <Image source={require('../assets/logo.png')} style={{borderRadius: 80}}></Image>
                 : elem = <Image source={require('../assets/logo.png')} style={{borderRadius: 80}}></Image>
-              } else if (route.name === 'Contact') {
+              } else if (route.name === 'Friend Request') {
                 iconName = focused 
                 ? elem = <SquareUserRound strokeWidth={1.75} color="blue" />
                 : elem = <SquareUserRound strokeWidth={1} color="blue" />
@@ -76,20 +76,24 @@ export default function Main({route, navigation}) {
           {(props) => <Chats user={user} {...props} />}
         </Tab.Screen>
 
-        <Tab.Screen name="Call">
-          {(props) => <Call {...props} />}
+        <Tab.Screen name="Create Group">
+          {(props) => <GroupScreen user={user.data} {...props} />}
         </Tab.Screen>
+
+        {/* <Tab.Screen name="Call">
+          {(props) => <Call {...props} />}
+        </Tab.Screen> */}
 
         <Tab.Screen name="GenChatLogo"  options={{ title: '' }}>
           {(props) => <GenChatLogo {...props} />}
         </Tab.Screen>
 
-        <Tab.Screen name="Contact">
-          {(props) => <Contact {...props} />}
+        <Tab.Screen name="Friend Request">
+          {(props) => <Contact user={user.data} {...props} />}
         </Tab.Screen>
 
         <Tab.Screen name="Profile">
-          {(props) => <Profile {...props} />}
+          {(props) => <Profile user={user.data} {...props} />}
         </Tab.Screen>
         
       </Tab.Navigator>
