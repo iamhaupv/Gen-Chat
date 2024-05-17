@@ -209,12 +209,33 @@ socketIo.on("connection", (socket) => {
   });
 
   socket.on("forward-message", async data => {
-    let found_room = rooms.find(room => room.id == data.idRoom);
-
-    let found_message = found_room.messages.find(mess => mess.idMessage = data.idMessageToForward);
-  
-    console.log("------- Found Message to forward---------");
-    console.log(found_message);
+    for (let i = 0; i < data.receivers.length; i++) {
+      console.log({
+        type: "text", 
+        idMessage: "mess" + new Date().valueOf(), 
+        date: new Date().toLocaleString(), 
+        idRoom: data.receivers[i].room_id, 
+        sender: data.sender, 
+        sender_name: data.sender_name, 
+        receiver: data.receivers[i].phoneNumber, 
+        content: data.content, 
+        chat_type: data.type, 
+        status: "ready"
+      });
+      
+      socket.emit('chat-message', {
+        type: "text", 
+        idMessage: "mess" + new Date().valueOf(), 
+        date: new Date().toLocaleString(), 
+        idRoom: data.receivers[i].room_id, 
+        sender: data.sender, 
+        sender_name: data.sender_name, 
+        receiver: data.receivers[i].phoneNumber, 
+        content: data.content, 
+        chat_type: data.type, 
+        status: "ready"
+      });
+    }
   });
 
   socket.on("remove-message", async data => {

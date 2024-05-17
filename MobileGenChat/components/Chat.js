@@ -41,9 +41,6 @@ export default function Chat({route, navigation}) {
     let userID = userRoot.phoneNumber;
     let receiverID = receiver.phoneNumber;
     let type = 'text';
-
-    // console.log("Send Messaage");
-    // console.log(userID + ': ' + receiverID + ': ' + content);
     
     socket.emit('chat-message', {
       type: "text", 
@@ -127,9 +124,9 @@ export default function Chat({route, navigation}) {
         {
           messages.map((msg, index) => {
             if (msg.sender == userRoot.phoneNumber)
-              return <ChatUser key={index} data={msg}/>;
+              return <ChatUser key={index} data={msg} navigation={navigation} />
             else
-              return <ChatData key={index} data={msg}/>;
+              return <ChatData key={index} data={msg} navigation={navigation} />
           })
         }
       </ScrollView>

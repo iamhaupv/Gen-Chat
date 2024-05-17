@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Button, ButtonGroup, ButtonText, HStack, Text, View, } from '@gluestack-ui/themed';
+import { Avatar, AvatarFallbackText, Button, ButtonGroup, ButtonText, HStack, Text, View, } from '@gluestack-ui/themed';
 
 import getInfor from '../services/getInfor';
-import { EllipsisVertical } from 'lucide-react-native';
+import { EllipsisVertical, Navigation } from 'lucide-react-native';
 import {socket} from '../utils/socket';
 
-export default function ChatUser({data}) {
+export default function ChatUser({data, navigation}) {
   const [userName, setUserName] = useState(null);
   const [isOpen, setIsOpen] = useState(false)
   
@@ -19,12 +19,7 @@ export default function ChatUser({data}) {
   }
 
   const handleForward = () => {
-    socket.emit('forward-message', {
-      idMessageToForward: data.idMessage, 
-      idRoom: data.idRoom, 
-      sender: data.sender,
-      receiver: data.receiver,
-    });
+    navigation.navigate("Forward Message", {data: data})
 
     setIsOpen(!isOpen);
   }
@@ -58,6 +53,10 @@ export default function ChatUser({data}) {
       <View style={{
         alignSelf: 'flex-end'
       }}>
+        {/* <Avatar size="md" alignSelf='flex-end'>
+          <AvatarFallbackText>{userName}</AvatarFallbackText>
+        </Avatar> */}
+
         <Text style={{
           padding: 10, 
           alignSelf: "flex-end"
@@ -94,7 +93,8 @@ export default function ChatUser({data}) {
   
         <Text style={{
           padding: 10, 
-          fontSize: 10
+          fontSize: 10, 
+          alignSelf: "flex-end"
         }}>
           {data.date}
         </Text>

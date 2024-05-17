@@ -19,17 +19,18 @@ export default function Chats({route, user, navigation}) {
 
   const getListFriends = async () => {
     const listFriend = await getListFriend(userRoot.phoneNumber);
+
     const temp_friends = [];
     
     for (let i = 0; i < listFriend.data.length; i++) {
+      socket.emit('join', listFriend.data[i].room_id);
+      socket.emit("init-chat-message", listFriend.data[i].room_id);
+
       const friend = await getInfor( listFriend.data[i].friend_id );
       temp_friends.push(friend.data);
     }
 
     setFriends(temp_friends);
-
-    console.log("--------------- Friends");
-    console.log(temp_friends);
   }
 
   useEffect(() => {
