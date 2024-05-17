@@ -20,7 +20,7 @@ export default function Profile(props) {
 
     <div className="avatar items-center justify-center pt-8">
       <div className="w-16 rounded-full">
-      <InitialIcon size={16} initials={user.name.match(/(\b\S)?/g).join("").match(/(^\S|\S$)?/g).join("").toUpperCase()} />
+        <InitialIcon size={16} initials={user.name.match(/(\b\S)?/g).join("").match(/(^\S|\S$)?/g).join("").toUpperCase()} />
       </div>
     </div>
 
@@ -187,8 +187,8 @@ export default function Profile(props) {
     </dialog>
 
     <div className="avatar items-center justify-center pt-8">
-      <div className="w-20 rounded-full">
-        <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+      <div className="w-16 rounded-full">
+        <InitialIcon size={16} initials={user.name.match(/(\b\S)?/g).join("").match(/(^\S|\S$)?/g).join("").toUpperCase()} />
       </div>
     </div>
 

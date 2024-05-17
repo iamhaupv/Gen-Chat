@@ -13,6 +13,7 @@ import addRequestGet from '../services/users/addRequestGet';
 import addRequestSend from '../services/users/addRequestSend';
 
 import socket from "../utils/socketGroup"
+import InitialIcon from './InitialIcon';
 
 export default function SidebarChat({user, handleCurrentFriend, handleUser}) {
   const [showListFriendRequest, setShowListFriendRequest] = useState("");
@@ -217,10 +218,17 @@ export default function SidebarChat({user, handleCurrentFriend, handleUser}) {
       <dialog id="my_modal_1" className="modal">
 
         <div className="card card-compact w-96 bg-base-100 shadow-xl">
-          <figure><img src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes" /></figure>
+          <figure>
+            <img src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes" />
+          </figure>
+
           <div className="avatar -top-3 left-2">
             <div className="w-24 rounded-full border-2  border-white ">
-              <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+              <InitialIcon size={24} initials={
+                searchedUser != null ? 
+                  searchedUser.name.match(/(\b\S)?/g).join("").match(/(^\S|\S$)?/g).join("").toUpperCase() :
+                  "Null"
+              } />
             </div>
             <h2 className="card-title ">{searchedUser != null ? searchedUser.name : ""}</h2> 
           </div>
@@ -408,7 +416,6 @@ export default function SidebarChat({user, handleCurrentFriend, handleUser}) {
           <div className='h-4/5 overflow-y-scroll'>
             {
               friendsRequestGet.map((elem, i) => {
-                
                 return <FriendRequest key={i} userRoot={user} user={elem} handleUser={handleUser} />
               })
             }

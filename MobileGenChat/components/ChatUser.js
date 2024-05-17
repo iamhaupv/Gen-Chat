@@ -63,8 +63,6 @@ export default function ChatUser({data, navigation}) {
         }}>{userName}</Text>
   
         <HStack alignItems='center' justifyContent='flex-end'>
-          <EllipsisVertical color="gray" onPress={handleOpen}/>
-          
           {
             data.status == "removed" ? 
               <Text style={{
@@ -77,16 +75,19 @@ export default function ChatUser({data, navigation}) {
               }}>
                 This message had been removed
               </Text> :
-              <Text style={{
-                width: "auto", 
-                marginRight: 10, 
-                padding: 10, 
-                color: "white", 
-                backgroundColor: "blue", 
-                borderRadius: 10
-              }}>
-                {data.content}
-              </Text>
+              <>
+                <EllipsisVertical color="gray" onPress={handleOpen}/>
+                <Text style={{
+                  width: "auto", 
+                  marginRight: 10, 
+                  padding: 10, 
+                  color: "white", 
+                  backgroundColor: "blue", 
+                  borderRadius: 10
+                }}>
+                  {data.content}
+                </Text>
+              </>
           }
   
         </HStack>
@@ -99,17 +100,21 @@ export default function ChatUser({data, navigation}) {
           {data.date}
         </Text>
   
-        <ButtonGroup display={isOpen ? "flex" : "none"} flexDirection='column' gap={0}>
-          <Button borderRadius={0} bgColor='#eeeeee' onPress={handleForward}>
-            <ButtonText color='#000000'>Forward</ButtonText>
-          </Button>
-          <Button borderRadius={0} bgColor='#eeeeee' onPress={handleRemove}>
-            <ButtonText color='#000000'>Remove</ButtonText>
-          </Button>
-          <Button borderRadius={0} bgColor='#eeeeee' onPress={handleDelete}>
-            <ButtonText color='#000000'>Delete</ButtonText>
-          </Button>
-        </ButtonGroup>
+        {
+          data.status == "ready" ? 
+          <ButtonGroup display={isOpen ? "flex" : "none"} flexDirection='column' gap={0}>
+            <Button borderRadius={0} bgColor='#eeeeee' onPress={handleForward}>
+              <ButtonText color='#000000'>Forward</ButtonText>
+            </Button>
+            <Button borderRadius={0} bgColor='#eeeeee' onPress={handleRemove}>
+              <ButtonText color='#000000'>Remove</ButtonText>
+            </Button>
+            <Button borderRadius={0} bgColor='#eeeeee' onPress={handleDelete}>
+              <ButtonText color='#000000'>Delete</ButtonText>
+            </Button>
+          </ButtonGroup> :
+          <></>
+        }
       </View>
     )
   else
