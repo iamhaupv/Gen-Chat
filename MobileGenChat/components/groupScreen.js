@@ -10,7 +10,7 @@ import getInfor from '../services/getInfor';
 import {socket} from '../utils/socket';
 
 export default GroupScreen = ({ user, navigation }) => {
-    const [nameGroup, setNameGroup] = useState("");
+    const [nameGroup, setNameGroup] = useState("New Room");
     const [friends, setFriends] = useState([]);
     const [checkboxes, setCheckboxes] = useState(friends.map(() => false));
 
