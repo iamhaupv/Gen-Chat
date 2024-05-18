@@ -102,7 +102,7 @@ export default function GroupChat({route, navigation}) {
           {room.name}
         </Text>
 
-        <Phone
+        {/* <Phone
           size={30}
           strokeWidth={2}
           color="blue"
@@ -110,14 +110,14 @@ export default function GroupChat({route, navigation}) {
             navigation.goBack();
           }}
           style={{padding: 10}}
-        />
+        /> */}
 
         <Info
           size={30}
           strokeWidth={2}
           color="blue"
           onPress={() => {
-            navigation.goBack();
+            navigation.navigate("Group info", {userRoot, room});
           }}
           style={{padding: 10}}
         />
@@ -136,12 +136,6 @@ export default function GroupChat({route, navigation}) {
                 return <ChatData key={index} data={msg}/>;
             })
           }
-        {/* <ChatUser data={{content: 'Xin chao, khoa da den'}} />
-        <ChatData data={{content: 'Toi muon mua khoa voi gia 2 cent'}} />
-        <ChatUser data={{content: 'Toi muon mua khoa voi gia 2 cent'}} />
-        <ChatData data={{content: 'Toi muon mua khoa voi gia 2 cent'}} />
-   
-      */}
       </ScrollView>
 
       <View

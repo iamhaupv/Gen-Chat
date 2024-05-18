@@ -152,7 +152,7 @@ socketIo.on("connection", (socket) => {
         idMessage: "mess" + new Date().valueOf(), 
         date: new Date().toLocaleString(),  
         idRoom: data.id, 
-        sender: data.remainingUserPhoneNumber[i].phoneNumber,
+        sender: data.admin,
         sender_name: data.admin,
         receiver: data.id,
         content: data.remainingUserPhoneNumber[i].name + " had join the group at " + new Date().toLocaleString(),
@@ -292,6 +292,8 @@ socketIo.on("connection", (socket) => {
   });
 
   socket.on("chat-message", async data => {
+    data.date = new Date().toLocaleString();
+
     console.log(rooms.find(elem => elem.id == data.idRoom));
     
     if ( rooms.find(elem => elem.id == data.idRoom) != undefined ) {

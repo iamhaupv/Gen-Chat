@@ -60,14 +60,7 @@ export default function Chats({route, user, navigation}) {
           navigation.navigate("Search", {user: user.data})
         }}
       >
-      {/* <Input size='xl'>
-        <InputSlot pl='$3'>
-          <InputIcon as={SearchIcon}/>
-        </InputSlot>
-        <InputField
-          placeholder="Search..."
-        />
-      </Input> */}
+
       <View p={10}>
         <HStack space='md'>
           <InputIcon as={SearchIcon}/>

@@ -10,7 +10,7 @@ const getInfor = async (phoneNumber) => {
       userData
     );
     if (response.status === 200) {
-      console.log("Get info successfully!:", response.data);
+      // console.log("Get info successfully!:", response.data);
 
       return response.data;
     } else {

@@ -11,7 +11,7 @@ const loginUser = async (phoneNumber, password) => {
       };
       const response = await axios.post(host.api_host + "/users/login", userData);
       if (response.status === 200) {
-        console.log("Login successful:", response.data);
+        // console.log("Login successful:", response.data);
         
         return response.data;
       } else {

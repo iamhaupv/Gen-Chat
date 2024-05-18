@@ -184,7 +184,7 @@ const acceptRequestGet = async (phoneNumber, phoneNumberUserGet, roomId) => {
   try {
     // Tìm kiếm người dùng
     const user = await User.findOne({ phoneNumber });
-    console.log(user);
+    // console.log(user);
     if (!user) {
       throw new Error("Người dùng không tồn tại");
     }
@@ -383,7 +383,7 @@ const removeRequestGet = async (phoneNumber, phoneNumberRemove) => {
 // delete friend xóa phone trong listFriend của cả 2 bên
 const removeFriend = async (phoneNumber, phoneRemove) => {
   try {
-    console.log(phoneNumber + " " + phoneRemove);
+    // console.log(phoneNumber + " " + phoneRemove);
     const user = await User.findOne({ phoneNumber });
     if (!user) {
       throw new Error("User is not exist!");
