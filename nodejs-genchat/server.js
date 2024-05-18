@@ -12,6 +12,7 @@ const connect = require("./src/databases/mongodb");
 const checkToken = require("./src/authentication/auththentication");
 const cors = require("cors")
 const { join } = require("node:path");
+const { log } = require('console');
 const server = http.createServer(app);
 const server_group = http.createServer(app);
 //
@@ -140,22 +141,24 @@ socketIo.on("connection", (socket) => {
 
   socket.on("add-new-user", data => {
     console.log("Called add new user");
+    console.log(data);
 
     rooms.find(elem => elem.id == data.id).user = 
       rooms.find(elem => elem.id == data.id).user.concat(data.remainingUser);
 
-    // rooms.find(elem => elem.id == data.id).messages.push({
-    //   type: "notification", 
-    //   idMessage: "mess" + new Date().valueOf(), 
-    //   date: new Date().toLocaleString(),  
-    //   idRoom: data.user.id, 
-    //   sender: data.removedUser.phoneNumber,
-    //   sender_name: data.user.admin,
-    //   receiver: data.user.id,
-    //   content: data.remainingUser.name + " had join the group at " + new Date().toLocaleString(),
-    //   chat_type: "notification",
-    //   status: "ready"
-    // });
+    for (let i = 0; i < data.remainingUser.length; i++) 
+      rooms.find(elem => elem.id == data.id).messages.push({
+        type: "notification", 
+        idMessage: "mess" + new Date().valueOf(), 
+        date: new Date().toLocaleString(),  
+        idRoom: data.id, 
+        sender: data.remainingUserPhoneNumber[i].phoneNumber,
+        sender_name: data.admin,
+        receiver: data.id,
+        content: data.remainingUserPhoneNumber[i].name + " had join the group at " + new Date().toLocaleString(),
+        chat_type: "notification",
+        status: "ready"
+      });
 
     // -------------------------------------------------------------
 
@@ -206,11 +209,12 @@ socketIo.on("connection", (socket) => {
       for (let i = 0; i < list_rooms.length; i++) {
         socketIo.to(userId).emit("rooms2", list_rooms);
 
-        for (let j = 0; j < list_rooms[i].user.length; j++)
+        for (let j = 0; j < list_rooms[i].user.length; j++) {
           socketIo.to(list_rooms[i].user[j]).emit("rooms2", list_rooms);
+        }
 
         socketIo.to(list_rooms[i].id).emit("rooms2", list_rooms); 
-      }
+      } 
   });
 
   socket.on("remove-user-from-group", data => {

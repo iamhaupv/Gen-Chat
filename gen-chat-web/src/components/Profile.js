@@ -67,20 +67,29 @@ export default function Profile(props) {
   }
 
   const handleAddNewUser = async () => {
-    let checkedUsers = getCheckedBoxes("userInGroup");
-    console.log("----------- add new user");
-    console.log(checkedUsers);
+    let checkedUsers = getCheckedBoxes("newUser");
+
+    let checkedUsersObject = [];
+
+    for (let i = 0; i < checkedUsers.length; i++) {
+      const userObj = await findUserByPhoneNumber(checkedUsers[i]);
+      checkedUsersObject.push(userObj.data);
+    }
 
     socket.emit("add-new-user", {
       id: user.id, 
       user: user.user, 
       admin: user.admin, 
-      remainingUser: checkedUsers
+      remainingUser: checkedUsers, 
+      remainingUserPhoneNumber: checkedUsersObject
     });
+
+    alert("Add new friend successfully!")
   }
 
   const handleRemoveFriend = async removedUser => {
     socket.emit("remove-user-from-group", {user, removedUser});
+    alert("Remove friend successfully!")
     document.getElementById('btnCloseModal').click();
   }
 
@@ -305,7 +314,7 @@ export default function Profile(props) {
             remainingUsers.map((elem, i) => {
               if (userRoot.phoneNumber == user.admin) {
                 return <div key={i} className='flex items-center'>
-                  <input type='checkbox' name='userInGroup' value={elem.phoneNumber}></input>
+                  <input type='checkbox' name='newUser' value={elem.phoneNumber}></input>
 
                   <Chat key={i} user={elem} setCurrentFriend={null} />
                 </div>
@@ -367,7 +376,8 @@ export default function Profile(props) {
   }
 
   useEffect(() => {
-    getFriendList();
+    if (user.admin != null)
+      getFriendList();
   }, []);
 
   return (
