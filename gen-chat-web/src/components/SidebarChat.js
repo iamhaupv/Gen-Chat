@@ -183,6 +183,8 @@ export default function SidebarChat({user, handleCurrentFriend, handleUser}) {
     socket.emit("init-room", user.phoneNumber);
 
     socket.on("rooms2", data => {
+      console.log("----------- Called rooms2");
+      console.log(data);
       setRooms(data);
     });
 

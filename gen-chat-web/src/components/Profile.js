@@ -4,19 +4,48 @@ import InitialIcon from './InitialIcon';
 
 import getInfor from "../services/users/getInfor";
 import socket from "../utils/socketGroup"
+import getListFriend from '../services/users/getListFriend';
+import findUserByPhoneNumber from '../services/users/findUserByPhoneNumber';
 
 export default function Profile(props) {
   const [users, setUsers] = useState([]);
   const isOpen = props.state;
   const user = props.user;
   const userRoot = props.userRoot;
+  const [remainingUsers, setRemainingUsers] = useState([]);
+
+  function getCheckedBoxes(chkboxName) {
+    var checkboxes = document.getElementsByName(chkboxName);
+    var checkboxesChecked = [];
+    // loop over them all
+    for (var i=0; i<checkboxes.length; i++) {
+      // And stick the checked ones onto an array...
+      if (checkboxes[i].checked) {
+        checkboxesChecked.push(checkboxes[i].value);
+      }
+    }
+    // Return the array if it is non-empty, or null
+    return checkboxesChecked.length > 0 ? checkboxesChecked : null;
+  }
+
+  const getFriendList = async () => {
+    const friendList = await getListFriend(user.admin);
+
+    const friendFound = [];
+
+    for (let i = 0; i < friendList.length; i++) {
+      const friend = await findUserByPhoneNumber(friendList[i].friend_id);
+
+      if ( user.user.indexOf( friend.data.phoneNumber ) == -1)
+        friendFound.push(friend.data);
+    }
+
+    setRemainingUsers(friendFound);
+  }
 
   const handleCurrentFriend2 = friend => {
     props.handleCurrentFriend(friend);
   }
-
-  console.log("---------- User ------------");
-  console.log(user);
   
   let comp;
 
@@ -37,9 +66,22 @@ export default function Profile(props) {
     document.getElementById('group_info_modal').showModal()
   }
 
-  const handleRemoveFriend = async user => {
-    // console.log("---------- Removed ------------");
-    // console.log(user);
+  const handleAddNewUser = async () => {
+    let checkedUsers = getCheckedBoxes("userInGroup");
+    console.log("----------- add new user");
+    console.log(checkedUsers);
+
+    socket.emit("add-new-user", {
+      id: user.id, 
+      user: user.user, 
+      admin: user.admin, 
+      remainingUser: checkedUsers
+    });
+  }
+
+  const handleRemoveFriend = async removedUser => {
+    socket.emit("remove-user-from-group", {user, removedUser});
+    document.getElementById('btnCloseModal').click();
   }
 
   const handleOutGroup = async user => {
@@ -48,7 +90,8 @@ export default function Profile(props) {
 
   const handleRemoveRoom = async () => {
     handleCurrentFriend2({});
-    await socket.emit("destroy-room", user);
+    socket.emit("destroy-room", user);
+    document.getElementById('btnCloseModal').click();
   }
 
   if (!isNaN(user.phoneNumber.charAt(0))) {
@@ -96,8 +139,6 @@ export default function Profile(props) {
             </div>
           </div>
         </dialog>
-
-
       </div>
 
       <div className='flex flex-col items-center'>
@@ -129,14 +170,7 @@ export default function Profile(props) {
         <p>Thay đổi chủ đề</p>
       </div>
     </div>
-    <dialog id="my_modal_4" className="modal">
-      {/* <div className="modal-box">
-        <form method="dialog">
-          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-        </form>
-        <h3 className="font-bold text-lg">Hello!</h3>
-        <p className="py-4">Press ESC key or click on ✕ button to close</p>
-      </div> */}
+    {/* <dialog id="my_modal_4" className="modal">
       <div className="card card-compact w-96 bg-base-100 shadow-xl">
             <form method="dialog">
               <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
@@ -189,7 +223,7 @@ export default function Profile(props) {
             
       </div>
     </div>
-    </dialog>
+    </dialog> */}
 
   </div>
   } else {
@@ -209,7 +243,7 @@ export default function Profile(props) {
         <p className='font-bold pb-5'>User list</p>
 
         {/* All friend title */}
-        <div className='border-b-2 border-gray-200'>
+        <div className='border-gray-200'>
           {
             users.map((elem, i) => {
               if (userRoot.phoneNumber == user.admin) {
@@ -244,12 +278,45 @@ export default function Profile(props) {
             users.map((elem, i) => {
               if (userRoot.phoneNumber == user.admin) {
                 if (elem.phoneNumber == user.admin) {
-                  return <button className='bg-red-600 text-white p-2 font-bold rounded-full' onClick={() => handleRemoveRoom()}>Remove room</button>
+                  return <div className='flex justify-around w-full p-2'>
+                    <button key={i} className='bg-green-400 text-white p-2 font-bold rounded-full' onClick={() => document.getElementById('my_modal_2').showModal()}>Add new user</button>
+                    <button key={"b" + i} className='bg-red-600 text-white p-2 font-bold rounded-full' onClick={() => handleRemoveRoom()}>Remove room</button>
+                  </div>
                 }
               }
             })
           }
         </div>
+      </div>
+    </dialog>
+
+    <dialog id="my_modal_2" className="modal">
+      <div className="modal-box">
+        <form method="dialog">
+          {/* if there is a button in form, it will close the modal */}
+          <button id='btnCloseModal' className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+        </form>
+
+        {/* All friend title */}
+        <p className='font-bold pb-5'>Select new user to added to group</p>
+
+        <div className='border-gray-200'>
+          {
+            remainingUsers.map((elem, i) => {
+              if (userRoot.phoneNumber == user.admin) {
+                return <div key={i} className='flex items-center'>
+                  <input type='checkbox' name='userInGroup' value={elem.phoneNumber}></input>
+
+                  <Chat key={i} user={elem} setCurrentFriend={null} />
+                </div>
+              }
+            })
+          }
+        </div>
+
+        <button className='bg-green-400 text-white p-2 font-bold rounded-full' onClick={() => handleAddNewUser()}>
+          Add new user
+        </button>
       </div>
     </dialog>
 
@@ -298,6 +365,10 @@ export default function Profile(props) {
 
   </div>
   }
+
+  useEffect(() => {
+    getFriendList();
+  }, []);
 
   return (
     (comp)

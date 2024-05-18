@@ -11,8 +11,6 @@ export default function ChatData({message, socketRef}) {
   const [friends, setFriends] = useState([]);
   const [searchPhoneNumber, setSearchPhoneNumber] = useState("");
 
-  // console.log("Message " + message.content);
-
   const handleSearchPhoneNumber = e => {
     setSearchPhoneNumber(e.target.value);
   }
@@ -115,7 +113,6 @@ export default function ChatData({message, socketRef}) {
   return (
     <div className="flex items-start gap-2.5">
 
-
       {/* Group Modal */}
       <dialog id="forward_modal" className="modal" add="true" dir='ltr'>
         <div className="modal-box">
@@ -167,7 +164,6 @@ export default function ChatData({message, socketRef}) {
           </div>
         </div>
       </dialog>
-
 
       {/* <img className="w-8 h-8 rounded-full" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="Jese image" /> */}
       <div className="avatar placeholder">

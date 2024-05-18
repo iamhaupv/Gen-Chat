@@ -117,9 +117,9 @@ socketIo.on("connection", (socket) => {
 
   console.log("New client connected" + socket.id);
 
-  socket.on('chat-message',data => {
-    socketIo.emit('chat-message', data)
-  })
+  // socket.on('chat-message',data => {
+  //   socketIo.emit('chat-message', data);
+  // })
 
   socket.on("join", data => {
     socket.join(data);
@@ -138,6 +138,54 @@ socketIo.on("connection", (socket) => {
     }
   });
 
+  socket.on("add-new-user", data => {
+    console.log("Called add new user");
+
+    rooms.find(elem => elem.id == data.id).user = 
+      rooms.find(elem => elem.id == data.id).user.concat(data.remainingUser);
+
+    // rooms.find(elem => elem.id == data.id).messages.push({
+    //   type: "notification", 
+    //   idMessage: "mess" + new Date().valueOf(), 
+    //   date: new Date().toLocaleString(),  
+    //   idRoom: data.user.id, 
+    //   sender: data.removedUser.phoneNumber,
+    //   sender_name: data.user.admin,
+    //   receiver: data.user.id,
+    //   content: data.remainingUser.name + " had join the group at " + new Date().toLocaleString(),
+    //   chat_type: "notification",
+    //   status: "ready"
+    // });
+
+    // -------------------------------------------------------------
+
+    let list_rooms = [];
+    list_rooms = rooms.filter(elem => {
+      if (elem.admin == data.admin) return true;
+
+      if (elem.user != undefined)
+        return elem.user.includes(data.admin);
+      else
+        return false;
+    });
+
+    console.log("------------- List room");
+    console.log(list_rooms);
+
+    if (list_rooms == undefined)
+      list_rooms = [];
+
+    if (list_rooms.length > 0)
+      for (let i = 0; i < list_rooms.length; i++) {
+        socketIo.to(data.admin).emit("rooms2", list_rooms);
+
+        for (let j = 0; j < list_rooms[i].user.length; j++)
+          socketIo.to(list_rooms[i].user[j]).emit("rooms2", list_rooms);
+
+        socketIo.to(list_rooms[i].id).emit("rooms2", list_rooms); 
+      }
+  });
+
   socket.on("init-room", userId => {
     socket.join(userId);
 
@@ -146,7 +194,7 @@ socketIo.on("connection", (socket) => {
       if (elem.admin == userId) return true;
 
       if (elem.user != undefined)
-        return elem.user.includes(userId)
+        return elem.user.includes(userId);
       else
         return false;
     });
@@ -161,8 +209,56 @@ socketIo.on("connection", (socket) => {
         for (let j = 0; j < list_rooms[i].user.length; j++)
           socketIo.to(list_rooms[i].user[j]).emit("rooms2", list_rooms);
 
-        socketIo.to(list_rooms[i].id).emit("rooms2", list_rooms);
+        socketIo.to(list_rooms[i].id).emit("rooms2", list_rooms); 
       }
+  });
+
+  socket.on("remove-user-from-group", data => {
+    rooms.find(elem => elem.id == data.user.id).user.splice(
+      rooms.find(elem => elem.id == data.user.id).user.findIndex(x => x === data.removedUser.phoneNumber), 1
+    );
+
+    rooms.find(elem => elem.id == data.user.id).messages.push({
+      type: "notification", 
+      idMessage: "mess" + new Date().valueOf(), 
+      date: new Date().toLocaleString(),  
+      idRoom: data.user.id, 
+      sender: data.removedUser.phoneNumber,
+      sender_name: data.user.admin,
+      receiver: data.user.id,
+      content: data.removedUser.name + " had left the group at " + new Date().toLocaleString(),
+      chat_type: "notification",
+      status: "ready"
+    });
+
+    socketIo.to(data.user.id).emit("chat-message-2", 
+      rooms.find(elem => elem.id == data.user.id).messages
+    );
+
+    // ---------------------------------------------------
+
+    // let list_rooms = [];
+    // list_rooms = rooms.filter(elem => {
+    //   if (elem.admin == data.removedUser.phoneNumber) return true;
+
+    //   if (elem.user != undefined)
+    //     return elem.user.includes(data.removedUser.phoneNumber)
+    //   else
+    //     return false;
+    // });
+
+    // if (list_rooms == undefined)
+    //   list_rooms = [];
+
+    // // if (list_rooms.length > 0)
+    //   for (let i = 0; i < list_rooms.length; i++) {
+    //     socketIo.to(data.removedUser.phoneNumber).emit("rooms2", list_rooms);
+
+    //     for (let j = 0; j < list_rooms[i].user.length; j++)
+    //       socketIo.to(list_rooms[i].user[j]).emit("rooms2", list_rooms);
+
+    //     socketIo.to(list_rooms[i].id).emit("rooms2", list_rooms); 
+    //   }
   });
 
   socket.on("destroy-room", data => {
@@ -202,8 +298,8 @@ socketIo.on("connection", (socket) => {
       rooms.find(elem => elem.id == data.idRoom).messages
     );
     
-    console.log("----------------------------");
     console.log("-- Socket: Sended data to client ");
+    console.log(data);
   });
 
   socket.on("forward-message", async data => {
