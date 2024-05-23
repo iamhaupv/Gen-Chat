@@ -6,16 +6,18 @@ import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBVil5F6zd0wRr4MSySbWF24wG-x0UmLtw",
-  authDomain: "genchat-4e64b.firebaseapp.com",
-  projectId: "genchat-4e64b",
-  storageBucket: "genchat-4e64b.appspot.com",
-  messagingSenderId: "210578620110",
-  appId: "1:210578620110:web:633f53705e6730cba9da9f"
+  apiKey: "AIzaSyDr60e3tWzCwRhfdpiQfstiMXst2ax4j04",
+  authDomain: "genchat-40209.firebaseapp.com",
+  projectId: "genchat-40209",
+  storageBucket: "genchat-40209.appspot.com",
+  messagingSenderId: "12729428612",
+  appId: "1:12729428612:web:7dd995b45c25f3539a70d1",
+  measurementId: "G-5CC8N690ZW"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
+auth.languageCode = "en"
 
 export default {app, auth}

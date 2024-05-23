@@ -1,25 +1,28 @@
 import React, { useState } from 'react'
 import logo from '../assets/logo.png'
-import { useNavigate } from "react-router-dom";
-import { signInWithPhoneNumber } from "firebase/auth";
+import { useLocation, useNavigate } from "react-router-dom";
+import { signInWithPhoneNumber, RecaptchaVerifier } from "firebase/auth";
 import loginUser from '../services/users/loginUser.js'
 import config from '../firebase/config.js';
 
-export default function OTP({navigation}) {
+export default function OTP() {
   const [OTP, setOTP] = useState('');
   const [errors, setErrors] = useState({});
   const [alerts, setAlerts] = useState({});
   const navigate = useNavigate();
 
-  console.log(navigation);
+  const {state} = useLocation();
+  
+  const appVerifier = window.recaptchaVerifier;
+  const auth = config.auth;
+  const formatPh = state.formatPh;
+  
+  console.log("-------------------------------------");
+  console.log(auth);
+  console.log(formatPh);
+  console.log(appVerifier);
 
-  let auth, formatPh, appVerifier;
-//   console.log(auth);
-//   console.log(formatPh);
-//   console.log(appVerifier);
-//   const auth = props.auth;
 //   const formatPh = props.formatPh;
-//   const appVerifier = props.appVerifier;
 
   const handleOTP = event => {
     setOTP(event.target.value);
@@ -62,6 +65,8 @@ export default function OTP({navigation}) {
   }
 
   return (
+    <div className="bg-gray-100 flex justify-center items-center h-screen">
+
     <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
       <img className="mb-4" src={logo}></img>
 
@@ -112,6 +117,12 @@ export default function OTP({navigation}) {
 
         <div id='recaptcha-container'></div>
       {/* </htmlForm> */}
+    </div>
+
+    <div className="w-1/2 h-screen hidden  lg:block">
+    <img src="https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80" alt="Placeholder Image" className="object-cover w-full h-full"></img>
+    </div>
+
     </div>
   )
 }

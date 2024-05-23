@@ -8,7 +8,7 @@ export default function Main() {
   const {state} = useLocation();
   
   const [currentFriend, setCurrentFriend] = useState({});
-  const [user, setUser] = useState(state.user.data)
+  const [user, setUser] = useState(state.user.data);
 
   const handleCurrentFriend = friend => {
     setCurrentFriend(friend);
