@@ -1,8 +1,8 @@
 import React from 'react'
 import { BrowserRouter as HomeRouter, Routes, Route } from "react-router-dom";
 import SignIn from '../components/SignIn';
-import SignUp from '../components/OTP';
-import OTP from '../components/OTP (not use)';
+import SignUp from '../components/SignUp';
+import OTP from '../components/OTP';
 
 export default function Home() {
 
