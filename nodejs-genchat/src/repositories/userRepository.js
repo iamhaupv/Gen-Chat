@@ -83,7 +83,7 @@ const register = async ({
     return newUser;
   } catch (error) {
     console.log(error);
-    throw new Error("Cannot User!");
+    throw new Error("Server: Registration Error: " + error);
   }
 };
 // getInfor (tìm theo phoneNumber)

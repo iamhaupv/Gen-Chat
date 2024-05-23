@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import logo from '../assets/logo.png'
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import registerUser from '../services/users/registerUser';
 
 export default function SignUp() {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [repeatedPassword, setRepeatedPassword] = useState('');
+  const [email, setEmail] = useState('');
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   const {state} = useLocation();
 
@@ -21,26 +24,46 @@ export default function SignUp() {
   const handleRepeatedPassword = e => {
     setRepeatedPassword(e.target.value);
   }
+  
+  const handleEmail = e => {
+    setEmail(e.target.value);
+  }
 
   const handleVerifyInput = () => {
     let checked = true;
+    // if (password != repeatedPassword) {
+    //   checked = false;
+    //   errors.error = "Password does not match repeated password";
+    //   setErrors(errors);
+    // }
+
     if (password != repeatedPassword) {
       checked = false;
+      alert("Password does not match repeated password");
       errors.error = "Password does not match repeated password";
       setErrors(errors);
     }
 
     if (password.length < 8) {
       checked = false;
+      alert("Password must have at least 8 characters");
       errors.error = "Password must have at least 8 characters";
       setErrors(errors);
     }
 
-    if (checked)
-      alert("Sign up successfully!");
-  }
+    if (email.length == 0) {
+      checked = false;
+      alert("Email must not be null");
+      errors.error = "Email must not be null";
+      setErrors(errors);
+    }
 
-  console.log(state);
+    if (checked) {
+      registerUser(name, state.phoneNumber, password, email, "", "", []);
+      alert("Sign up successfully!");
+      navigate("/");      
+    }
+  }
 
   return (
     <div className="bg-gray-100 flex justify-center items-center h-screen">
@@ -56,7 +79,7 @@ export default function SignUp() {
             <label htmlFor="phoneNumber" className="block text-gray-600">Name</label>
             <input type="text" id="name" name="name" className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autoComplete="off" 
               value={name}
-              onChange={handleName}
+              onChange={handleName} required
             />
           </div>
 
@@ -65,7 +88,7 @@ export default function SignUp() {
             <label htmlFor="phoneNumber" className="block text-gray-600">Password</label>
             <input type="password" id="password" name="password" className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autoComplete="off" 
               value={password}
-              onChange={handlePassword}
+              onChange={handlePassword} required
             />
           </div>
 
@@ -74,7 +97,16 @@ export default function SignUp() {
             <label htmlFor="phoneNumber" className="block text-gray-600">Repeat Password</label>
             <input type="password" id="password" name="password" className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autoComplete="off" 
               value={repeatedPassword}
-              onChange={handleRepeatedPassword}
+              onChange={handleRepeatedPassword} required
+            />
+          
+          </div>
+          {/* <!-- Email Input --> */}
+          <div className="mb-4">
+            <label htmlFor="email" className="block text-gray-600">Email</label>
+            <input type="email" id="email" name="email" className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autoComplete="off" 
+              value={email}
+              onChange={handleEmail} required
             />
           </div>
 

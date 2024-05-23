@@ -11,6 +11,9 @@ export default function SidebarMenu({user}) {
 
   const navigate = useNavigate();
 
+  console.log("User");
+  console.log(user);
+
   const signOut = () => {
     console.log("Pressed Sign Out");
     navigate('/', {user: null});

@@ -11,12 +11,10 @@ export default function SignIn() {
 
   const handlePhoneNumber = event => {
     setPhoneNumber(event.target.value);
-    // console.log('Value is:', event.target.value);
   };
 
   const handlePassword = event => {
     setPassword(event.target.value);
-    // console.log('Value is:', event.target.value);
   };
 
   const logIn = async () => {
@@ -28,11 +26,6 @@ export default function SignIn() {
       console.error("Registration error:", error);
     }
   };
-
-  const goToSignUpPage = () => {
-    console.log("Go to sign up");
-    navigate("/SignUp");
-  }
 
   return (
     <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">

@@ -1,5 +1,5 @@
 import axios from "axios";
-import {api_host, socket_host} from "../../GlobalVariable";
+import host from "../../GlobalVariable";
 //
 const registerUser = async (
   name,
@@ -21,7 +21,7 @@ const registerUser = async (
       listFriend,
     };
     const response = await axios.post(
-      api_host + "/users/register",
+      host.api_host + "/users/register",
       userData
     );
     if (response.status === 200) {
