@@ -68,7 +68,7 @@ export default function SignIn() {
         <div className="flex justify-between mb-4">
           {/* <!-- Sign up  Link --> */}
           <div className="text-blue-500">
-          <a href="/SignUp" className="hover:underline">Sign Up Here</a>
+          <a href="/OTP" className="hover:underline">Sign Up Here</a>
           </div>
 
           {/* <!-- Forgot Password Link --> */}

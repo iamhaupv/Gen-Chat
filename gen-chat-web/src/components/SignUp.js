@@ -1,227 +1,104 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import logo from '../assets/logo.png'
-import { useNavigate } from "react-router-dom";
-import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-import config from '../firebase/config.js';
-import loginUser from '../services/users/loginUser.js'
+import { useLocation } from "react-router-dom";
 
 export default function SignUp() {
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const [repeatedPassword, setRepeatedPassword] = useState('');
   const [errors, setErrors] = useState({});
-  const [status, setStatus] = useState("NOT_INPUT_NUMBER")
-  const [OTP, setOTP] = useState('');
-  const [alerts, setAlerts] = useState({});
-  const [formatPh, setFormatPh] = useState("");
-  const navigate = useNavigate();
 
-  const auth = config.auth;
-  const appVerifier = window.recaptchaVerifier;
+  const {state} = useLocation();
 
-  console.log(auth);
+  const handleName = e => {
+    setName(e.target.value);
+  }
 
-  const handlePhoneNumber = event => {
-    setPhoneNumber(event.target.value);
-  };
+  const handlePassword = e => {
+    setPassword(e.target.value);
+  }
 
-  const handleSignUp = () => {
-    let errors = {};
-    if (!phoneNumber)
-      errors.error = "Phone Number must not null";
-    
-    if (errors.error)
+  const handleRepeatedPassword = e => {
+    setRepeatedPassword(e.target.value);
+  }
+
+  const handleVerifyInput = () => {
+    let checked = true;
+    if (password != repeatedPassword) {
+      checked = false;
+      errors.error = "Password does not match repeated password";
       setErrors(errors);
-    else
-      signInWithPhone();
-  }
-
-  function onCaptchVerify() {
-    if (!window.recaptchaVerifier) {
-      setFormatPh("+" + phoneNumber);
-
-      console.log("-------- PHone");
-      console.log("+" + phoneNumber);
-
-      const appVerifier = window.recaptchaVerifier = new RecaptchaVerifier(
-        auth,
-        "recaptcha-container",
-        {
-          size: "invisible",
-          callback: (response) => {
-            console.log(status);
-            signInWithPhone();
-          },
-          "expired-callback": () => {
-            
-          },
-        }
-      );
-
-      signInWithPhoneNumber(auth, "+" + phoneNumber, appVerifier)
-      .then((confirmationResult) => {
-        window.confirmationResult = confirmationResult;
-        alerts.alert = "OTP sended successfully!";
-        setAlerts(alerts);
-        // console.log("OTP sended successfully!");
-      })
-      .catch((error) => {
-        errors.error = "Error sending OTP: " + error;
-        setErrors(errors);
-        console.error("Error sending OTP: " + error);
-      });
     }
+
+    if (password.length < 8) {
+      checked = false;
+      errors.error = "Password must have at least 8 characters";
+      setErrors(errors);
+    }
+
+    if (checked)
+      alert("Sign up successfully!");
   }
 
-  const signInWithPhone = () => {
-    onCaptchVerify();
-
-    setStatus("dgfjn");
-  }
-
-  // 
-
-  const handleOTP = event => {
-    setOTP(event.target.value);
-  };
-
-  const sendingCode = () => {
-    console.log("---------------------- PH ");
-    console.log("+" + phoneNumber);
-
-    signInWithPhoneNumber(auth, "+" + phoneNumber, appVerifier)
-      .then((confirmationResult) => {
-        window.confirmationResult = confirmationResult;
-        alerts.alert = "OTP sended successfully!";
-        setAlerts(alerts);
-      })
-      .catch((error) => {
-        errors.error = "Error sending OTP: " + error;
-        setErrors(errors);
-        console.error("Error sending OTP: " + error);
-      });
-  }
-
-  function onOTPVerify() {
-    window.confirmationResult
-      .confirm(OTP)
-      .then(async (res) => {
-        // addUser(user);
-        console.log("---------------------------");
-        handleSignUp();
-        console.log("===========================");
-        navigate("/Main");
-      })
-      .catch((error) => {
-        errors.error = "Error verifying OTP: " + error;
-        setErrors(errors);
-        console.error("Error verifying OTP: " + error);
-      });
-  }
-
-  // 
+  console.log(state);
 
   return (
     <div className="bg-gray-100 flex justify-center items-center h-screen">
 
-      {
-        status == "NOT_INPUT_NUMBER" ? (
-          <>
-            <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
-              <img className="mb-4" src={logo}></img>
+      <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
+        <img className="mb-4" src={logo}></img>
 
-              <h1 className="text-2xl font-semibold mb-4">Sign Up to Gen Chat!</h1>
-              
-              {/* <htmlForm action="http://localhost:6969/users/login" method="POST"> */}
-                {/* <!-- Phone Number Input --> */}
-                <div className="mb-4">
-                  <label htmlFor="phoneNumber" className="block text-gray-600">Please enter the Phone Number that we can use to send the OTP</label>
-                  <input type="tel" id="phoneNumber" name="phoneNumber" className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autoComplete="off" 
-                    value={phoneNumber}
-                    onChange={handlePhoneNumber}
-                  />
-                </div>
-                
-                {/* <!-- Forgot Password Link --> */}
-                <div className="text-blue-500 py-2">
-                  <a href="/" className="hover:underline">Return to Main page</a>
-                </div>
-
-                {/* <!-- Sign Up Button --> */}
-                <button 
-                  type="submit" 
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full"
-                  onClick={handleSignUp}
-                >
-                  Sign Up
-                </button>
-
-                {/* <!-- Error --> */}
-                <div className="text-red-500 py-2">
-                  <p href="/" className="hover:underline">{errors.error}</p>
-                </div>
-
-              {/* </htmlForm> */}
-
-            </div>
-          </>
-        ) : (
-          <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
-            <img className="mb-4" src={logo}></img>
-
-            <h1 className="text-2xl font-semibold mb-4">OTP Verification</h1>
-            
-            {/* <htmlForm action="http://localhost:6969/users/login" method="POST"> */}
-              {/* <!-- Phone Number Input --> */}
-              <div className="mb-4">
-                <label htmlFor="phoneNumber" className="block text-gray-600">Please enter the OTP that we send to this phone number</label>
-                <input type="tel" id="phoneNumber" name="phoneNumber" className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autoComplete="off" 
-                  value={OTP}
-                  onChange={handleOTP}
-                />
-              </div>
-
-              {/* <!-- Forgot Password Link --> */}
-              <div className="text-blue-500 py-2">
-                <p className="hover:underline" 
-                  onClick={sendingCode}  
-                >
-                  Sending Code to {formatPh}
-              </p>
-              </div>
-              
-              {/* <!-- Forgot Password Link --> */}
-              <div className="text-blue-500 py-2">
-                <a href="/" className="hover:underline">Return to Main page</a>
-              </div>
-
-              {/* <!-- Sign Up Button --> */}
-              <button 
-                type="submit" 
-                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full"
-                onClick={onOTPVerify}
-              >
-                Submit OTP
-              </button>
-
-              {/* <!-- Error --> */}
-              <div className="text-red-500 py-2">
-                <p href="/" className="hover:underline">{errors.error}</p>
-              </div>
-
-              {/* <!-- Alert --> */}
-              <div className="text-red-500 py-2">
-                <p href="/" className="hover:underline">{alerts.alert}</p>
-              </div>
-
-            {/* </htmlForm> */}
+        <h1 className="text-2xl font-semibold mb-4">Welcome {state.phoneNumber}!</h1>
+        
+        {/* <htmlForm action="http://localhost:6969/users/login" method="POST"> */}
+          {/* <!-- Phone Number Input --> */}
+          <div className="mb-4">
+            <label htmlFor="phoneNumber" className="block text-gray-600">Name</label>
+            <input type="text" id="name" name="name" className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autoComplete="off" 
+              value={name}
+              onChange={handleName}
+            />
           </div>
-        )
-      }
+
+          {/* <!-- Password Input --> */}
+          <div className="mb-4">
+            <label htmlFor="phoneNumber" className="block text-gray-600">Password</label>
+            <input type="password" id="password" name="password" className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autoComplete="off" 
+              value={password}
+              onChange={handlePassword}
+            />
+          </div>
+
+          {/* <!-- Repeated Password Input --> */}
+          <div className="mb-4">
+            <label htmlFor="phoneNumber" className="block text-gray-600">Repeat Password</label>
+            <input type="password" id="password" name="password" className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autoComplete="off" 
+              value={repeatedPassword}
+              onChange={handleRepeatedPassword}
+            />
+          </div>
+
+          {/* <!-- Sign Up Button --> */}
+          <button 
+            type="submit" 
+            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full"
+            onClick={handleVerifyInput}
+          >
+            Sign Up
+          </button>
+
+          {/* <!-- Error --> */}
+          <div className="text-red-500 py-2">
+            <p href="/" className="hover:underline">{errors.error}</p>
+          </div>
+
+        {/* </htmlForm> */}
+
+      </div>
 
       <div className="w-1/2 h-screen hidden  lg:block">
         <img src="https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80" alt="Placeholder Image" className="object-cover w-full h-full"></img>
       </div>
-
-      <div id='recaptcha-container'></div>
 
     </div>
   )
