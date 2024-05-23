@@ -22,5 +22,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-./src/GlobalVariables.js
-./src/firebase/config.js
+/src/GlobalVariables.js
+/src/firebase/config.js
