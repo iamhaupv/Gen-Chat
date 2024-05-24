@@ -6,6 +6,8 @@ import { StringeeClient, StringeeCall } from "stringee";
 export default function CallScreen() {
   const {state} = useLocation();
   const navigate = useNavigate();
+
+  console.log("lmaoae");
   
   const {id, calleeId, token, request} = state;
   console.log("------------- state");
