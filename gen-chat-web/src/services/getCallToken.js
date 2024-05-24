@@ -6,6 +6,10 @@ const getCallToken = async (phoneNumber) => {
     const userData = {
       phoneNumber: phoneNumber
     };
+
+    console.log("---------- Phone number");
+    console.log(phoneNumber);
+
     const response = await axios.post(
       host.api_host + "/createCallToken",
       userData

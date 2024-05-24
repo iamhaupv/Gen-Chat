@@ -34,6 +34,7 @@ export default function CallScreen() {
 
     client.on("incomingcall", (incomingcall) => {
       console.log("----------- Incoming call");
+      console.log(incomingcall);
       currentCall = incomingcall;
       settingCallEvent(currentCall);
       console.log("Call JS: ", incomingcall);
@@ -43,12 +44,11 @@ export default function CallScreen() {
       console.log("------- answer call");
       currentCall.answer((res) => {
         console.log(`answer res ${res}`);
-      })
+      });
     }
 
     function settingCallEvent(callObject) {
       callObject.on('addremotestream', function (stream) {
-        // reset srcObject to work around minor bugs in Chrome and Edge.
         console.log('addremotestream');
         remoteVideo.srcObject = null;
         remoteVideo.srcObject = stream;
@@ -58,8 +58,6 @@ export default function CallScreen() {
         console.log('addlocalstream, khong xu ly event nay, xu ly o event: addlocaltrack');
         localVideo.srcObject = null;
         localVideo.srcObject = stream;
-        // remoteVideo.srcObject = null;
-        // remoteVideo.srcObject = stream;
       });
 
       callObject.on('addlocaltrack', function (stream) {
@@ -73,23 +71,15 @@ export default function CallScreen() {
         if (state.code === 6 || state.code === 5) {
           localVideo.srcObject = null;
           remoteVideo.srcObject = null;
-          // $('#incoming-call-notice').hide();
-          // document.getElementById("incoming-call-notice").style.visibility = "visible";
-          console.log("signalingstate");
-          // onstop(); 
+          currentCall.hangup((res) => {
+            console.log(`Hangup res: ${res}`);
+          })
+          navigate(-1);
         }
       });
       callObject.on('mediastate', function (state) {
         console.log('mediastate ', state);
       });
-      // callObject.on('otherdevice', function (msg) {
-      //     console.log('otherdevice ', msg);
-      //     if (msg.type == 'CALL2_STATE') {
-      //         if (msg.code == 200 || msg.code == 486) {
-
-      //         }
-      //     }
-      // });
       callObject.on('info', function (info) {
         console.log('++++info ', info);
       });
