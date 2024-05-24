@@ -19,7 +19,7 @@ export default function Profile(props) {
 
     <div className="avatar items-center justify-center pt-8">
       <div className="w-20 rounded-full">
-        <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+        <img src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80pg" />
       </div>
     </div>
 

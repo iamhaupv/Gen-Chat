@@ -119,7 +119,7 @@ export default function Chats({user, currentFriend}) {
               <div className='flex items-center'>
                 <div className="avatar online">
                   <div className="w-10 rounded-full">
-                    <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                    <img src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" />
                   </div>
                 </div>
                 <p className='font-medium text-xl ml-5'>{currentFriend.name}</p>
