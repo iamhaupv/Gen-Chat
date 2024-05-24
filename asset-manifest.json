@@ -1,16 +1,15 @@
 {
   "files": {
-    "main.css": "/Gen-Chat/static/css/main.99356c2b.css",
-    "main.js": "/Gen-Chat/static/js/main.fc5adda3.js",
+    "main.css": "/Gen-Chat/static/css/main.5a1bc535.css",
+    "main.js": "/Gen-Chat/static/js/main.0741386f.js",
     "static/js/453.a83f1676.chunk.js": "/Gen-Chat/static/js/453.a83f1676.chunk.js",
-    "static/media/background.png": "/Gen-Chat/static/media/background.cc427a69f60de2067fa4.png",
     "index.html": "/Gen-Chat/index.html",
-    "main.99356c2b.css.map": "/Gen-Chat/static/css/main.99356c2b.css.map",
-    "main.fc5adda3.js.map": "/Gen-Chat/static/js/main.fc5adda3.js.map",
+    "main.5a1bc535.css.map": "/Gen-Chat/static/css/main.5a1bc535.css.map",
+    "main.0741386f.js.map": "/Gen-Chat/static/js/main.0741386f.js.map",
     "453.a83f1676.chunk.js.map": "/Gen-Chat/static/js/453.a83f1676.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.99356c2b.css",
-    "static/js/main.fc5adda3.js"
+    "static/css/main.5a1bc535.css",
+    "static/js/main.0741386f.js"
   ]
 }
