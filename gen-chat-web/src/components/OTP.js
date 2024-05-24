@@ -3,7 +3,6 @@ import logo from '../assets/logo.png'
 import { useNavigate } from "react-router-dom";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import config from '../firebase/config.js';
-import loginUser from '../services/users/loginUser.js'
 
 export default function OTP() {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -52,18 +51,6 @@ export default function OTP() {
           },
         }
       );
-
-      // signInWithPhoneNumber(auth, "+" + phoneNumber, window.recaptchaVerifier)
-      //   .then((confirmationResult) => {
-      //     window.confirmationResult = confirmationResult;
-      //     alerts.alert = "OTP sended successfully!";
-      //     setAlerts(alerts);
-      //   })
-      //   .catch((error) => {
-      //     errors.error = "Error sending OTP: " + error;
-      //     setErrors(errors);
-      //     console.error("Error sending OTP: " + error);
-      //   });
     }
   }
 
@@ -94,8 +81,6 @@ export default function OTP() {
     window.confirmationResult
       .confirm(OTP)
       .then(async (res) => {
-        // addUser(user);
-        // handleSignUp();
         alert("OTP is corrected");
         navigate("/SignUp", { state: { phoneNumber: phoneNumber } });
       })
@@ -106,8 +91,6 @@ export default function OTP() {
       });
   }
 
-  // 
-
   return (
     <div className="bg-gray-100 flex justify-center items-center h-screen">
 
@@ -116,40 +99,37 @@ export default function OTP() {
       {
         status == "NOT_INPUT_NUMBER" ? (
           <>
-              <img className="mb-4" src={logo}></img>
+            <img className="mb-4" src={logo}></img>
 
-              <h1 className="text-2xl font-semibold mb-4">Sign Up to Gen Chat!</h1>
-              
-              {/* <htmlForm action="http://localhost:6969/users/login" method="POST"> */}
-                {/* <!-- Phone Number Input --> */}
-                <div className="mb-4">
-                  <label htmlFor="phoneNumber" className="block text-gray-600">Please enter the Phone Number that we can use to send the OTP</label>
-                  <input type="tel" id="phoneNumber" name="phoneNumber" className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autoComplete="off" 
-                    value={phoneNumber}
-                    onChange={handlePhoneNumber}
-                  />
-                </div>
-                
-                {/* <!-- Forgot Password Link --> */}
-                <div className="text-blue-500 py-2">
-                  <a href="/" className="hover:underline">Return to Main page</a>
-                </div>
+            <h1 className="text-2xl font-semibold mb-4">Sign Up to Gen Chat!</h1>
+            
+            {/* <!-- Phone Number Input --> */}
+            <div className="mb-4">
+              <label htmlFor="phoneNumber" className="block text-gray-600">Please enter the Phone Number that we can use to send the OTP</label>
+              <input type="tel" id="phoneNumber" name="phoneNumber" className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autoComplete="off" 
+                value={phoneNumber}
+                onChange={handlePhoneNumber}
+              />
+            </div>
+            
+            {/* <!-- Forgot Password Link --> */}
+            <div className="text-blue-500 py-2">
+              <a href="/" className="hover:underline">Return to Main page</a>
+            </div>
 
-                {/* <!-- Sign Up Button --> */}
-                <button 
-                  type="submit" 
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full"
-                  onClick={handleSignUp}
-                >
-                  Sign Up
-                </button>
+            {/* <!-- Sign Up Button --> */}
+            <button 
+              type="submit" 
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full"
+              onClick={handleSignUp}
+            >
+              Sign Up
+            </button>
 
-                {/* <!-- Error --> */}
-                <div className="text-red-500 py-2">
-                  <p href="/" className="hover:underline">{errors.error}</p>
-                </div>
-
-              {/* </htmlForm> */}
+            {/* <!-- Error --> */}
+            <div className="text-red-500 py-2">
+              <p href="/" className="hover:underline">{errors.error}</p>
+            </div>
 
           </>
         ) : (
@@ -158,53 +138,51 @@ export default function OTP() {
 
             <h1 className="text-2xl font-semibold mb-4">OTP Verification</h1>
             
-            {/* <htmlForm action="http://localhost:6969/users/login" method="POST"> */}
-              {/* <!-- Phone Number Input --> */}
-              <div className="mb-4">
-                <label htmlFor="phoneNumber" className="block text-gray-600">Please enter the OTP that we send to this phone number</label>
-                <input type="tel" id="phoneNumber" name="phoneNumber" className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autoComplete="off" 
-                  value={OTP}
-                  onChange={handleOTP}
-                />
-              </div>
+            {/* <!-- Phone Number Input --> */}
+            <div className="mb-4">
+              <label htmlFor="phoneNumber" className="block text-gray-600">Please enter the OTP that we send to this phone number</label>
+              <input type="tel" id="phoneNumber" name="phoneNumber" className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autoComplete="off" 
+                value={OTP}
+                onChange={handleOTP}
+              />
+            </div>
 
-              {/* <!-- Forgot Password Link --> */}
-              <div className="text-blue-500 py-2">
-                <p className="hover:underline" 
-                  onClick={sendingCode}  
-                >
-                  Sending Code to {formatPh}
-              </p>
-              </div>
-              
-              {/* <!-- Forgot Password Link --> */}
-              <div className="text-blue-500 py-2">
-                <a href="/" className="hover:underline">Return to Main page</a>
-              </div>
-
-              {/* <!-- Sign Up Button --> */}
-              <button 
-                type="submit" 
-                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full"
-                onClick={onOTPVerify}
+            {/* <!-- Forgot Password Link --> */}
+            <div className="text-blue-500 py-2">
+              <p className="hover:underline" 
+                onClick={sendingCode}  
               >
-                Submit OTP
-              </button>
+                Sending Code to {formatPh}
+            </p>
+            </div>
+            
+            {/* <!-- Forgot Password Link --> */}
+            <div className="text-blue-500 py-2">
+              <a href="/" className="hover:underline">Return to Main page</a>
+            </div>
 
-            {/* </htmlForm> */}
+            {/* <!-- Sign Up Button --> */}
+            <button 
+              type="submit" 
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full"
+              onClick={onOTPVerify}
+            >
+              Submit OTP
+            </button>
+
           </>
         )
       }
 
-        {/* <!-- Error --> */}
-        <div className="text-red-500 py-2">
-          <p href="/" className="hover:underline text-red-500">{errors.error}</p>
-        </div>
+      {/* <!-- Error --> */}
+      <div className="text-red-500 py-2">
+        <p href="/" className="hover:underline text-red-500">{errors.error}</p>
+      </div>
 
-        {/* <!-- Alert --> */}
-        <div className="text-red-500 py-2">
-          <p href="/" className="hover:underline text-green-400">{alerts.alert}</p>
-        </div>
+      {/* <!-- Alert --> */}
+      <div className="text-red-500 py-2">
+        <p href="/" className="hover:underline text-green-400">{alerts.alert}</p>
+      </div>
 
       </div>
 

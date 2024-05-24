@@ -1,4 +1,5 @@
-const { register } = require('./src/repositories/userRepository')
+const { register } = require('./src/repositories/userRepository');
+const { StringeeClient } = require("./lib/StringeeSDK-1.5.10.js");
 
 const express = require("express");
 const app = express();
@@ -15,7 +16,7 @@ const { join } = require("node:path");
 const { log } = require('console');
 const server = http.createServer(app);
 const server_group = http.createServer(app);
-//
+
 app.get("/", (req, res) => {
   res.sendFile(join(__dirname, "index.html"));
 });
