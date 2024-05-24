@@ -82,7 +82,7 @@ export default function OTP() {
       .confirm(OTP)
       .then(async (res) => {
         alert("OTP is corrected");
-        navigate("/SignUp", { state: { phoneNumber: phoneNumber } });
+        navigate("/Gen-Chat/SignUp", { state: { phoneNumber: phoneNumber } });
       })
       .catch((error) => {
         errors.error = "Error verifying OTP: " + error;

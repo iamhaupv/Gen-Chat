@@ -21,7 +21,7 @@ export default function SignIn() {
     try {
       const user = await loginUser(phoneNumber, password);
       alert("Log in successfully!")
-      navigate("/Main", { state: { user: user } });
+      navigate("/Gen-Chat/Main", { state: { user: user } });
     } catch (error) {
       console.error("Registration error:", error);
     }

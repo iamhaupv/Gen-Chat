@@ -16,7 +16,7 @@ export default function SidebarMenu({user}) {
 
   const signOut = () => {
     console.log("Pressed Sign Out");
-    navigate('/', {user: null});
+    navigate('/Gen-Chat/', {user: null});
   };
   
   return (

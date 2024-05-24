@@ -172,7 +172,7 @@ export default function Chats({ user, currentFriend, handleCurrentFriend }) {
                       request: "call",
                     });
 
-                    navigate("/CallScreen", {
+                    navigate("/Gen-Chat/CallScreen", {
                       state: {
                         id: user.phoneNumber,
                         calleeId: currentFriend.phoneNumber,
@@ -256,7 +256,7 @@ export default function Chats({ user, currentFriend, handleCurrentFriend }) {
                                 user.phoneNumber
                               );
 
-                              navigate("/CallScreen", {
+                              navigate("/Gen-Chat/CallScreen", {
                                 state: {
                                   id: user.phoneNumber,
                                   calleeId: currentFriend.phoneNumber,

@@ -61,7 +61,7 @@ export default function SignUp() {
     if (checked) {
       registerUser(name, state.phoneNumber, password, email, "", "", []);
       alert("Sign up successfully!");
-      navigate("/");      
+      navigate("/Gen-Chat/");      
     }
   }
 

@@ -20,23 +20,23 @@ import CallScreen from './components/CallScreen';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/Gen-Chat",
     element: <Home />
   },
   {
-    path: "/Main",
+    path: "/Gen-Chat/Main",
     element: <Main />
   },
   {
-    path: "/SignUp",
+    path: "/Gen-Chat/SignUp",
     element: <SignUp />
   },
   {
-    path: "/OTP",
+    path: "/Gen-Chat/OTP",
     element: <OTP />
   },
   {
-    path: "/CallScreen",
+    path: "/Gen-Chat/CallScreen",
     element: <CallScreen />
   },
 ]);
