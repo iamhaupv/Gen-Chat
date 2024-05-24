@@ -108,8 +108,13 @@ export default function Profile(props) {
     <h1 className='text-center font-medium text-xl mt-5 border-b-2 pb-2'>Information</h1>
 
     <div className="avatar items-center justify-center pt-8">
+<<<<<<< HEAD
+      <div className="w-20 rounded-full">
+        <img src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80pg" />
+=======
       <div className="w-16 rounded-full">
         <InitialIcon size={16} initials={user.name.match(/(\b\S)?/g).join("").match(/(^\S|\S$)?/g).join("").toUpperCase()} />
+>>>>>>> e3c074b12c04e8e9a4044a6c795c63397174e319
       </div>
     </div>
 
