@@ -34,7 +34,40 @@ app.use("/users", userRouter);
 // url messengers
 app.use("/messengers", messengerRouter)
 // url rooms
-app.use("/rooms", roomRouter)
+app.use("/rooms", roomRouter);
+
+function getAccessToken(idUser) {
+  const apiKeySid = 'SK.0.QzbQyQiyFdV7tC18LBvbiw0twB7y7v';
+  const apiKeySecret = 'RGRMM0piRDVMaEhFVFh5UVRlWG5hejZTYjBBOGZs';
+
+  var now = Math.floor(Date.now() / 1000);
+  var exp = now * 3600;
+
+  var header = { cty: "stringee-api;v=1" };
+  var payload = {
+      jti: apiKeySid + "-" + now,
+      iss: apiKeySid,
+      exp: exp,
+      userId: idUser
+  };
+
+  var jwt = require('jsonwebtoken')
+
+  var token = jwt.sign(payload,
+      apiKeySecret,
+      { algorithm: 'HS256' })
+  console.log("token " + idUser + " : " + token);
+  return token;
+}
+
+app.use("/createCallToken", async (req, res) => {
+  const {phoneNumber} = req.body;
+  const data = await getAccessToken(phoneNumber);
+
+  return res.status(200).json({
+    data: data
+  });
+})
 
 // const socketIo = require("socket.io")(server, {
 const socketIo = new Server(server, {
