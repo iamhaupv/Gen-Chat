@@ -1,16 +1,106 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Chat from './Chat';
+import InitialIcon from './InitialIcon';
+
+import getInfor from "../services/users/getInfor";
+import socket from "../utils/socketGroup"
+import getListFriend from '../services/users/getListFriend';
+import findUserByPhoneNumber from '../services/users/findUserByPhoneNumber';
 
 export default function Profile(props) {
   const [users, setUsers] = useState([]);
   const isOpen = props.state;
   const user = props.user;
+  const userRoot = props.userRoot;
+  const [remainingUsers, setRemainingUsers] = useState([]);
+
+  function getCheckedBoxes(chkboxName) {
+    var checkboxes = document.getElementsByName(chkboxName);
+    var checkboxesChecked = [];
+    // loop over them all
+    for (var i=0; i<checkboxes.length; i++) {
+      // And stick the checked ones onto an array...
+      if (checkboxes[i].checked) {
+        checkboxesChecked.push(checkboxes[i].value);
+      }
+    }
+    // Return the array if it is non-empty, or null
+    return checkboxesChecked.length > 0 ? checkboxesChecked : null;
+  }
+
+  const getFriendList = async () => {
+    const friendList = await getListFriend(user.admin);
+
+    const friendFound = [];
+
+    for (let i = 0; i < friendList.length; i++) {
+      const friend = await findUserByPhoneNumber(friendList[i].friend_id);
+
+      if ( user.user.indexOf( friend.data.phoneNumber ) == -1)
+        friendFound.push(friend.data);
+    }
+
+    setRemainingUsers(friendFound);
+  }
+
+  const handleCurrentFriend2 = friend => {
+    props.handleCurrentFriend(friend);
+  }
   
   let comp;
 
-  const handleOpenUserList = () => {
-    console.log("Open user list");
+  const handleOpenUserList = async () => {
+    const friends = [];
+
+    const admin = await getInfor(user.admin);
+
+    friends.push(admin.data);
+
+    for (let i = 0; i < user.user.length; i++) {
+      const friend = await getInfor(user.user[i]);
+
+      friends.push(friend.data);
+    }
+
+    setUsers(friends)
     document.getElementById('group_info_modal').showModal()
+  }
+
+  const handleAddNewUser = async () => {
+    let checkedUsers = getCheckedBoxes("newUser");
+
+    let checkedUsersObject = [];
+
+    for (let i = 0; i < checkedUsers.length; i++) {
+      const userObj = await findUserByPhoneNumber(checkedUsers[i]);
+      checkedUsersObject.push(userObj.data);
+    }
+
+    socket.emit("add-new-user", {
+      id: user.id, 
+      user: user.user, 
+      admin: user.admin, 
+      remainingUser: checkedUsers, 
+      remainingUserPhoneNumber: checkedUsersObject
+    });
+
+    alert("Add new friend successfully!")
+  }
+
+  const handleRemoveFriend = async removedUser => {
+    socket.emit("remove-user-from-group", {user, removedUser});
+    alert("Remove friend successfully!")
+    document.getElementById('btnCloseModal').click();
+  }
+
+  const handleOutGroup = async user => {
+
+  }
+
+  const handleRemoveRoom = async () => {
+    handleCurrentFriend2({});
+    socket.emit("destroy-room", user);
+    document.getElementById('btnCloseModal').click();
   }
 
   if (!isNaN(user.phoneNumber.charAt(0))) {
@@ -18,8 +108,13 @@ export default function Profile(props) {
     <h1 className='text-center font-medium text-xl mt-5 border-b-2 pb-2'>Information</h1>
 
     <div className="avatar items-center justify-center pt-8">
+<<<<<<< HEAD
       <div className="w-20 rounded-full">
         <img src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80pg" />
+=======
+      <div className="w-16 rounded-full">
+        <InitialIcon size={16} initials={user.name.match(/(\b\S)?/g).join("").match(/(^\S|\S$)?/g).join("").toUpperCase()} />
+>>>>>>> e3c074b12c04e8e9a4044a6c795c63397174e319
       </div>
     </div>
 
@@ -58,8 +153,6 @@ export default function Profile(props) {
             </div>
           </div>
         </dialog>
-
-
       </div>
 
       <div className='flex flex-col items-center'>
@@ -91,68 +184,60 @@ export default function Profile(props) {
         <p>Thay đổi chủ đề</p>
       </div>
     </div>
-    <dialog id="my_modal_4" className="modal">
-                {/* <div className="modal-box">
-                  <form method="dialog">
-                    <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                  </form>
-                  <h3 className="font-bold text-lg">Hello!</h3>
-                  <p className="py-4">Press ESC key or click on ✕ button to close</p>
-                </div> */}
-                   <div className="card card-compact w-96 bg-base-100 shadow-xl">
-                      
-                          <form method="dialog">
-                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                          </form>    
-                          <h3 className='card-title justify-center'>Chủ đề</h3>                  
-                    <div className="card-body">
-                      <div className='flex flex-row justify-between'>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-yellow-100 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          
-                      </div>
-                      <div className='flex flex-row justify-between'>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          
-                      </div>
-                      <div className='flex flex-row justify-between'>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          
-                      </div>
-                      <div className='flex flex-row justify-between'>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          
-                      </div>
-                      <div className='flex flex-row justify-between'>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          
-                      </div>
-                      <div className='flex flex-row justify-between'>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
-                          
-                      </div>
-    
-                         
-                    </div>
-                  </div>
-          </dialog>
+    {/* <dialog id="my_modal_4" className="modal">
+      <div className="card card-compact w-96 bg-base-100 shadow-xl">
+            <form method="dialog">
+              <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+            </form>    
+            <h3 className='card-title justify-center'>Chủ đề</h3>                  
+      <div className="card-body">
+        <div className='flex flex-row justify-between'>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-yellow-100 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            
+        </div>
+        <div className='flex flex-row justify-between'>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            
+        </div>
+        <div className='flex flex-row justify-between'>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            
+        </div>
+        <div className='flex flex-row justify-between'>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            
+        </div>
+        <div className='flex flex-row justify-between'>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            
+        </div>
+        <div className='flex flex-row justify-between'>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            <div className='h-20 w-20 bg-gradient-to-b from-blue-50 via-blue-100 to-pink-200 rounded-full'/>
+            
+        </div>
+
+            
+      </div>
+    </div>
+    </dialog> */}
 
   </div>
   } else {
@@ -172,22 +257,86 @@ export default function Profile(props) {
         <p className='font-bold pb-5'>User list</p>
 
         {/* All friend title */}
-        <div className='border-b-2 border-gray-200'>
+        <div className='border-gray-200'>
           {
-            users.map((elem, i) => 
-              <div key={i} className='flex items-center'>
-                <input type='checkbox' name='userInGroup' value={elem.phoneNumber}></input>
-                <Chat user={elem} setCurrentFriend={null} />
-              </div>
-            )
+            users.map((elem, i) => {
+              if (userRoot.phoneNumber == user.admin) {
+                if (elem.phoneNumber == user.admin)
+                  return <div key={i} className='flex items-center'>
+                    <Chat key={i} user={elem} setCurrentFriend={null} />
+
+                    <button className='bg-red-500 rounded-full p-2' onClick={() => handleOutGroup(elem)}>
+                      <p className='text-white'>Out</p>
+                    </button>
+                  </div>
+                else
+                  return <div key={i} className='flex items-center'>
+                    <Chat key={i} user={elem} setCurrentFriend={null} />
+
+                    <button className='bg-red-500 rounded-full p-2' onClick={() => handleRemoveFriend(elem)}>
+                      <p className='text-white'>Remove</p>
+                    </button>
+                  </div>
+              }
+              else {
+                return <div key={i} className='flex items-center'>
+                  <Chat key={i} user={elem} setCurrentFriend={null} />
+                </div>
+              }
+            })
+          }
+        </div>
+
+        <div className='flex justify-center'>
+          {
+            users.map((elem, i) => {
+              if (userRoot.phoneNumber == user.admin) {
+                if (elem.phoneNumber == user.admin) {
+                  return <div className='flex justify-around w-full p-2'>
+                    <button key={i} className='bg-green-400 text-white p-2 font-bold rounded-full' onClick={() => document.getElementById('my_modal_2').showModal()}>Add new user</button>
+                    <button key={"b" + i} className='bg-red-600 text-white p-2 font-bold rounded-full' onClick={() => handleRemoveRoom()}>Remove room</button>
+                  </div>
+                }
+              }
+            })
           }
         </div>
       </div>
     </dialog>
 
+    <dialog id="my_modal_2" className="modal">
+      <div className="modal-box">
+        <form method="dialog">
+          {/* if there is a button in form, it will close the modal */}
+          <button id='btnCloseModal' className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+        </form>
+
+        {/* All friend title */}
+        <p className='font-bold pb-5'>Select new user to added to group</p>
+
+        <div className='border-gray-200'>
+          {
+            remainingUsers.map((elem, i) => {
+              if (userRoot.phoneNumber == user.admin) {
+                return <div key={i} className='flex items-center'>
+                  <input type='checkbox' name='newUser' value={elem.phoneNumber}></input>
+
+                  <Chat key={i} user={elem} setCurrentFriend={null} />
+                </div>
+              }
+            })
+          }
+        </div>
+
+        <button className='bg-green-400 text-white p-2 font-bold rounded-full' onClick={() => handleAddNewUser()}>
+          Add new user
+        </button>
+      </div>
+    </dialog>
+
     <div className="avatar items-center justify-center pt-8">
-      <div className="w-20 rounded-full">
-        <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+      <div className="w-16 rounded-full">
+        <InitialIcon size={16} initials={user.name.match(/(\b\S)?/g).join("").match(/(^\S|\S$)?/g).join("").toUpperCase()} />
       </div>
     </div>
 
@@ -230,6 +379,11 @@ export default function Profile(props) {
 
   </div>
   }
+
+  useEffect(() => {
+    if (user.admin != null)
+      getFriendList();
+  }, []);
 
   return (
     (comp)

@@ -13,6 +13,7 @@ import addRequestGet from '../services/users/addRequestGet';
 import addRequestSend from '../services/users/addRequestSend';
 
 import socket from "../utils/socketGroup"
+import InitialIcon from './InitialIcon';
 
 export default function SidebarChat({user, handleCurrentFriend, handleUser}) {
   const [showListFriendRequest, setShowListFriendRequest] = useState("");
@@ -27,9 +28,6 @@ export default function SidebarChat({user, handleCurrentFriend, handleUser}) {
   const [currentUser, setCurrentUser] = useState({});
   const [roomName, setRoomName] = useState("New Room");
   const [rooms, setRooms] = useState([]);
-
-  // console.log("----- Sidebar chat -----");
-  // console.log(user);
 
   const getFriendsRequestGet = async () => {
     const friends_request_get = await getRequestGet(user.phoneNumber);
@@ -58,7 +56,6 @@ export default function SidebarChat({user, handleCurrentFriend, handleUser}) {
   const socketGroupRef = useRef();
 
   const handleCurrentFriend2 = friend => {
-    // console.log("Called handle current friend 2");
     setCurrentFriend(friend);
     handleCurrentFriend(friend);
   }
@@ -83,8 +80,6 @@ export default function SidebarChat({user, handleCurrentFriend, handleUser}) {
   
   const handleCreateGroup = async () => {
     let checkedUsers = getCheckedBoxes("userInGroup");
-    // console.log("Checked user");
-    // console.log(checkedUsers);
 
     try {
       let idRoom = "room" + new Date().valueOf();
@@ -180,10 +175,16 @@ export default function SidebarChat({user, handleCurrentFriend, handleUser}) {
   useEffect(() => {}, [friendsRequestGet]);
   useEffect(() => {}, [friendsRequestSend]);
 
+  const loadRoom = data => {
+    setRooms(data);
+  }
+
   useEffect(() => {
     socket.emit("init-room", user.phoneNumber);
 
     socket.on("rooms2", data => {
+      console.log("----------- Called rooms2");
+      console.log(data);
       setRooms(data);
     });
 
@@ -217,10 +218,17 @@ export default function SidebarChat({user, handleCurrentFriend, handleUser}) {
       <dialog id="my_modal_1" className="modal">
 
         <div className="card card-compact w-96 bg-base-100 shadow-xl">
-          <figure><img src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes" /></figure>
+          <figure>
+            <img src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes" />
+          </figure>
+
           <div className="avatar -top-3 left-2">
             <div className="w-24 rounded-full border-2  border-white ">
-              <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+              <InitialIcon size={24} initials={
+                searchedUser != null ? 
+                  searchedUser.name.match(/(\b\S)?/g).join("").match(/(^\S|\S$)?/g).join("").toUpperCase() :
+                  "Null"
+              } />
             </div>
             <h2 className="card-title ">{searchedUser != null ? searchedUser.name : ""}</h2> 
           </div>
@@ -288,7 +296,7 @@ export default function SidebarChat({user, handleCurrentFriend, handleUser}) {
             friends.map((elem, i) => 
               <div key={i} className='flex items-center'>
                 <input type='checkbox' name='userInGroup' value={elem.phoneNumber}></input>
-                <Chat user={elem} setCurrentFriend={() => handleCurrentFriend2(elem)} />
+                <Chat user={elem} setCurrentFriend={() => handleCurrentFriend2(elem)} loadRoom={loadRoom}/>
               </div>
             )
           }
@@ -305,10 +313,9 @@ export default function SidebarChat({user, handleCurrentFriend, handleUser}) {
       </div>
     </dialog>
 
-
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className={`absolute cursor-pointer -right-3 top-9 w-6 border-blue-400 border-2 rounded-full ${!open && "rotate-180"} bg-blue-400`} onClick={() => setOpen(!open)}>
+    {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className={`absolute cursor-pointer -right-3 top-9 w-6 border-blue-400 border-2 rounded-full ${!open && "rotate-180"} bg-blue-400`} onClick={() => setOpen(!open)}>
       <path fillRule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clipRule="evenodd" />
-    </svg>
+    </svg> */}
 
     {/* Message title */}
     <div className='flex flex-row p-5 justify-between border-solid border-b border-gray-200 font-medium text-xl' >
@@ -408,7 +415,6 @@ export default function SidebarChat({user, handleCurrentFriend, handleUser}) {
           <div className='h-4/5 overflow-y-scroll'>
             {
               friendsRequestGet.map((elem, i) => {
-                
                 return <FriendRequest key={i} userRoot={user} user={elem} handleUser={handleUser} />
               })
             }

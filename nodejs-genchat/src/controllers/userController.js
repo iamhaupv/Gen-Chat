@@ -8,7 +8,7 @@ const { upload, s3, bucketName } = require("../config/aws.config");
 //
 const myEvent = new EventEmitter();
 myEvent.on("event.register.user", (params) => {
-  console.log(`${JSON.stringify(params)}`);
+  // console.log(`${JSON.stringify(params)}`);
 });
 // login (đăng nhập)
 const login = async (req, res) => {
@@ -19,15 +19,12 @@ const login = async (req, res) => {
     });
   }
   const { phoneNumber, password } = req.body;
-  console.log("---------------------------");
-  console.log(phoneNumber);
-  console.log(password);
-  console.log("---------------------------");
   try {
     let existUser = await userRepository.login({
       phoneNumber,
       password,
     });
+
     res.status(200).json({
       message: "Login successfully!",
       data: existUser,
@@ -85,7 +82,7 @@ const register = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      message: "Cannot Register",
+      message: "Server Controller: Cannot Register " + error,
     });
   }
 };
@@ -151,7 +148,7 @@ const reset = async (req, res) => {
   try {
     const { email, password } = req.body;
     const token = req.query.token;
-    console.log(email, token, password);
+    // console.log(email, token, password);
     if (!email || !token || !password) {
       return res.send("Error!");
     }
@@ -366,10 +363,7 @@ const acceptRequestSend = async (req, res) => {
 // khi chấp nhận kết bạn sẽ gọi lại 2 hàm acceptRequestSend và acceptRequestGet
 const acceptFriend = async (req, res) => {
   try {
-    console.log("ACcpect freind");
-    console.log(req.body);
     const { phoneNumberUserSend, phoneNumberUserGet } = req.body;
-    console.log("---- 1 ----");
 
     const room_id = "room" + new Date().valueOf();
     await userRepository.acceptRequestSend(
@@ -396,7 +390,6 @@ const acceptFriend = async (req, res) => {
 const addRequestSend = async (req, res) => {
   try {
     const { phoneNumberUserSend, phoneNumberUserGet } = req.body;
-    console.log("2", phoneNumberUserSend);
     await userRepository.addRequestSend(
       phoneNumberUserSend,
       phoneNumberUserGet
@@ -524,7 +517,6 @@ const getListFriend = async (req, res) => {
 const changePassword = async (req, res) => {
   try {
     const { phoneNumber, newPassword } = req.body;
-    console.log(phoneNumber, newPassword);
     await userRepository.changePassword(phoneNumber, newPassword);
     res.status(200).json({
       message: "Change password successfully!",

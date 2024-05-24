@@ -5,6 +5,7 @@ import findUserByPhoneNumber from '../services/users/findUserByPhoneNumber';
 import Chat from './Chat';
 
 import socket from "../utils/socketGroup"
+import InitialIcon from './InitialIcon';
 
 export default function ChatUser({message, socketRef}) {
   const [searchedUser, setSearchedUser] = useState(null);
@@ -126,8 +127,6 @@ export default function ChatUser({message, socketRef}) {
   if (message.status != "deleted")
     return (
       <div className="flex items-start gap-2.5" dir='rtl'>
-        
-        
         {/* Group Modal */}
         <dialog id="forward_modal" className="modal" add="true" dir='ltr'>
           <div className="modal-box">
@@ -183,9 +182,7 @@ export default function ChatUser({message, socketRef}) {
         
         {/* <img className="w-8 h-8 rounded-full" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="Jese image" /> */}
         <div className="avatar placeholder">
-          <div className="bg-blue-800 text-neutral-content rounded-full w-8">
-            <span className="text-sm font-bold">{message.sender_name[0]}</span>
-          </div>
+          <InitialIcon size={10} initials={message.sender_name.match(/(\b\S)?/g).join("").match(/(^\S|\S$)?/g).join("").toUpperCase()} />
         </div>
           
           <div className="flex flex-col gap-1">
@@ -218,18 +215,23 @@ export default function ChatUser({message, socketRef}) {
                 {comp}
               </div>
 
-              <details className="dropdown bg-transparent border-0">
-                <summary className="m-1 btn bg-transparent border-0">
-                  <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15">
-                    <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/>
-                  </svg>
-                </summary>
-                <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-auto">
-                  <li><a onClick={handleReplyMessage}>Forward</a></li>
-                  <li><a onClick={handleRemoveMessage}>Remove</a></li>
-                  <li><a onClick={handleDeleteMessage}>Delete</a></li>
-                </ul>
-              </details>
+              {
+                message.status == "ready" ? 
+                  <details className="dropdown bg-transparent border-0">
+                    <summary className="m-1 btn bg-transparent border-0">
+                      <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15">
+                        <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/>
+                      </svg>
+                    </summary>
+
+                    <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-auto">
+                      <li><a onClick={handleReplyMessage}>Forward</a></li>
+                      <li><a onClick={handleRemoveMessage}>Remove</a></li>
+                      <li><a onClick={handleDeleteMessage}>Delete</a></li>
+                    </ul>
+                  </details> :
+                  <></>
+              }
             </div>
         </div>
       </div>

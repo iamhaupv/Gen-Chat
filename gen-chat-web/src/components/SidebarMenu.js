@@ -4,11 +4,15 @@ import parse from 'html-react-parser';
 // import { auth } from '../firebase/config';
 import logo from '../assets/logo.png';
 import { useNavigate } from 'react-router-dom';
+import InitialIcon from './InitialIcon';
 
 export default function SidebarMenu({user}) {
   const [open, setOpen] = useState(false);
 
   const navigate = useNavigate();
+
+  console.log("User");
+  console.log(user);
 
   const signOut = () => {
     console.log("Pressed Sign Out");
@@ -55,7 +59,7 @@ export default function SidebarMenu({user}) {
           }
 
           <li className='mt-auto flex items-center gap-4' onClick={()=>document.getElementById('my_modal_3').showModal()}>
-            <img className='aspect-square h-10 w-10 rounded-full' src='https://lh3.googleusercontent.com/a/ACg8ocLlO1pfA9KPIKdD6CNveeOZ6F7MzO8OPni_FMqOHqjx=s96-c'></img>
+            <InitialIcon size={10} initials={user.name.match(/(\b\S)?/g).join("").match(/(^\S|\S$)?/g).join("").toUpperCase()} />
             <div>
               <p className={`${!open && "hidden"} text-white font-medium text-xl`}>{user.name}</p>
             </div>
@@ -72,7 +76,8 @@ export default function SidebarMenu({user}) {
                       <figure><img src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes" /></figure>
                       <div className="avatar -top-3 left-2">
                         <div className="w-24 rounded-full border-2  border-white ">
-                          <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                          <InitialIcon size={24} initials={user.name.match(/(\b\S)?/g).join("").match(/(^\S|\S$)?/g).join("").toUpperCase()} />
+                          
                         </div>
                             <h2 className="card-title ">{user.name}</h2> 
                             {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 27 " strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">

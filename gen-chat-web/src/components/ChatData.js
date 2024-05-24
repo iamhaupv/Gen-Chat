@@ -3,14 +3,13 @@ import React, { useState, useEffect, useRef, useLayoutEffect } from 'react'
 import getListFriend from '../services/users/getListFriend';
 import findUserByPhoneNumber from '../services/users/findUserByPhoneNumber';
 import Chat from './Chat';
+import InitialIcon from './InitialIcon';
 
 export default function ChatData({message, socketRef}) {
   const [searchedUser, setSearchedUser] = useState(null);
   const [showSearchResult, setShowSearchResult] = useState(false);
   const [friends, setFriends] = useState([]);
   const [searchPhoneNumber, setSearchPhoneNumber] = useState("");
-
-  // console.log("Message " + message.content);
 
   const handleSearchPhoneNumber = e => {
     setSearchPhoneNumber(e.target.value);
@@ -114,7 +113,6 @@ export default function ChatData({message, socketRef}) {
   return (
     <div className="flex items-start gap-2.5">
 
-
       {/* Group Modal */}
       <dialog id="forward_modal" className="modal" add="true" dir='ltr'>
         <div className="modal-box">
@@ -167,12 +165,9 @@ export default function ChatData({message, socketRef}) {
         </div>
       </dialog>
 
-
       {/* <img className="w-8 h-8 rounded-full" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="Jese image" /> */}
       <div className="avatar placeholder">
-        <div className="bg-blue-800 text-neutral-content rounded-full w-8">
-          <span className="text-sm font-bold">{message.sender_name[0]}</span>
-        </div>
+        <InitialIcon size={10} initials={message.sender_name.match(/(\b\S)?/g).join("").match(/(^\S|\S$)?/g).join("").toUpperCase()} />
       </div>
 
       <div className="flex flex-col gap-1">
@@ -185,7 +180,7 @@ export default function ChatData({message, socketRef}) {
 
           <div className='flex'>
             <div className="flex flex-col leading-1.5 p-4 border-gray-200 bg-white rounded-e-xl rounded-es-xl dark:bg-gray-700">
-              <p className="text-sm font-normal text-gray-900 dark:text-white">
+              <div className="text-sm font-normal text-gray-900 dark:text-white">
                 {/* {
                   message.type == "text" ? 
                     message.content : 
@@ -202,7 +197,7 @@ export default function ChatData({message, socketRef}) {
                         <a download={message.filename} href={message.link} className='underline text-blue-400'>{message.filename}</a>
                 } */}
                 {comp}
-              </p>
+              </div>
             </div>
 
             {/* <details className="dropdown bg-transparent border-0">

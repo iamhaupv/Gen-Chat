@@ -13,6 +13,7 @@ import {ScrollView} from 'react-native';
 import ChatUser from './ChatUser';
 import ChatData from './ChatData';
 import {socket} from '../utils/socket';
+import Notification from './Notification';
 
 export default function Chat({route, navigation}) {  
   // This variable use for socket
@@ -41,9 +42,6 @@ export default function Chat({route, navigation}) {
     let userID = userRoot.phoneNumber;
     let receiverID = receiver.phoneNumber;
     let type = 'text';
-
-    // console.log("Send Messaage");
-    // console.log(userID + ': ' + receiverID + ': ' + content);
     
     socket.emit('chat-message', {
       type: "text", 
@@ -60,7 +58,7 @@ export default function Chat({route, navigation}) {
   };
 
   useEffect(() => {
-    // socket.emit("init-room", userRoot.phoneNumber);
+    socket.emit("init-room", userRoot.phoneNumber);
 
     socket.on('chat-message-2', msg => {
       setMessages(msg);
@@ -126,10 +124,15 @@ export default function Chat({route, navigation}) {
       >
         {
           messages.map((msg, index) => {
-            if (msg.sender == userRoot.phoneNumber)
-              return <ChatUser key={index} data={msg}/>;
+            console.log("------- msg type");
+            console.log(msg.type);
+            if (msg.type != "notification") 
+              if (msg.sender == userRoot.phoneNumber)
+                return <ChatUser key={index} data={msg} navigation={navigation} />
+              else
+                return <ChatData key={index} data={msg} navigation={navigation} />
             else
-              return <ChatData key={index} data={msg}/>;
+              return <Notification key={index} data={msg} navigation={navigation} />
           })
         }
       </ScrollView>

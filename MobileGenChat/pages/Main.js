@@ -19,7 +19,6 @@ import Call from "../components/Call";
 import { Image } from "react-native";
 import GenChatLogo from "./GenChatLogo";
 import GroupScreen from "../components/groupScreen";
-import getInfor from '../services/getInfor';
   
 export const Provider = createProvider({
   StyledProvider,

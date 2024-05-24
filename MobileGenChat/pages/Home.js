@@ -12,6 +12,9 @@ import Chat from "../components/Chat";
 import GroupChat from "../components/GroupChat";
 import Search from "../components/Search";
 import FriendProfile from "../components/FriendProfile";
+import ForwardMessage from "../components/ForwardMessage";
+import GroupInfo from "../components/GroupInfo";
+import AddNewUserForm from "../components/AddNewUserForm";
   
 export const Provider = createProvider({
   StyledProvider,
@@ -89,6 +92,18 @@ export default function Home({navigation}) {
 
         <Screen.Screen name="FriendProfile">
           {(props) => <FriendProfile {...props} />}
+        </Screen.Screen>
+
+        <Screen.Screen name="Forward Message">
+          {(props) => <ForwardMessage {...props} />}
+        </Screen.Screen>
+
+        <Screen.Screen name="Group info">
+          {(props) => <GroupInfo {...props} />}
+        </Screen.Screen>
+
+        <Screen.Screen name="Add new user form">
+          {(props) => <AddNewUserForm {...props} />}
         </Screen.Screen>
         
       </Screen.Navigator>

@@ -1,4 +1,6 @@
-import * as React from 'react';
+// import * as React from 'react';
+import React, { useEffect } from 'react';
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from './pages/Home';
 import Main from './pages/Main';

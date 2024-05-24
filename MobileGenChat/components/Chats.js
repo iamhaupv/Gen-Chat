@@ -1,13 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { TouchableHighlight,  } from 'react-native'
-import { Input, InputSlot, InputField, InputIcon, SearchIcon, Box, FlatList, HStack, VStack, Text, Heading, Avatar, AvatarImage, Fab, FabIcon, AddIcon, AvatarFallbackText, View } from '@gluestack-ui/themed';
+import { InputIcon, SearchIcon, Box, FlatList, HStack, VStack, Text, Avatar, Fab, FabIcon, AddIcon, AvatarFallbackText, View } from '@gluestack-ui/themed';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import getListFriend from '../services/getListFriend';
 import getInfor from '../services/getInfor';
 import {socket} from '../utils/socket';
-import findUserByPhoneNumber from '../services/findUserByPhoneNumber';
 
 const ChatScreen = createNativeStackNavigator();
 
@@ -18,18 +17,20 @@ export default function Chats({route, user, navigation}) {
   const userRoot = user.data;
 
   const getListFriends = async () => {
+    
     const listFriend = await getListFriend(userRoot.phoneNumber);
+
     const temp_friends = [];
     
     for (let i = 0; i < listFriend.data.length; i++) {
+      socket.emit('join', listFriend.data[i].room_id);
+      socket.emit("init-chat-message", listFriend.data[i].room_id);
+
       const friend = await getInfor( listFriend.data[i].friend_id );
       temp_friends.push(friend.data);
     }
 
     setFriends(temp_friends);
-
-    console.log("--------------- Friends");
-    console.log(temp_friends);
   }
 
   useEffect(() => {
@@ -59,14 +60,7 @@ export default function Chats({route, user, navigation}) {
           navigation.navigate("Search", {user: user.data})
         }}
       >
-      {/* <Input size='xl'>
-        <InputSlot pl='$3'>
-          <InputIcon as={SearchIcon}/>
-        </InputSlot>
-        <InputField
-          placeholder="Search..."
-        />
-      </Input> */}
+
       <View p={10}>
         <HStack space='md'>
           <InputIcon as={SearchIcon}/>

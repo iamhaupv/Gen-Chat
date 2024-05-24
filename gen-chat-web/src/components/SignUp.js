@@ -1,130 +1,137 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import logo from '../assets/logo.png'
-import { useNavigate } from "react-router-dom";
-import { RecaptchaVerifier } from "firebase/auth";
-import config from '../firebase/config.js';
-import loginUser from '../services/users/loginUser.js'
+import { useNavigate, useLocation } from "react-router-dom";
+import registerUser from '../services/users/registerUser';
 
 export default function SignUp() {
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const [repeatedPassword, setRepeatedPassword] = useState('');
+  const [email, setEmail] = useState('');
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  const auth = config.auth;
+  const {state} = useLocation();
 
-  const handlePhoneNumber = event => {
-    setPhoneNumber(event.target.value);
-  };
-
-  const handleSignUp = () => {
-    let errors = {};
-    if (!phoneNumber)
-      errors.error = "Phone Number must not null";
-    
-    if (errors.error)
-      setErrors(errors);
-    else
-      signInWithPhone();
+  const handleName = e => {
+    setName(e.target.value);
   }
 
-  // const signUp = async () => {
-  //   console.log("Sign up");
-  //   window.recaptchaVerifier = new RecaptchaVerifier(auth, 'sign-in-button', {
-  //     'size': 'invisible',
-  //     'callback': (response) => {
-  //       console.log("Responsed");
-  //       onSignInSubmit();
-  //     }, 
-  //   });
+  const handlePassword = e => {
+    setPassword(e.target.value);
+  }
 
-  //   // try {
-  //   //   const user = await loginUser(phoneNumber, password);
-  //   //   alert("Log in successfully!")
-  //   //   navigate("/Main");
-  //   // } catch (error) {
-  //   //   console.error("Registration error:", error);
-  //   // }
-  // };
+  const handleRepeatedPassword = e => {
+    setRepeatedPassword(e.target.value);
+  }
+  
+  const handleEmail = e => {
+    setEmail(e.target.value);
+  }
 
-  function onCaptchVerify() {
-    if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        auth,
-        "recaptcha-container",
-        {
-          size: "invisible",
-          callback: (response) => {
-            signInWithPhone();
-          },
-          "expired-callback": () => {
-            
-          },
-        }
-      );
+  const handleVerifyInput = () => {
+    let checked = true;
+    // if (password != repeatedPassword) {
+    //   checked = false;
+    //   errors.error = "Password does not match repeated password";
+    //   setErrors(errors);
+    // }
+
+    if (password != repeatedPassword) {
+      checked = false;
+      alert("Password does not match repeated password");
+      errors.error = "Password does not match repeated password";
+      setErrors(errors);
+    }
+
+    if (password.length < 8) {
+      checked = false;
+      alert("Password must have at least 8 characters");
+      errors.error = "Password must have at least 8 characters";
+      setErrors(errors);
+    }
+
+    if (email.length == 0) {
+      checked = false;
+      alert("Email must not be null");
+      errors.error = "Email must not be null";
+      setErrors(errors);
+    }
+
+    if (checked) {
+      registerUser(name, state.phoneNumber, password, email, "", "", []);
+      alert("Sign up successfully!");
+      navigate("/");      
     }
   }
 
-  const signInWithPhone = () => {
-    onCaptchVerify();
-
-    const appVerifier = window.recaptchaVerifier;
-    const formatPh = "+" + phoneNumber;
-
-    console.log(auth);
-    console.log(formatPh);
-    console.log(appVerifier);
-
-    navigate('/OTP', { otp: { auth: auth, formatPh: formatPh, appVerifier: appVerifier }});
-
-    // signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-    // .then((confirmationResult) => {
-    //   // SMS sent. Prompt user to type the code from the message, then sign the
-    //   // user in with confirmationResult.confirm(code).
-    //   window.confirmationResult = confirmationResult;
-    //   console.log(confirmationResult);
-    //   // ...
-    // }).catch((error) => {
-    //   console.error("Error sign in with phone number: " + error);
-    // });
-  }
-
   return (
-    <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
-      <img className="mb-4" src={logo}></img>
+    <div className="bg-gray-100 flex justify-center items-center h-screen">
 
-      <h1 className="text-2xl font-semibold mb-4">Sign Up to Gen Chat!</h1>
-      
-      {/* <htmlForm action="http://localhost:6969/users/login" method="POST"> */}
-        {/* <!-- Phone Number Input --> */}
-        <div className="mb-4">
-          <label htmlFor="phoneNumber" className="block text-gray-600">Please enter the Phone Number that we can use to send the OTP</label>
-          <input type="tel" id="phoneNumber" name="phoneNumber" className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autoComplete="off" 
-            value={phoneNumber}
-            onChange={handlePhoneNumber}
-          />
-        </div>
+      <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
+        <img className="mb-4" src={logo}></img>
+
+        <h1 className="text-2xl font-semibold mb-4">Welcome {state.phoneNumber}!</h1>
         
-        {/* <!-- Forgot Password Link --> */}
-        <div className="text-blue-500 py-2">
-          <a href="/" className="hover:underline">Return to Main page</a>
-        </div>
+        {/* <htmlForm action="http://localhost:6969/users/login" method="POST"> */}
+          {/* <!-- Phone Number Input --> */}
+          <div className="mb-4">
+            <label htmlFor="phoneNumber" className="block text-gray-600">Name</label>
+            <input type="text" id="name" name="name" className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autoComplete="off" 
+              value={name}
+              onChange={handleName} required
+            />
+          </div>
 
-        {/* <!-- Sign Up Button --> */}
-        <button 
-          type="submit" 
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full"
-          onClick={handleSignUp}
-        >
-          Sign Up
-        </button>
+          {/* <!-- Password Input --> */}
+          <div className="mb-4">
+            <label htmlFor="phoneNumber" className="block text-gray-600">Password</label>
+            <input type="password" id="password" name="password" className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autoComplete="off" 
+              value={password}
+              onChange={handlePassword} required
+            />
+          </div>
 
-        {/* <!-- Error --> */}
-        <div className="text-red-500 py-2">
-          <p href="/" className="hover:underline">{errors.error}</p>
-        </div>
+          {/* <!-- Repeated Password Input --> */}
+          <div className="mb-4">
+            <label htmlFor="phoneNumber" className="block text-gray-600">Repeat Password</label>
+            <input type="password" id="password" name="password" className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autoComplete="off" 
+              value={repeatedPassword}
+              onChange={handleRepeatedPassword} required
+            />
+          
+          </div>
+          {/* <!-- Email Input --> */}
+          <div className="mb-4">
+            <label htmlFor="email" className="block text-gray-600">Email</label>
+            <input type="email" id="email" name="email" className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autoComplete="off" 
+              value={email}
+              onChange={handleEmail} required
+            />
+          </div>
 
-        <div id='recaptcha-container'></div>
-      {/* </htmlForm> */}
+          {/* <!-- Sign Up Button --> */}
+          <button 
+            type="submit" 
+            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full"
+            onClick={handleVerifyInput}
+          >
+            Sign Up
+          </button>
+
+          {/* <!-- Error --> */}
+          <div className="text-red-500 py-2">
+            <p href="/" className="hover:underline">{errors.error}</p>
+          </div>
+
+        {/* </htmlForm> */}
+
+      </div>
+
+      <div className="w-1/2 h-screen hidden  lg:block">
+        <img src="https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80" alt="Placeholder Image" className="object-cover w-full h-full"></img>
+      </div>
+
     </div>
   )
 }

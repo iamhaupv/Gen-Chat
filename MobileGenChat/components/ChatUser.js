@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Button, ButtonGroup, ButtonText, HStack, Text, View, } from '@gluestack-ui/themed';
+import { Avatar, AvatarFallbackText, Button, ButtonGroup, ButtonText, HStack, Text, View, } from '@gluestack-ui/themed';
 
 import getInfor from '../services/getInfor';
-import { EllipsisVertical } from 'lucide-react-native';
+import { EllipsisVertical, Navigation } from 'lucide-react-native';
 import {socket} from '../utils/socket';
 
-export default function ChatUser({data}) {
+export default function ChatUser({data, navigation}) {
   const [userName, setUserName] = useState(null);
   const [isOpen, setIsOpen] = useState(false)
   
@@ -19,12 +19,7 @@ export default function ChatUser({data}) {
   }
 
   const handleForward = () => {
-    socket.emit('forward-message', {
-      idMessageToForward: data.idMessage, 
-      idRoom: data.idRoom, 
-      sender: data.sender,
-      receiver: data.receiver,
-    });
+    navigation.navigate("Forward Message", {data: data})
 
     setIsOpen(!isOpen);
   }
@@ -58,14 +53,16 @@ export default function ChatUser({data}) {
       <View style={{
         alignSelf: 'flex-end'
       }}>
+        {/* <Avatar size="md" alignSelf='flex-end'>
+          <AvatarFallbackText>{userName}</AvatarFallbackText>
+        </Avatar> */}
+
         <Text style={{
           padding: 10, 
           alignSelf: "flex-end"
         }}>{userName}</Text>
   
         <HStack alignItems='center' justifyContent='flex-end'>
-          <EllipsisVertical color="gray" onPress={handleOpen}/>
-          
           {
             data.status == "removed" ? 
               <Text style={{
@@ -78,38 +75,46 @@ export default function ChatUser({data}) {
               }}>
                 This message had been removed
               </Text> :
-              <Text style={{
-                width: "auto", 
-                marginRight: 10, 
-                padding: 10, 
-                color: "white", 
-                backgroundColor: "blue", 
-                borderRadius: 10
-              }}>
-                {data.content}
-              </Text>
+              <>
+                <EllipsisVertical color="gray" onPress={handleOpen}/>
+                <Text style={{
+                  width: "auto", 
+                  marginRight: 10, 
+                  padding: 10, 
+                  color: "white", 
+                  backgroundColor: "blue", 
+                  borderRadius: 10
+                }}>
+                  {data.content}
+                </Text>
+              </>
           }
   
         </HStack>
   
         <Text style={{
           padding: 10, 
-          fontSize: 10
+          fontSize: 10, 
+          alignSelf: "flex-end"
         }}>
           {data.date}
         </Text>
   
-        <ButtonGroup display={isOpen ? "flex" : "none"} flexDirection='column' gap={0}>
-          <Button borderRadius={0} bgColor='#eeeeee' onPress={handleForward}>
-            <ButtonText color='#000000'>Forward</ButtonText>
-          </Button>
-          <Button borderRadius={0} bgColor='#eeeeee' onPress={handleRemove}>
-            <ButtonText color='#000000'>Remove</ButtonText>
-          </Button>
-          <Button borderRadius={0} bgColor='#eeeeee' onPress={handleDelete}>
-            <ButtonText color='#000000'>Delete</ButtonText>
-          </Button>
-        </ButtonGroup>
+        {
+          data.status == "ready" ? 
+          <ButtonGroup display={isOpen ? "flex" : "none"} flexDirection='column' gap={0}>
+            <Button borderRadius={0} bgColor='#eeeeee' onPress={handleForward}>
+              <ButtonText color='#000000'>Forward</ButtonText>
+            </Button>
+            <Button borderRadius={0} bgColor='#eeeeee' onPress={handleRemove}>
+              <ButtonText color='#000000'>Remove</ButtonText>
+            </Button>
+            <Button borderRadius={0} bgColor='#eeeeee' onPress={handleDelete}>
+              <ButtonText color='#000000'>Delete</ButtonText>
+            </Button>
+          </ButtonGroup> :
+          <></>
+        }
       </View>
     )
   else

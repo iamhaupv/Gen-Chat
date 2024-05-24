@@ -1,4 +1,5 @@
-const { register } = require('./src/repositories/userRepository')
+const { register } = require('./src/repositories/userRepository');
+const { StringeeClient } = require("./lib/StringeeSDK-1.5.10.js");
 
 const express = require("express");
 const app = express();
@@ -12,9 +13,10 @@ const connect = require("./src/databases/mongodb");
 const checkToken = require("./src/authentication/auththentication");
 const cors = require("cors")
 const { join } = require("node:path");
+const { log } = require('console');
 const server = http.createServer(app);
 const server_group = http.createServer(app);
-//
+
 app.get("/", (req, res) => {
   res.sendFile(join(__dirname, "index.html"));
 });
@@ -32,7 +34,40 @@ app.use("/users", userRouter);
 // url messengers
 app.use("/messengers", messengerRouter)
 // url rooms
-app.use("/rooms", roomRouter)
+app.use("/rooms", roomRouter);
+
+function getAccessToken(idUser) {
+  const apiKeySid = 'SK.0.QzbQyQiyFdV7tC18LBvbiw0twB7y7v';
+  const apiKeySecret = 'RGRMM0piRDVMaEhFVFh5UVRlWG5hejZTYjBBOGZs';
+
+  var now = Math.floor(Date.now() / 1000);
+  var exp = now * 3600;
+
+  var header = { cty: "stringee-api;v=1" };
+  var payload = {
+      jti: apiKeySid + "-" + now,
+      iss: apiKeySid,
+      exp: exp,
+      userId: idUser
+  };
+
+  var jwt = require('jsonwebtoken')
+
+  var token = jwt.sign(payload,
+      apiKeySecret,
+      { algorithm: 'HS256' })
+  console.log("token " + idUser + " : " + token);
+  return token;
+}
+
+app.use("/createCallToken", async (req, res) => {
+  const {phoneNumber} = req.body;
+  const data = await getAccessToken(phoneNumber);
+
+  return res.status(200).json({
+    data: data
+  });
+})
 
 // const socketIo = require("socket.io")(server, {
 const socketIo = new Server(server, {
@@ -117,9 +152,9 @@ socketIo.on("connection", (socket) => {
 
   console.log("New client connected" + socket.id);
 
-  socket.on('chat-message',data => {
-    socketIo.emit('chat-message', data)
-  })
+  // socket.on('chat-message',data => {
+  //   socketIo.emit('chat-message', data);
+  // })
 
   socket.on("join", data => {
     socket.join(data);
@@ -131,30 +166,72 @@ socketIo.on("connection", (socket) => {
   });
 
   socket.on("join-room", data => {
-    // console.log("Rooms id");
-    // console.log(data.id);
     socket.join(data.id);
 
     if ( rooms.find(elem => elem.id == data.id) == undefined ) {
       rooms.push(data);
     }
-    // console.log("Create room");
-    // console.log(rooms);
+  });
+
+  socket.on("add-new-user", data => {
+    console.log("Called add new user");
+    console.log(data);
+
+    rooms.find(elem => elem.id == data.id).user = 
+      rooms.find(elem => elem.id == data.id).user.concat(data.remainingUser);
+
+    for (let i = 0; i < data.remainingUser.length; i++) 
+      rooms.find(elem => elem.id == data.id).messages.push({
+        type: "notification", 
+        idMessage: "mess" + new Date().valueOf(), 
+        date: new Date().toLocaleString(),  
+        idRoom: data.id, 
+        sender: data.admin,
+        sender_name: data.admin,
+        receiver: data.id,
+        content: data.remainingUserPhoneNumber[i].name + " had join the group at " + new Date().toLocaleString(),
+        chat_type: "notification",
+        status: "ready"
+      });
+
+    // -------------------------------------------------------------
+
+    let list_rooms = [];
+    list_rooms = rooms.filter(elem => {
+      if (elem.admin == data.admin) return true;
+
+      if (elem.user != undefined)
+        return elem.user.includes(data.admin);
+      else
+        return false;
+    });
+
+    console.log("------------- List room");
+    console.log(list_rooms);
+
+    if (list_rooms == undefined)
+      list_rooms = [];
+
+    if (list_rooms.length > 0)
+      for (let i = 0; i < list_rooms.length; i++) {
+        socketIo.to(data.admin).emit("rooms2", list_rooms);
+
+        for (let j = 0; j < list_rooms[i].user.length; j++)
+          socketIo.to(list_rooms[i].user[j]).emit("rooms2", list_rooms);
+
+        socketIo.to(list_rooms[i].id).emit("rooms2", list_rooms); 
+      }
   });
 
   socket.on("init-room", userId => {
     socket.join(userId);
-
-    console.log("------- Init rooms");
-    console.log("Rooms");
-    console.log(rooms);
 
     let list_rooms = [];
     list_rooms = rooms.filter(elem => {
       if (elem.admin == userId) return true;
 
       if (elem.user != undefined)
-        return elem.user.includes(userId)
+        return elem.user.includes(userId);
       else
         return false;
     });
@@ -162,20 +239,75 @@ socketIo.on("connection", (socket) => {
     if (list_rooms == undefined)
       list_rooms = [];
 
-    console.log("List room");
-    console.log(list_rooms);
-
     if (list_rooms.length > 0)
       for (let i = 0; i < list_rooms.length; i++) {
-        console.log("List rooms id");
-        console.log(list_rooms[i].id);
         socketIo.to(userId).emit("rooms2", list_rooms);
 
-        for (let j = 0; j < list_rooms[i].user.length; j++)
+        for (let j = 0; j < list_rooms[i].user.length; j++) {
           socketIo.to(list_rooms[i].user[j]).emit("rooms2", list_rooms);
+        }
 
-        socketIo.to(list_rooms[i].id).emit("rooms2", list_rooms);
-      }
+        socketIo.to(list_rooms[i].id).emit("rooms2", list_rooms); 
+      } 
+  });
+
+  socket.on("remove-user-from-group", data => {
+    rooms.find(elem => elem.id == data.user.id).user.splice(
+      rooms.find(elem => elem.id == data.user.id).user.findIndex(x => x === data.removedUser.phoneNumber), 1
+    );
+
+    rooms.find(elem => elem.id == data.user.id).messages.push({
+      type: "notification", 
+      idMessage: "mess" + new Date().valueOf(), 
+      date: new Date().toLocaleString(),  
+      idRoom: data.user.id, 
+      sender: data.removedUser.phoneNumber,
+      sender_name: data.user.admin,
+      receiver: data.user.id,
+      content: data.removedUser.name + " had left the group at " + new Date().toLocaleString(),
+      chat_type: "notification",
+      status: "ready"
+    });
+
+    socketIo.to(data.user.id).emit("chat-message-2", 
+      rooms.find(elem => elem.id == data.user.id).messages
+    );
+
+    // ---------------------------------------------------
+
+    // let list_rooms = [];
+    // list_rooms = rooms.filter(elem => {
+    //   if (elem.admin == data.removedUser.phoneNumber) return true;
+
+    //   if (elem.user != undefined)
+    //     return elem.user.includes(data.removedUser.phoneNumber)
+    //   else
+    //     return false;
+    // });
+
+    // if (list_rooms == undefined)
+    //   list_rooms = [];
+
+    // // if (list_rooms.length > 0)
+    //   for (let i = 0; i < list_rooms.length; i++) {
+    //     socketIo.to(data.removedUser.phoneNumber).emit("rooms2", list_rooms);
+
+    //     for (let j = 0; j < list_rooms[i].user.length; j++)
+    //       socketIo.to(list_rooms[i].user[j]).emit("rooms2", list_rooms);
+
+    //     socketIo.to(list_rooms[i].id).emit("rooms2", list_rooms); 
+    //   }
+  });
+
+  socket.on("destroy-room", data => {
+    let removedIndex = rooms.findIndex(x => x.id === data.id);
+    rooms.splice(removedIndex, 1);
+
+    console.log("----------- Destroyed room");
+    console.log(data);
+
+    socket.leave(data.id);
+    // socketIo.emit("init-room", data.admin);
   });
 
   socket.on("init-chat-message", idRoom => {
@@ -194,6 +326,8 @@ socketIo.on("connection", (socket) => {
   });
 
   socket.on("chat-message", async data => {
+    data.date = new Date().toLocaleString();
+
     console.log(rooms.find(elem => elem.id == data.idRoom));
     
     if ( rooms.find(elem => elem.id == data.idRoom) != undefined ) {
@@ -204,17 +338,38 @@ socketIo.on("connection", (socket) => {
       rooms.find(elem => elem.id == data.idRoom).messages
     );
     
-    console.log("----------------------------");
     console.log("-- Socket: Sended data to client ");
+    console.log(data);
   });
 
   socket.on("forward-message", async data => {
-    let found_room = rooms.find(room => room.id == data.idRoom);
-
-    let found_message = found_room.messages.find(mess => mess.idMessage = data.idMessageToForward);
-  
-    console.log("------- Found Message to forward---------");
-    console.log(found_message);
+    for (let i = 0; i < data.receivers.length; i++) {
+      console.log({
+        type: "text", 
+        idMessage: "mess" + new Date().valueOf(), 
+        date: new Date().toLocaleString(), 
+        idRoom: data.receivers[i].room_id, 
+        sender: data.sender, 
+        sender_name: data.sender_name, 
+        receiver: data.receivers[i].phoneNumber, 
+        content: data.content, 
+        chat_type: data.type, 
+        status: "ready"
+      });
+      
+      socket.emit('chat-message', {
+        type: "text", 
+        idMessage: "mess" + new Date().valueOf(), 
+        date: new Date().toLocaleString(), 
+        idRoom: data.receivers[i].room_id, 
+        sender: data.sender, 
+        sender_name: data.sender_name, 
+        receiver: data.receivers[i].phoneNumber, 
+        content: data.content, 
+        chat_type: data.type, 
+        status: "ready"
+      });
+    }
   });
 
   socket.on("remove-message", async data => {
